@@ -22,14 +22,27 @@
                     <a href="{{route('empresa.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext">Empresas</span></a>
                 </li>
                 @endif
-                @if(Auth::user()->hasRole('Administrador'))
+                @if(!Auth::user()->hasRole('SuperAdministrador'))
                 <li data-username="Table bootstrap datatable footable" class="nav-item">
                     <a href="{{route('cliente.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Clientes</span></a>
                 </li>
                 @endif
-                @if(Auth::user()->hasRole('SuperAdministrador'))
+                @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
+                </li>
+                <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administracion</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class=""><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
+                        <li class=""><a href="{{route('aerolinea.index')}}" class="">Tipos de visita</a></li>
+                        <li class=""><a href="bc_breadcrumb-pagination.html" class="">Clasificaciones</a></li>
+                    </ul>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('SuperAdministrador'))
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Administración general</label>
                 </li>
                 <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administracion</span></a>

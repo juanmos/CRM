@@ -32,6 +32,9 @@ Route::post('oficina/store/{cliente_id}','OficinaController@store')->name('ofici
 Route::get('oficina/edit/{id}','OficinaController@edit')->name('oficina.edit');
 Route::put('oficina/update/{id}','OficinaController@update')->name('oficina.update');
 
+
+
+
 Route::resource('conductor', 'ConductorController');
 Route::resource('hotel', 'HotelController');
 Route::resource('aerolinea', 'AerolineaController')->middleware('auth');
