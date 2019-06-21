@@ -144,28 +144,7 @@
                                     </div>
                                     <div class="card-block px-0 py-3">
                                         <div class="table-responsive">
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    {{-- @forelse ($cliente->usuarios as $usuario )
-                                                        
-                                                    
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="{{Storage::url($usuario->foto)}}" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">{{$usuario->nombre}} {{$usuario->apellido}}</h6>
-                                                            <p class="m-0">{{$usuario->telefono}}</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle {{($usuario->activo)?'text-c-green' :'text-c-red' }} f-10 m-r-15"></i>{{$usuario->email}}</h6>
-                                                        </td>
-                                                        <td><a href="{{route('empresa.usuario.edit',[$empresa->id,$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
-                                                    </tr>
-                                                    @empty
-                                                    <p>No hay usuarios</p>
-                                                    
-                                                    @endforelse --}}
-                                                </tbody>
-                                            </table>
+                                            <div id="calendar"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +162,7 @@
                                                         
                                                         <td>
                                                             <h6 class="mb-1"><i class="fas fa-user-tie"></i> {{$contacto->nombre}} {{$contacto->apellido}}</h6>
-                                                            <p class="m-0"><i class="fas fa-phone-square-alt"></i> {{$contacto->telefono}}</p>
+                                                            <p class="m-0"><i class="fas fa-phone-square-alt"></i> {{$contacto->telefono}} {{($contacto->extension)?' - '.$contacto->extension:''}}</p>
                                                         </td>
                                                         <td>
                                                             <h6 class="mb-1"><i class="fas fa-id-card-alt"></i> {{$contacto->cargo}}</h6>
@@ -231,157 +210,8 @@
                             <!--[ Recent Users ] end-->
 
                             
-                            {{-- <!--[social-media section] start-->
-                            <div class="col-md-12 col-xl-4">
-                                <div class="card card-social">
-                                    <div class="card-block border-bottom">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col-auto">
-                                                <i class="fab fa-facebook-f text-primary f-36"></i>
-                                            </div>
-                                            <div class="col text-right">
-                                                <h3>12,281</h3>
-                                                <h5 class="text-c-green mb-0">+7.2% <span class="text-muted">Total Likes</span></h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center card-active">
-                                            <div class="col-6">
-                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>35,098</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width:60%;height:6px;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>3,539</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width:45%;height:6px;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card card-social">
-                                    <div class="card-block border-bottom">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col-auto">
-                                                <i class="fab fa-twitter text-c-blue f-36"></i>
-                                            </div>
-                                            <div class="col text-right">
-                                                <h3>11,200</h3>
-                                                <h5 class="text-c-purple mb-0">+6.2% <span class="text-muted">Total Likes</span></h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center card-active">
-                                            <div class="col-6">
-                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>34,185</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-green" role="progressbar" style="width:40%;height:6px;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>4,567</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-blue" role="progressbar" style="width:70%;height:6px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card card-social">
-                                    <div class="card-block border-bottom">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col-auto">
-                                                <i class="fab fa-google-plus-g text-c-red f-36"></i>
-                                            </div>
-                                            <div class="col text-right">
-                                                <h3>10,500</h3>
-                                                <h5 class="text-c-blue mb-0">+5.9% <span class="text-muted">Total Likes</span></h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center card-active">
-                                            <div class="col-6">
-                                                <h6 class="text-center m-b-10"><span class="text-muted m-r-5">Target:</span>25,998</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width:80%;height:6px;" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="text-center  m-b-10"><span class="text-muted m-r-5">Duration:</span>7,753</h6>
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width:50%;height:6px;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--[social-media section] end-->
-                            <!-- [ rating list ] starts-->
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card user-list">
-                                    <div class="card-header">
-                                        <h5>Rating</h5>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center m-b-20">
-                                            <div class="col-6">
-                                                <h2 class="f-w-300 d-flex align-items-center float-left m-0">4.7 <i class="fas fa-star f-10 m-l-10 text-c-yellow"></i></h2>
-                                            </div>
-                                            <div class="col-6">
-                                                <h6 class="d-flex  align-items-center float-right m-0">0.4 <i class="fas fa-caret-up text-c-green f-22 m-l-10"></i></h6>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-xl-12">
-                                                <h6 class="align-items-center float-left"><i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>5</h6>
-                                                <h6 class="align-items-center float-right">384</h6>
-                                                <div class="progress m-t-30 m-b-20" style="height: 6px;">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <h6 class="align-items-center float-left"><i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>4</h6>
-                                                <h6 class="align-items-center float-right">145</h6>
-                                                <div class="progress m-t-30  m-b-20" style="height: 6px;">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <h6 class="align-items-center float-left"><i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>3</h6>
-                                                <h6 class="align-items-center float-right">24</h6>
-                                                <div class="progress m-t-30  m-b-20" style="height: 6px;">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <h6 class="align-items-center float-left"><i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>2</h6>
-                                                <h6 class="align-items-center float-right">1</h6>
-                                                <div class="progress m-t-30  m-b-20" style="height: 6px;">
-                                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <h6 class="align-items-center float-left"><i class="fas fa-star f-10 m-r-10 text-c-yellow"></i>1</h6>
-                                                <h6 class="align-items-center float-right">0</h6>
-                                                <div class="progress m-t-30  m-b-20" style="height: 6px;">
-                                                    <div class="progress-bar" role="progressbar" style="width:0;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- [ rating list ] end-->
+                            
+                            
                             <div class="col-xl-8 col-md-12 m-b-30">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
@@ -625,7 +455,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
                         </div>
                         <!-- [ Main Content ] end -->
@@ -636,3 +466,97 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src='{{asset("assets/plugins/fullcalendar/packages/core/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/interaction/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/daygrid/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/timegrid/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/list/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/core/locales-all.js")}}'></script>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
+      locale:'es',
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      defaultDate: '2019-06-12',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [
+        {
+          title: 'All Day Event',
+          start: '2019-06-01',
+        },
+        {
+          title: 'Long Event',
+          start: '2019-06-07',
+          end: '2019-06-10'
+        },
+        {
+          groupId: 999,
+          title: 'Repeating Event',
+          start: '2019-06-09T16:00:00'
+        },
+        {
+          groupId: 999,
+          title: 'Repeating Event',
+          start: '2019-06-16T16:00:00'
+        },
+        {
+          title: 'Conference',
+          start: '2019-06-11',
+          end: '2019-06-13'
+        },
+        {
+          title: 'Meeting',
+          start: '2019-06-12T10:30:00',
+          end: '2019-06-12T12:30:00'
+        },
+        {
+          title: 'Lunch',
+          start: '2019-06-12T12:00:00'
+        },
+        {
+          title: 'Meeting',
+          start: '2019-06-12T14:30:00'
+        },
+        {
+          title: 'Happy Hour',
+          start: '2019-06-12T17:30:00'
+        },
+        {
+          title: 'Dinner',
+          start: '2019-06-12T20:00:00'
+        },
+        {
+          title: 'Birthday Party',
+          start: '2019-06-13T07:00:00'
+        },
+        {
+          title: 'Click for Google',
+          url: 'http://google.com/',
+          start: '2019-06-28'
+        }
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
+@endpush
+@push('styles')
+<link href='{{asset("assets/plugins/fullcalendar/packages/core/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/daygrid/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/timegrid/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/list/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/bootstrap/main.css")}}' rel='stylesheet' />
+@endpush

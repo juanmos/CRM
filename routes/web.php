@@ -20,7 +20,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('empresa', 'EmpresaController');
 Route::resource('cliente', 'ClienteController');
-
+Route::resource('visita', 'VisitaController');
+Route::resource('tipoVisita', 'TipoVisitaController');
+Route::resource('clasificacion', 'ClasificacionController');
+Route::resource('usuario', 'UsuarioController');
 
 Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
 Route::post('contacto/store/{cliente_id}','ContactoController@store')->name('contacto.store');
@@ -32,20 +35,8 @@ Route::post('oficina/store/{cliente_id}','OficinaController@store')->name('ofici
 Route::get('oficina/edit/{id}','OficinaController@edit')->name('oficina.edit');
 Route::put('oficina/update/{id}','OficinaController@update')->name('oficina.update');
 
-
-
-
-Route::resource('conductor', 'ConductorController');
-Route::resource('hotel', 'HotelController');
-Route::resource('aerolinea', 'AerolineaController')->middleware('auth');
-Route::resource('usuario', 'UsuarioController');
-
-Route::get('/empresa/usuario/create/{id}','EmpresaController@usuarioCreate')->name('empresa.usuario.create');
-Route::post('/empresa/usuario/store/{id}','EmpresaController@usuarioStore')->name('empresa.usuario.store');
-Route::get('/empresa/usuario/edit/{id}/{usuario_id}','EmpresaController@usuarioEdit')->name('empresa.usuario.edit');
-Route::put('/empresa/usuario/update/{usuario_id}','EmpresaController@usuarioUpdate')->name('empresa.usuario.update');
-
-Route::get('vuelo/{aerolinea_id}', 'VueloController@create')->name('vuelo.create');
-Route::post('vuelo/{aerolinea_id}', 'VueloController@store')->name('vuelo.store');
-Route::get('vuelo/{id}/edit', 'VueloController@edit')->name('vuelo.edit');
-Route::put('vuelo/{id}', 'VueloController@update')->name('vuelo.update');
+Route::group(['prefix' => 'e'], function () {
+    Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
+    Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
+    Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
+});

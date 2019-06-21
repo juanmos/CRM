@@ -7,11 +7,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Conductor;
+
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use SoftDeletes;
     use HasRoles;
     /**
      * The attributes that are mass assignable.
@@ -19,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios','conductor_id','hotel_id','foto','activo','primer_login','latitud','longitud'
+        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios','empresa_id','primer_login','foto','activo','primer_login','latitud','longitud','cedula'
     ];
     
     /**

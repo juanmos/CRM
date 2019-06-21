@@ -22,8 +22,8 @@ class CreateContactosTable extends Migration
             $table->string('telefono')->nullable();
             $table->string('extension')->nullable();
             $table->string('cargo')->nullable();
-            $table->integer('ciudad_id');
-            $table->integer('oficina_id');
+            $table->integer('ciudad_id')->default(0);
+            $table->integer('oficina_id')->default(0);
             $table->timestamps();
         });
     }

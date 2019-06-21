@@ -26,10 +26,10 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        $hotel =null;
+        $empresa =null;
         $usuario = null;
         $roles = Role::orderBy('name')->get()->pluck('name','name');
-        return view('usuario.form',compact('hotel','id','usuario','roles'));
+        return view('usuario.form',compact('empresa','id','usuario','roles'));
     }
 
     /**
@@ -68,10 +68,10 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        $hotel =null;
+        $empresa =null;
         $usuario = User::find($id);
         $roles = Role::orderBy('name')->get()->pluck('name','name');
-        return view('usuario.form',compact('hotel','id','usuario','roles'));
+        return view('usuario.form',compact('empresa','id','usuario','roles'));
     }
 
     /**

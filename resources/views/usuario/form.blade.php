@@ -19,7 +19,7 @@
                                 </div>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="feather icon-home"></i></a></li>
-                                    <li class="breadcrumb-item"><a href="{{route('hotel.index')}}">Usuario</a></li>
+                                    <li class="breadcrumb-item"><a href="{{route('empresa.usuario.index')}}">Usuario</a></li>
                                     @if($usuario!=null)
                                     <li class="breadcrumb-item"><a href="javascript:">Editar</a></li>
                                     @else
@@ -31,10 +31,10 @@
                     </div>
                 </div>
                 <!-- [ breadcrumb ] end -->
-                @if($hotel!=null)
+                @if($empresa!=null)
                     
-                <form action="{{($usuario!=null)?route('hotel.usuario.update',[$usuario->id]):route('hotel.usuario.store',$hotel->id)}}" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="hotel_id" value="{{$hotel->id}}"/>
+                <form action="{{($usuario!=null)?route('empresa.usuario.update',[$usuario->id]):route('empresa.usuario.store')}}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="empresa_id" value="{{$empresa->id}}"/>
                 @else
                 <form action="{{($usuario!=null)?route('usuario.update',[$usuario->id]):route('usuario.store')}}" method="POST" enctype="multipart/form-data">
                 @endif
@@ -102,12 +102,12 @@
                                                 {!! Form::select('activo', ["0"=>"Inactivo","1"=>"Activo"], ($usuario!=null)?$usuario->activo : 1 ,["class"=>"form-control"]) !!}
                                             </div>  
                                             @endif
-                                            @if($hotel==null)
+                                            
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Role</label>
                                                 {!! Form::select('role', $roles, ($usuario!=null)?$usuario->activo : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
-                                            @endif
+                                            
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>
                                         

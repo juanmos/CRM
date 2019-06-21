@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/animation/css/animate.min.css')}}">
     <!-- vendor css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    @stack('styles')
 </head>
 <body>
     <div class="loader-bg">

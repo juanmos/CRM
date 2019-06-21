@@ -22,7 +22,7 @@ Route::middleware('jwt.auth')->post('usuario/registroPush', 'APIAuthController@r
 Route::middleware('jwt.auth')->post('geoposicion', 'APIAuthController@geoposicion');//Establecer la ubicacion del usuario actual
 Route::middleware('jwt.auth')->get('saldo', 'APIAuthController@saldo');//Saldo del conductor
 
-Route::middleware('jwt.auth')->get('aerolineas', 'AerolineaController@index');//Listado de las aerolineas
+// Route::middleware('jwt.auth')->get('aerolineas', 'AerolineaController@index');//Listado de las aerolineas
 
-Route::middleware('jwt.auth')->get('carrera','CarreraController@index'); //Listado de carrera
-Route::middleware('jwt.auth')->post('carrera','CarreraController@store'); //Crear carrera
+// Route::middleware('jwt.auth')->get('carrera','CarreraController@index'); //Listado de carrera
+// Route::middleware('jwt.auth')->post('carrera','CarreraController@store'); //Crear carrera
