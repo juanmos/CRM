@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Empresa;
+use App\Models\User;
+use Auth;
 
 class VisitaController extends Controller
 {
@@ -11,9 +15,10 @@ class VisitaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request,$usuario_id=null)
     {
-        return view('visita.index');
+        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        return view('visita.index',compact('usuarios'));
     }
 
     /**

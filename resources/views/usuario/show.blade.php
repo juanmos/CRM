@@ -71,6 +71,7 @@
                                                         </td>
                                                         <td>
                                                             <a href="{{route('cliente.show',[$cliente->id] )}}" class="label theme-bg text-white f-12">Ver</a>
+                                                            <a href="{{route('cliente.show',[$cliente->id] )}}" class="label theme-bg2 text-white f-12">Visita</a>
                                                             <a href="{{route('cliente.desasignar',[$usuario->id,$cliente->id] )}}" class="label theme-danger text-white f-12">Quitar</a>
                                                         </td>
                                                     </tr>
@@ -288,6 +289,7 @@
       navLinks: true, // can click day/week names to navigate views
       editable: true,
       eventLimit: true, // allow "more" link when too many events
+      defaultView:'timeGridWeek',
       events: [
         {
           title: 'All Day Event',

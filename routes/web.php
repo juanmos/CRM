@@ -20,7 +20,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth']], function () {
 Route::resource('empresa', 'EmpresaController');
     Route::resource('cliente', 'ClienteController');
-    Route::resource('visita', 'VisitaController');
     Route::resource('tipoVisita', 'TipoVisitaController');
     Route::resource('clasificacion', 'ClasificacionController');
     Route::resource('usuario', 'UsuarioController');
@@ -43,6 +42,8 @@ Route::resource('empresa', 'EmpresaController');
 
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
+        Route::resource('visita', 'Empresa\VisitaController');
+        Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
         Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
         Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
     });

@@ -21,8 +21,19 @@
                                                 <h5 class="m-0">Vendedores</h5>
                                             </div>
                                         </div>
-                                        
-                                        <i class="far fa-building text-c-purple f-50"></i>
+                                        <table class="table table-hover">
+                                          <tbody>
+                                              @foreach($usuarios as $user)
+                                              <tr class="unread">
+                                                  <td><img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">{{$user->nombre}} {{$user->apellido}}
+                                                  </td>
+                                                  <td>
+                                                    <a href="{{ route('visita.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
+                                                  </td>
+                                              </tr>                                              
+                                              @endforeach
+                                          </tbody>
+                                      </table>
                                     </div>
                                 </div>
                             </div>
@@ -71,10 +82,21 @@
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
-      defaultDate: '2019-06-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
       eventLimit: true, // allow "more" link when too many events
+      defaultView:'timeGridWeek',
+      hiddenDays: [ 0 ],
+      minTime:'06:00:00',
+      maxTime:'21:00:00',
+      scrollTime:'08:00:00',
+      dateClick: function(info) {
+        alert('Clicked on: ' + info.dateStr);
+        alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+        alert('Current view: ' + info.view.type);
+        // change the day's background color just for fun
+        info.dayEl.style.backgroundColor = 'red';
+      },
       events: [
         {
           title: 'All Day Event',

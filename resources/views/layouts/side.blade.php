@@ -29,7 +29,7 @@
                 @endif
                 @if(!Auth::user()->hasRole('SuperAdministrador'))
                 <li data-username="Table bootstrap datatable footable" class="nav-item">
-                    <a href="{{route('visita.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
+                    <a href="{{route('visita.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
