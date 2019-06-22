@@ -22,7 +22,7 @@ class Cliente extends Model
         return $this->belongsTo(Clasificacion::class,'clasificacion_id');
     }
 
-    public function usuario(){
+    public function vendedor(){
         return $this->belongsTo(User::class,'usuario_id');
     }
 

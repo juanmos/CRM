@@ -19,11 +19,13 @@
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Usuarios</h5>
-                                        @if(Auth::user()->hasRole('SuperAdmin'))
-                                        <a class="btn btn-primary float-right" href="{{route('usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
-                                        @else
-                                        <a class="btn btn-primary float-right" href="{{route('empresa.usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
-                                        <a class="btn btn-secondary float-right" href="{{route('empresa.usuario.eliminados')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Usuarios eliminados</span></a>
+                                        @if(!Request::is('cliente/vendedor/*'))  
+                                            @if(Auth::user()->hasRole('SuperAdmin'))
+                                            <a class="btn btn-primary float-right" href="{{route('usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
+                                            @else
+                                            <a class="btn btn-primary float-right" href="{{route('empresa.usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
+                                            <a class="btn btn-secondary float-right" href="{{route('empresa.usuario.eliminados')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Usuarios eliminados</span></a>
+                                            @endif
                                         @endif
                                     </div>
                                     <div class="card-block px-0 py-3">
@@ -36,7 +38,7 @@
                                                         <th>Nombre</th>
                                                         <th>Email</th>
                                                         <th>Telefono</th>
-                                                        <th>Role</th>
+                                                        <th>Rol</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -51,7 +53,10 @@
                                                         <td>{{$user->telefono}}</td>
                                                         <td>{{$user->getRoleNames()->implode(',')}}</td>
                                                         <td>
-                                                            
+                                                        @if(Request::is('cliente/vendedor/*'))  
+                                                        
+                                                            <a href="{{ route('cliente.asignar',[$user->id,$id]) }}" class="label theme-bg2 text-white f-12">Asignar</a>
+                                                        @else
                                                             @if(Auth::user()->hasRole('SuperAdmin'))
                                                             <a href="{{ route('usuario.show',$user->id) }}" class="label theme-bg2 text-white f-12">Ver</a>
                                                             <a href="{{ route('usuario.edit',$user->id) }}" class="label theme-bg text-white f-12">Editar</a>
@@ -67,9 +72,8 @@
                                                                     <button type="submit" class="label theme-danger text-white f-12">Eliminar</button>
                                                                     {!! Form::close() !!}
                                                                 @endif
-                                                            
-                                                            
                                                             @endif
+                                                        @endif
                                                         </td>
                                                     </tr>
                                                     

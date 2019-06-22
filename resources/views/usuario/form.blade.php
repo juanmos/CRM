@@ -104,7 +104,7 @@
                                             @endif
                                             
                                             <div class="form-group col-md-6">
-                                                <label for="exampleInputPassword1">Role</label>
+                                                <label for="exampleInputPassword1">Rol</label>
                                                 {!! Form::select('role', $roles, ($usuario!=null)?$usuario->activo : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
                                             

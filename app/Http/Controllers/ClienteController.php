@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clasificacion;
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 class ClienteController extends Controller
@@ -13,10 +14,10 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($usuario_id=null)
     {
         $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(20);
-        return view('cliente.index',compact('clientes'));
+        return view('cliente.index',compact('clientes','usuario_id'));
     }
 
     /**
@@ -56,6 +57,32 @@ class ClienteController extends Controller
             'ruc'=>$request->get('ruc'),
         ]);
         return redirect('cliente');
+    }
+
+    public function vendedor($id){
+        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->where('activo',1)->orderBy('nombre')->paginate(50);
+        return view('usuario.index',compact('usuarios','id'));
+    }
+
+    public function asignar($id,$cliente_id){
+        $cliente = Cliente::find($cliente_id);
+        $cliente->usuario_id=$id;
+        $cliente->save();
+        return redirect('cliente/'.$cliente_id);
+    }
+    public function asignarMultiple(Request $request,$id){
+        $clientes = Cliente::whereIn('id',$request->get('clientes'))->get();
+        foreach($clientes as $cliente){
+            $cliente->usuario_id=$id;
+            $cliente->save();
+        }
+        return redirect('e/usuario/'.$id);
+    }
+    public function desasignar($id,$cliente_id){
+        $cliente = Cliente::find($cliente_id);
+        $cliente->usuario_id=0;
+        $cliente->save();
+        return back();
     }
 
     /**

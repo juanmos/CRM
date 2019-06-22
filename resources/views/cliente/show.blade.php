@@ -109,6 +109,32 @@
                                         <i class="fas fa-file-invoice-dollar text-c-purple f-50"></i>
                                     </div>
                                 </div>
+                                <div class="card card-event">
+                                    <div class="card-block">
+                                        <div class="row align-items-center justify-content-center">
+                                            <div class="col">
+                                                <h5 class="m-0">Datos de vendedor</h5>
+                                                @if($cliente->vendedor!=null)
+                                                <sub class="text-muted f-12"><small>Nombre: </small>{{$cliente->vendedor->nombre}} {{$cliente->vendedor->apellido}}</sub><br>
+                                                <sub class="text-muted f-12"><small>Telf: </small>{{$cliente->vendedor->telefono}}</sub><br>
+                                                <sub class="text-muted f-12"><small>Email: </small>{{$cliente->vendedor->email}}</sub><br>
+                                                <sub class="text-muted f-12"><small>Rol: </small>{{$cliente->vendedor->getRoleNames()->implode(',')}}</sub>
+                                                @else
+                                                <sub class="text-muted f-12">Sin asginar</sub><br>
+                                                @endif
+                                            </div>
+                                            {{-- <div class="col-auto">
+                                                <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
+                                            </div> --}}
+                                        </div>
+                                        
+                                        <h6 class="text-muted mt-4 mb-0"><a href="{{route('cliente.vendedor',$cliente->id)}}" class="label theme-bg text-white f-12">@if($cliente->vendedor!=null) Editar @else Asignar @endif</a> </h6>
+                                        @if($cliente->vendedor!=null)
+                                        <h6 class="text-muted mt-4 mb-0"><a href="{{route('empresa.usuario.show',$cliente->vendedor->id)}}" class="label theme-bg2 text-white f-12">Perfil</a>
+                                        @endif
+                                        <i class="fas fa-user-tie text-c-purple f-50"></i>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
@@ -148,6 +174,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-xl-8 col-md-8">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Contactos</h5>
@@ -178,6 +206,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-xl-4 col-md-4">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Oficinas</h5>
@@ -191,10 +221,9 @@
                                                     <tr class="unread">
                                                         <td>
                                                             <h6 class="mb-1"><i class="fas fa-map-marked-alt"></i> {{$oficina->direccion}} </h6>
-                                                        </td>
-                                                        <td>
+                                                            <br>
                                                             <h6 class="text-muted"><i class="fas fa-globe-americas"></i> {{$oficina->ciudad->ciudad}}</h6>
-                                                        </td>
+                                                        </br>
                                                         <td><a href="{{route('oficina.edit',[$oficina->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
                                                     </tr>
                                                     @empty
