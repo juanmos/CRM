@@ -20,6 +20,11 @@ class ClienteController extends Controller
         return view('cliente.index',compact('clientes','usuario_id'));
     }
 
+    public function buscar(Request $request){
+        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->where('usuario_id',$request->get('vendedor_id'))->where('nombre','like','%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
+        return response()->json(compact('clientes','usuario_id'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

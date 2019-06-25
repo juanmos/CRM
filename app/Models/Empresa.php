@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Configuracion;
 use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\User;
@@ -21,5 +22,9 @@ class Empresa extends Model
 
     public function clientes(){
         return $this->hasMany(Cliente::class,'empresa_id');
+    }
+
+    public function configuracion(){
+        return $this->hasOne(Configuracion::class,'emrpesa_id');
     }
 }

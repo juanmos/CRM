@@ -39,6 +39,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::get('cliente/asignar/{user_id}/{cliente_id}','ClienteController@asignar')->name('cliente.asignar');
     Route::post('cliente/asignarMultiple/{user_id}','ClienteController@asignarMultiple')->name('cliente.asignar.multiple');
     Route::get('cliente/desasignar/{user_id}/{cliente_id}','ClienteController@desasignar')->name('cliente.desasignar');
+    Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
 
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
