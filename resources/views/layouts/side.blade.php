@@ -42,6 +42,7 @@
                         <li class=""><a href="{{route('empresa.usuario.index')}}" class="">Usuarios</a></li>
                         <li class=""><a href="{{route('tipoVisita.index')}}" class="">Tipos de visita</a></li>
                         <li class=""><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
+                        <li class=""><a href="{{route('clasificacion.index')}}" class="">Configuraciones</a></li>
                     </ul>
                 </li>
                 @endif
