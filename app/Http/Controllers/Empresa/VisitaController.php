@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
+use App\Models\Visita;
 use App\Models\User;
+use Carbon\Carbon;
 use Auth;
 
 class VisitaController extends Controller
@@ -23,7 +25,22 @@ class VisitaController extends Controller
             $usuario_id=$usuarios->first()->id;
         }
         $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
-        return view('visita.index',compact('usuarios','usuario_id','tiposVisita'));
+        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
+        return view('visita.index',compact('usuarios','usuario_id','tiposVisita','tiempoVisita'));
+    }
+
+    public function visitasByUsuario(Request $request,$usuario_id){
+        $fechaIni = new Carbon($request->get('start'));
+        $fechaFin = new Carbon($request->get('end'));
+        $visitas = Visita::where("usuario_id",$usuario_id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+        foreach($visitas as $visita){
+            $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
+            $visita->description='Visita: '.$visita->tipoVisita->tipo;
+            $visita->start=$visita->fecha_inicio;
+            $visita->end=$visita->fecha_fin;
+            $visita->url=route('visita.show',$visita->id);
+        }
+        return $visitas;//response()->json(compact('visitas'));
     }
 
     /**
@@ -44,7 +61,13 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data=$request->all();
+        $data['estado_visita_id']=1;
+        $data['fecha_inicio']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->toDateTimeString();
+        $data['fecha_fin']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
+        $visita=Visita::create($data);
+        $validate=true;
+        return response()->json(compact('visita','validate'));
     }
 
     /**
@@ -78,7 +101,10 @@ class VisitaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data=$request->all();
+        $visita = Visita::find($id);
+        $visita->update($data);
+        return $visita;
     }
 
     /**

@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Configuracion;
-use App\Models\Empresa;
-use App\Models\Ciudad;
+use Session;
+use Auth;
 
-class EmpresaController extends Controller
+class ConfiguracionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,7 @@ class EmpresaController extends Controller
      */
     public function index()
     {
-        $empresas = Empresa::orderBy('nombre')->paginate(50);
-        return view('empresa.index',compact('empresas'));
+        
     }
 
     /**
@@ -27,9 +26,7 @@ class EmpresaController extends Controller
      */
     public function create()
     {
-        $empresa = null;
-        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('empresa.form',compact('empresa','ciudad'));
+        //
     }
 
     /**
@@ -40,9 +37,7 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        $empresa = Empresa::create($request->all());
-        $empresa->configuracion()->create();
-        return redirect('empresa');
+        //
     }
 
     /**
@@ -53,8 +48,7 @@ class EmpresaController extends Controller
      */
     public function show($id)
     {
-        $empresa = Empresa::find($id);
-        return view('empresa.show',compact('empresa'));
+        //
     }
 
     /**
@@ -63,11 +57,14 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id=null)
     {
-        $empresa = Empresa::find($id);
-        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('empresa.form',compact('empresa','ciudad'));
+        $configuracion = Configuracion::find($id);
+        $horaInicial = array('04:00:00'=>'04:00:00','05:00:00'=>'05:00:00','06:00:00'=>'06:00:00','07:00:00'=>'07:00:00','08:00:00'=>'08:00:00','09:00:00'=>'09:00:00','10:00:00'=>'10:00:00');
+        $horaFinal = array('15:00:00'=>'15:00:00','16:00:00'=>'16:00:00','17:00:00'=>'17:00:00','18:00:00'=>'18:00:00','19:00:00'=>'19:00:00','20:00:00'=>'20:00:00','21:00:00'=>'21:00:00','22:00:00'=>'22:00:00','23:00:00'=>'23:00:00');
+        $vistaAgenda=array('dayGridMonth'=>'Més','timeGridWeek'=>'Semana','timeGridDay'=>'Día','listWeek'=>'Listado');
+        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
+        return view('empresa.configuracion',compact('configuracion','horaInicial','horaFinal','vistaAgenda','tiempoVisita'));
     }
 
     /**
@@ -79,8 +76,9 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $empresa = Empresa::find($id)->update($request->all());
-        return redirect('empresa');
+        Configuracion::find($id)->update($request->all());
+        Session::flash('mensaje','Configuraciones guardadas');
+        return back();
     }
 
     /**

@@ -25,6 +25,6 @@ class Empresa extends Model
     }
 
     public function configuracion(){
-        return $this->hasOne(Configuracion::class,'emrpesa_id');
+        return $this->hasOne(Configuracion::class,'empresa_id');
     }
 }

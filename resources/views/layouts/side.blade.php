@@ -42,7 +42,7 @@
                         <li class=""><a href="{{route('empresa.usuario.index')}}" class="">Usuarios</a></li>
                         <li class=""><a href="{{route('tipoVisita.index')}}" class="">Tipos de visita</a></li>
                         <li class=""><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
-                        <li class=""><a href="{{route('clasificacion.index')}}" class="">Configuraciones</a></li>
+                        <li class=""><a href="{{route('configuracion.edit',Auth::user()->empresa_id)}}" class="">Configuraciones</a></li>
                     </ul>
                 </li>
                 @endif
@@ -54,11 +54,6 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administracion</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
-                        <li class=""><a href="{{route('aerolinea.index')}}" class="">Aerolineas</a></li>
-                        <li class=""><a href="bc_breadcrumb-pagination.html" class="">Vuelos</a></li>
-
-
-                        <li class=""><a href="icon-feather.html" class="">Feather<span class="pcoded-badge label label-danger">NEW</span></a></li>
                     </ul>
                 </li>
                 @endif

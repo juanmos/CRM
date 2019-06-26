@@ -18,7 +18,12 @@ class ContactoController extends Controller
      */
     public function index()
     {
-        //
+        
+    }
+
+    public function buscar(Request $request){
+        $contacto = Contacto::where('cliente_id',$request->get('cliente_id'))->get();
+        return $contacto;
     }
 
     /**

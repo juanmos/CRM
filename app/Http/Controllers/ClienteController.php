@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clasificacion;
+use App\Models\TipoVisita;
+use App\Models\Visita;
 use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Auth;
 class ClienteController extends Controller
 {
@@ -23,6 +26,20 @@ class ClienteController extends Controller
     public function buscar(Request $request){
         $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->where('usuario_id',$request->get('vendedor_id'))->where('nombre','like','%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
         return response()->json(compact('clientes','usuario_id'));
+    }
+
+    public function visitas(Request $request,$id){
+        $fechaIni = new Carbon($request->get('start'));
+        $fechaFin = new Carbon($request->get('end'));
+        $visitas = Visita::where("cliente_id",$id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+        foreach($visitas as $visita){
+            $visita->title=$visita->vendedor->full_name.' Visita: '.$visita->tipoVisita->tipo;;
+            $visita->description='Visita: '.$visita->tipoVisita->tipo;
+            $visita->start=$visita->fecha_inicio;
+            $visita->end=$visita->fecha_fin;
+            $visita->url=route('visita.show',$visita->id);
+        }
+        return $visitas;
     }
 
     /**
@@ -99,7 +116,9 @@ class ClienteController extends Controller
     public function show( $id)
     {
         $cliente=Cliente::find($id);
-        return view('cliente.show',compact('cliente'));
+        $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
+        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
+        return view('cliente.show',compact('cliente','tiposVisita','tiempoVisita'));
     }
 
     /**

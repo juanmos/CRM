@@ -88,8 +88,10 @@
                                                 <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
                                             </div> --}}
                                         </div>
-                                        {{-- <h2 class="mt-3 f-w-300">45<sub class="text-muted f-14">{{$empresa->direccion}}</sub></h2>
-                                        <h6 class="text-muted mt-4 mb-0">You can participate in event </h6> --}}
+                                        <h6 class="text-muted mt-4 mb-0">
+                                            <a href="{{route('empresa.edit',$empresa->id)}}" class="label theme-bg text-white f-12">Editar</a> 
+                                            <a href="{{route('configuracion.edit',$empresa->id)}}" class="label theme-bg2 text-white f-12">Configuraciones</a>
+                                        </h6>
                                         <i class="far fa-building text-c-purple f-50"></i>
                                     </div>
                                 </div>

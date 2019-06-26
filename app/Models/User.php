@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Cliente;
+use App\Models\Empresa;
 
 
 class User extends Authenticatable implements JWTSubject
@@ -45,6 +46,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function clientes(){
         return $this->hasMany(Cliente::class,'usuario_id');
+    }
+
+    public function empresa(){
+        return $this->belongsTo(Empresa::class,'empresa_id');
     }
 
     public function getFullNameAttribute()

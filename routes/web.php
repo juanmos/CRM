@@ -23,11 +23,13 @@ Route::resource('empresa', 'EmpresaController');
     Route::resource('tipoVisita', 'TipoVisitaController');
     Route::resource('clasificacion', 'ClasificacionController');
     Route::resource('usuario', 'UsuarioController');
+    Route::resource('configuracion', 'ConfiguracionController');
 
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
     Route::post('contacto/store/{cliente_id}','ContactoController@store')->name('contacto.store');
     Route::get('contacto/edit/{id}','ContactoController@edit')->name('contacto.edit');
     Route::put('contacto/update/{id}','ContactoController@update')->name('contacto.update');
+    Route::post('contacto/buscar/','ContactoController@buscar')->name('contacto.buscar');
 
     Route::get('oficina/create/{cliente_id}', 'OficinaController@create')->name('oficina.create');
     Route::post('oficina/store/{cliente_id}','OficinaController@store')->name('oficina.store');
@@ -40,11 +42,13 @@ Route::resource('empresa', 'EmpresaController');
     Route::post('cliente/asignarMultiple/{user_id}','ClienteController@asignarMultiple')->name('cliente.asignar.multiple');
     Route::get('cliente/desasignar/{user_id}/{cliente_id}','ClienteController@desasignar')->name('cliente.desasignar');
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
+    Route::get('cliente/visitas/{id}','ClienteController@visitas')->name('cliente.visitas');
 
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
         Route::resource('visita', 'Empresa\VisitaController');
         Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
+        Route::get('visitas/by/vendedor/{id}','Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
         Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
         Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
     });

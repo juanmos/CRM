@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Empresa;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Models\TipoVisita;
 use App\Models\Empresa;
 use App\Models\User;
 use Auth;
@@ -66,7 +67,10 @@ class UsuarioController extends Controller
     public function show($id)
     {
         $usuario = User::find($id);
-        return view('usuario.show',compact('usuario'));
+        $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
+        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
+        $usuario_id=$usuario->id;
+        return view('usuario.show',compact('usuario','tiposVisita','tiempoVisita','usuario_id'));
     }
 
     /**

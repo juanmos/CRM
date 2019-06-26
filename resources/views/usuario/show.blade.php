@@ -264,6 +264,7 @@
         </div>
     </div>
 </div>
+@include('includes.modalNuevaVisita')
 @endsection
 @push('scripts')
 <script src='{{asset("assets/plugins/fullcalendar/packages/core/main.js")}}'></script>
@@ -273,79 +274,71 @@
 <script src='{{asset("assets/plugins/fullcalendar/packages/list/main.js")}}'></script>
 <script src='{{asset("assets/plugins/fullcalendar/packages/core/locales-all.js")}}'></script>
 <script>
-
+    var calendar=null
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
-      locale:'es',
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-      },
-      defaultDate: '2019-06-12',
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      defaultView:'timeGridWeek',
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2019-06-01',
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
+        locale:'es',
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
-        {
-          title: 'Long Event',
-          start: '2019-06-07',
-          end: '2019-06-10'
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        defaultView:'{{Auth::user()->empresa->configuracion->defaultView}}',
+        hiddenDays: [ 0 ],
+        minTime:"{{Auth::user()->empresa->configuracion->min_time}}",
+        maxTime:'{{Auth::user()->empresa->configuracion->max_time}}',
+        scrollTime:'08:00:00',
+        slotDuration:'00:15:00',
+        dateClick: function(info) {
+            var fecha=moment(info.dateStr);
+            $('#modalBuscaCliente').modal('show');
+            $('#mesModal').val(fecha.format('MM'))
+            $('#diaModal').val(fecha.format('DD'));
+            $('#anioModal').val(fecha.format('YYYY'));
+            $('#horaModal').val(fecha.format('HH'));
+            $('#minModal').val(fecha.format('mm'));
         },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2019-06-09T16:00:00'
+        eventDrop: function(event) {
+            if (!confirm("La visita a "+event.event.title + " se reagendara para el: " + moment(event.event.start).format('dddd, DD-MM-YYYY HH:mm')+". Es esto correcto?")) {
+                event.revert();
+            }else{
+                $.ajax({
+                    url: '{{url("e/visita")}}/'+event.event.id,
+                    type: 'PUT',
+                    data:{_token:"{{csrf_token()}}",fecha_inicio:moment(event.event.start).format('YYYY-MM-DD HH:mm:ss'),fecha_fin:moment(event.event.end).format('YYYY-MM-DD HH:mm:ss')},
+                    success: function(response) {
+                        calendar.refetchEvents();
+                    }
+                });
+            }
         },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2019-06-16T16:00:00'
+        eventResize: function(event) {
+            if (!confirm("La visita a "+event.event.title + " terminara ahora: " + moment(event.event.end).format('dddd, DD-MM-YYYY HH:mm')+". Es esto correcto?")) {
+                event.revert();
+            }else{
+                $.ajax({
+                    url: '{{url("e/visita")}}/'+event.event.id,
+                    type: 'PUT',
+                    data:{_token:"{{csrf_token()}}",fecha_fin:moment(event.event.end).format('YYYY-MM-DD HH:mm:ss')},
+                    success: function(response) {
+                        calendar.refetchEvents();
+                    }
+                });
+            }
         },
-        {
-          title: 'Conference',
-          start: '2019-06-11',
-          end: '2019-06-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2019-06-12T10:30:00',
-          end: '2019-06-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2019-06-12T12:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2019-06-12T14:30:00'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2019-06-12T17:30:00'
-        },
-        {
-          title: 'Dinner',
-          start: '2019-06-12T20:00:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2019-06-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2019-06-28'
-        }
-      ]
+        eventSources: [
+            {
+            url: "{{route('visita.vendedor',$usuario->id)}}", // use the `url` property
+            color: '#2C3E50',    // an option!
+            textColor: '#fff'  // an option!
+            }
+        ]
     });
 
     calendar.render();

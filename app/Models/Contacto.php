@@ -16,4 +16,14 @@ class Contacto extends Model
     public function ciudad(){
         return $this->belongsTo(Ciudad::class,'ciudad_id');
     }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->nombre} {$this->apellido}";
+    }
+
+    public function getNameCargoAttribute()
+    {
+        return "{$this->nombre} {$this->apellido} - {$this->cargo}";
+    }
 }
