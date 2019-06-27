@@ -132,8 +132,6 @@
       eventSources: [
         {
           url: "{{route('visita.vendedor',$usuario_id)}}", // use the `url` property
-          color: '#2C3E50',    // an option!
-          textColor: '#fff'  // an option!
         }
       ]
     });

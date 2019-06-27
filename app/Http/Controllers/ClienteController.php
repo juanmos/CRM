@@ -37,6 +37,8 @@ class ClienteController extends Controller
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
             $visita->start=$visita->fecha_inicio;
             $visita->end=$visita->fecha_fin;
+            $visita->color=$visita->estado->color;
+            $visita->textColor=$visita->estado->textColor;
             $visita->url=route('visita.show',$visita->id);
         }
         return $visitas;

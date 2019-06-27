@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class EstadoVisita extends Model
 {
-    protected $fillable=['estado'];
+    protected $fillable=['estado','color','icono'];
 }

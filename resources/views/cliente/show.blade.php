@@ -528,8 +528,6 @@
         eventSources: [
             {
             url: "{{route('cliente.visitas',$cliente->id)}}", // use the `url` property
-            color: '#2C3E50',    // an option!
-            textColor: '#fff'  // an option!
             }
         ],
         dateClick: function(info) {
