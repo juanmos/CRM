@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Configuracion;
+use App\Models\Plantilla;
 use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\User;
@@ -26,5 +27,9 @@ class Empresa extends Model
 
     public function configuracion(){
         return $this->hasOne(Configuracion::class,'empresa_id');
+    }
+
+    public function plantillas(){
+        return $this->hasMany(Plantilla::class,'empresa_id');
     }
 }
