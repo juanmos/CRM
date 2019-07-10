@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PlantillaDetalle;
+use App\Models\TipoVisita;
 use App\Models\Empresa;
 
 class Plantilla extends Model
@@ -17,6 +18,10 @@ class Plantilla extends Model
     public function detalles()
     {
         return $this->hasMany(PlantillaDetalle::class, 'plantilla_id');
+    }
+
+    public function tipos(){
+        return $this->hasMany(TipoVisita::class,'plantilla_id');
     }
 
 }
