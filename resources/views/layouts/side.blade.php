@@ -37,11 +37,12 @@
                     <label>Administración</label>
                 </li>
                 <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
-                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administracion</span></a>
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{{route('empresa.usuario.index')}}" class="">Usuarios</a></li>
                         <li class=""><a href="{{route('tipoVisita.index')}}" class="">Tipos de visita</a></li>
                         <li class=""><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
+                        <li class=""><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>
                         <li class=""><a href="{{route('configuracion.edit',Auth::user()->empresa_id)}}" class="">Configuraciones</a></li>
                     </ul>
                 </li>
@@ -51,7 +52,7 @@
                     <label>Administración general</label>
                 </li>
                 <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
-                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administracion</span></a>
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
                     </ul>

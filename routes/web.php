@@ -24,6 +24,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::resource('clasificacion', 'ClasificacionController');
     Route::resource('usuario', 'UsuarioController');
     Route::resource('configuracion', 'ConfiguracionController');
+    Route::resource('plantilla','PlantillaController');
 
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
     Route::post('contacto/store/{cliente_id}','ContactoController@store')->name('contacto.store');
