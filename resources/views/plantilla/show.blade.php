@@ -32,27 +32,44 @@
                             <!--[ Recent Users ] start-->
                             <div class="col-xl-8 col-md-6">
                                 <div class="card Recent-Users">
-                                    <div class="card-block px-0 py-3">
-                                        <div class="table-responsive">
+                                    <div class="card-block px-0 py-3 row">
+                                        <div class="col-md-12" ><a href="#" class="btn btn-primary nuevoCampo float-right"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a></div>
+                                        <div class="col-md-12" id="camposPreview">
                                             @if($plantilla->detalles->count()>0)
-                                            <a href="#" class="btn btn-primary nuevoCampo"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a>
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    @foreach ($plantilla->detalles as $detalle )
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="{{Storage::url($usuario->foto)}}" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">{{$usuario->nombre}} {{$usuario->apellido}}</h6>
-                                                            <p class="m-0">{{$usuario->telefono}}</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle {{($usuario->activo)?'text-c-green' :'text-c-red' }} f-10 m-r-15"></i>{{$usuario->email}}</h6>
-                                                        </td>
-                                                        <td><a href="{{route('empresa.usuario.edit',[$empresa->id,$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                            
+                                            
+                                                @foreach ($plantilla->detalles as $detalle )
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <h6 class="mb-2">{{$detalle->label}}</h6>
+                                                        @if($detalle->tipo_campo==1)
+                                                        <input type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                        @elseif($detalle->tipo_campo==2)
+                                                        <textarea rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
+                                                        @elseif($detalle->tipo_campo==3)
+                                                        <input type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                        @elseif($detalle->tipo_campo==4)
+                                                        <select class="selectpicker borderColorElement mb-2 opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
+                                                            @foreach(explode('|',$detalle->opciones) as $opcion)
+                                                                <option value="{{$opcion}}">{{$opcion}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @else
+                                                        <div class="mb-2">&nbsp;</div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <a href="#" class="label btn-primary text-white f-12 btnModificar" myid="{{$detalle->id}}" title="Editar"><i class="fas fa-edit"></i></a>
+                                                        @if($detalle->tipo_campo==4)
+                                                            <a href="#" class="label btn-secondary text-white f-12 btnOpciones" myid="{{$detalle->id}}" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>
+                                                        @endif
+                                                        <a href="#" class="label btn-danger text-white f-12 btnEliminar" myid="{{$detalle->id}}" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                               
                                             @else
                                                 <p>No hay vista previa de la plantilla</p>
                                                 <a href="#" class="btn btn-primary nuevoCampo"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a>
@@ -84,26 +101,28 @@
                     <h4 class="card-title">Campos personalizados</h4>
                   </div>
                 </div>
-                <div class="modal-body" align="center">                    
-                    <div class="form-group-select col-md-12 row">                        
-                        <label class="col-md-4"><b>Tipo de campo:</b></label>                            
-                        {!! Form::select('tipoCampo', ['1'=>'Texto corto','2'=>'Texto largo','3'=>'Numero','4'=>'Opciones'], 1 ,array("class"=>"selectpicker tipoCampo required col-md-8 full-width-fix","id"=>"tipoCampo")); !!}                            
+                <div class="modal-body" align="center">    
+                    <div class="row">                
+                        <div class="form-group-select col-md-12">   
+                            <div class="form-group col-md-12 ">                     
+                                <label class="col-md-4">Tipo de campo:</label>                            
+                                {!! Form::select('tipoCampo', ['1'=>'Texto corto','2'=>'Texto largo','3'=>'Numero','4'=>'Opciones','5'=>'Etiqueta','6'=>'Checks'], 1 ,array("class"=>"form-control","id"=>"tipoCampo")); !!}                            
+                            </div>
+                        </div>
+                        <div class="form-group-select col-md-12">
+                            <div class="form-group col-md-12 ">
+                                <label for="exampleInputEmail1">Nombre del campo</label>
+                                <input type="text" id="nombreCampo" value="" name="label" class="form-control" aria-describedby="emailHelp" placeholder="Nombre del campo">
+                            </div>
+                        </div> 
                     </div>
-                    <div class="form-group-select col-md-12 row">
-                        <div class="col-md-4">
-                            <label class="col-md-12"><b>Nombre del campo:</b></label>
-                        </div>
-                        <div class="col-md-8">
-                            <input class="form-control col-md-12" id="nombreCampo" type="text" name="nombreCampo" value="" placeholder="Nombre del campo">
-                        </div>
-                    </div> 
                 </div>
                 <div class="modal-footer">    
                     <div class="col-md-12">                                     
-                        <button class="btn btnModal-Second pull-left" data-dismiss="modal">
-                            <i class="fa fa-close"> </i> CERRAR
+                        <button class="btn btn-danger float-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
                         </button>
-                        <button class="btn btn-primary pull-right" id="btnGuardaTipoCampo">
+                        <button class="btn btn-primary float-right" id="btnGuardaTipoCampo">
                             <i class="fa fa-save"> </i> GUARDAR
                         </button>
                         <input type="hidden" value="" id="campoId"/>
@@ -119,7 +138,7 @@
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="card card-signup card-plain"> 
-                <div class="modal-header">
+                <div class="">
                   <div class="card-header card-header-blue text-center">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                       <i class="material-icons">clear</i>
@@ -131,17 +150,19 @@
                 <div class="modal-body">
                     <div id="opcionesView">                        
                         <div class="col-md-12 row">
-                            <label class="col-md-3"><b>1:</b></label>
-                            <input type="text" class="form-control col-md-8 borderColorElement opcionCampo" name="opcionCampo[]"/>
+                            <label class="col-md-2"><b>1:</b></label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control borderColorElement opcionCampo" name="opcionCampo[]"/>
+                            </div>
                         </div>
                     </div>    
                 </div>
                 <div class="modal-footer">    
                     <div class="col-md-12">                                    
-                        <button class="btn btnModal-Second pull-left" data-dismiss="modal">
-                            <i class="fa fa-close"> </i> CERRAR
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
                         </button>
-                        <button class="btn btn-primary pull-right" id="btnGuardaOpcionesCampo" >
+                        <button class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
                             <i class="fa fa-save"> </i> GUARDAR
                         </button>
                         <input type="hidden" value="" id="campoOpcionesId"/>
@@ -169,25 +190,15 @@
 
     $(document).on('click','#btnGuardaTipoCampo',function(){
         var tipoCampo = $('select[name=tipoCampo]').val();
-        if($('#antecedentes').val()=="true"){
-            if ($('#nombreCampo').val() != "") {
-                $.post("{{URL::to('configuracion/nuevocampoant')}}",{_token:"{{csrf_token()}}",tipoCampo:tipoCampo,orden:$('#ordenCampo').val() ,nombre:$('#nombreCampo').val(),id:$('#campoId').val()},function(json){
-                    llenaAnt(json);           
-                },'json');
-                cleanFields();
-            }else {
-                alert("Ingrese todos los campos por favor.");
-            }            
-        }else{
-            if ($('#nombreCampo').val() != "") {
-                $.post("{{URL::to('configuracion/nuevocampo')}}",{_token:"{{csrf_token()}}",tipoCampo:tipoCampo,orden:$('#ordenCampo').val() ,nombre:$('#nombreCampo').val(),id:$('#campoId').val()},function(json){
-                    llenaCampos(json);            
-                },'json');
-                cleanFields();
-            }else {
-                alert("Ingrese todos los campos por favor.");
-            }            
-        }                  
+        if ($('#nombreCampo').val() != "") {
+            $.post("{{route('plantilla.campo.create',$plantilla->id)}}",{_token:"{{csrf_token()}}",tipo_campo:$('select[name=tipoCampo]').val(),orden:$('#ordenCampo').val() ,label:$('#nombreCampo').val(),id:$('#campoId').val()},function(json){
+                llenaCampos(json);            
+            },'json');
+            cleanFields();
+        }else {
+            alert("Ingrese todos los campos por favor.");
+        }            
+                         
     });
 
     function cleanFields() {
@@ -202,7 +213,7 @@
         e.preventDefault();
         var r = confirm("Está seguro que desea eliminar el campo, ya no estará visible en sus fichas médicas");
         if (r == true) {
-            $.post("{{URL::to('configuracion/eliminarcampo')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
+            $.post("{{route('plantilla.campo.eliminar')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
                 llenaCampos(json);;
             },'json')
         }
@@ -210,37 +221,17 @@
 
     $(document).on('click','.btnModificar',function(e){
         e.preventDefault();
-        $.post("{{URL::to('configuracion/campo')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
-            $('#tipoCampo').val(json.campo.tipoCampo);
+        $.get("{{url('plantilla/campo/edit/')}}/"+$(this).attr('myid'),function(json){
+            $('#tipoCampo').val(json.campo.tipo_campo);
             $('#ordenCampo').val(json.campo.orden);
-            $('#nombreCampo').val(json.campo.nombre);
+            $('#nombreCampo').val(json.campo.label);
             $('#campoId').val(json.campo.id);
             $('#modalNuevoCampo').modal('show');
             $('#antecedentes').val("false");
         },'json')
         
     });
-    $(document).on('click','.btnEliminarAnt',function(e){
-        e.preventDefault();
-        var r = confirm("Está seguro que desea eliminar el antecedente, ya no estará visible en sus fichas médicas");
-        if (r == true) {
-            $.post("{{URL::to('configuracion/eliminarantecedente')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
-                llenaAnt(json);;
-            },'json')
-        }
-    });
-
-    $(document).on('click','.btnModificarAnt',function(){
-        $.post("{{URL::to('configuracion/antecedente')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
-            $('#tipoCampo').val(json.campo.tipoCampo);
-            $('#ordenCampo').val(json.campo.orden);
-            $('#nombreCampo').val(json.campo.nombre);
-            $('#campoId').val(json.campo.id);
-            $('#modalNuevoCampo').modal('show');
-            $('#antecedentes').val("true");
-        },'json')
-        
-    });
+   
     $(document).on('click','.btnOpciones',function(e){
         e.preventDefault();
         opcionCount=1;
@@ -252,39 +243,21 @@
             $(".opcionesId_"+$(this).attr('myid')+" option").each(function(){
                 opcionCount++;
                 $('#opcionesView').append('<div class="col-md-12 row" id="row_'+opcionCount+'">\
-                    <label class="col-md-2 text-right"><b>'+opcionCount+':</b></label>\
+                    <label class="col-md-2"><b>'+opcionCount+':</b></label>\
                     <div class="col-md-8"><input type="text" value="'+$(this).val()+'" class="form-control borderColorElement opcionCampo" name="opcionCampo[]"/></div>\
-                    <a href="#" class="btn btn-danger btn-fab btn-fab-mini btn-round bs-tooltip removeOpcion col-md-1" count="'+opcionCount+'"><i class="fa fa-times-circle"></i></a>\
+                    <div class="col-md-1"><a href="#" class="label btn-danger text-white f-12 removeOpcion" count="'+opcionCount+'"><i class="fa fa-times-circle"></i></a></div>\
                 </div>');
             });
         }        
         $('#opcionesCampo').modal('show');
     })
-    $(document).on('click','.btnOpcionesAnt',function(e){
-        e.preventDefault();
-        opcionCountAnt=1;
-        $('#campoOpcionesId').val($(this).attr('myid'));
-        $('#antecedentesOpcionesId').val('true');
-        if($(".opcionesId_"+$(this).attr('myid')+" option").length>0){
-            $('#opcionesView').empty();
-            opcionCountAnt=0;
-            $(".opcionesId_"+$(this).attr('myid')+" option").each(function(){
-                opcionCountAnt++;
-                $('#opcionesView').append('<div class="col-md-12 row" id="row_'+opcionCountAnt+'">\
-                    <label class="col-md-2 text-right"><b>'+opcionCountAnt+':</b></label>\
-                    <div class="col-md-8"><input type="text" value="'+$(this).val()+'"  class="form-control borderColorElement opcionCampo" name="opcionCampo[]"/></div>\
-                    <a href="#" class="btn btn-danger btn-fab btn-fab-mini btn-round bs-tooltip removeOpcion col-md-1" count="'+opcionCountAnt+'"><i class="fa fa-times-circle"></i></a>\
-                </div>');
-            });
-        }        
-        $('#opcionesCampo').modal('show');
-    })
+    
     $(document).on('focus','.opcionCampo',function(){
         opcionCount++;
         $('#opcionesView').append('<div class="col-md-12 row" id="row_'+opcionCount+'">\
-            <label class="col-md-2 text-right"><b>'+opcionCount+':</b></label>\
+            <label class="col-md-2"><b>'+opcionCount+':</b></label>\
             <div class="col-md-8"><input type="text"  class="form-control borderColorElement opcionCampo" name="opcionCampo[]"/></div>\
-            <a href="#" class="btn btn-danger btn-fab btn-fab-mini btn-round bs-tooltip removeOpcion col-md-1" count="'+opcionCount+'"><i class="fa fa-times-circle"></i></a>\
+            <div class="col-md-1"><a href="#" class="label btn-danger text-white f-12 removeOpcion" count="'+opcionCount+'"><i class="fa fa-times-circle"></i></a></div>\
         </div>');
         
     });
@@ -308,70 +281,54 @@
                 else
                     return ;
             }).get();
-        if($('#antecedentesOpcionesId').val()=="false"){
-            $.post("{{URL::to('configuracion/opciones')}}",{_token:"{{csrf_token()}}",id:$('#campoOpcionesId').val(),'opciones[]':opciones},function(json){
-                llenaCampos(json);
-                $('#opcionesCampo').modal('hide');
-            },'json')
-        }else{
-            $.post("{{URL::to('configuracion/opcionesant')}}",{_token:"{{csrf_token()}}",id:$('#campoOpcionesId').val(),'opciones[]':opciones},function(json){
-                llenaAnt(json);
-                $('#opcionesCampo').modal('hide');
-            },'json')
-        }
+        
+        $.post("{{route('plantilla.campo.opciones')}}",{_token:"{{csrf_token()}}",id:$('#campoOpcionesId').val(),'opciones[]':opciones},function(json){
+            llenaCampos(json);
+            $('#opcionesCampo').modal('hide');
+        },'json')
+        
             
     })
 
     function llenaCampos(json){
-        $('#tablaCampos').empty();
+        $('#camposPreview').empty();
         json.campos.forEach(function(data){
-            var campo='<tr><td>'+data.orden+'</td><td>'+data.nombre+'</td><td>';
-            if(data.tipoCampo==1){
-                campo+='<input type="text" class="form-control col-md-12 borderColorElement" />';
-            }else if(data.tipoCampo==2){
-                campo+='<textarea rows="4" class="form-control borderColorElement" ></textarea>';
-            }else if(data.tipoCampo==3){
-                campo+='<input type="text" class="form-control col-md-12 borderColorElement" />';
-            }else if(data.tipoCampo==4){
-                campo+='<select class="selectpicker borderColorElement opcionesId_'+data.id+' col-md-12 full-width-fix">';
-                data.opciones.split(',').forEach(function(opcion){
-                    campo+='<option value="'+opcion+'">'+opcion+'</opcion>';
-                });
-                campo+='</select>'
+            var campo='<div class="row"><div class="col-md-1"></div><div class="col-md-8"><h6 class="mb-2">'+data.label+'</h6>';
+            if(data.tipo_campo==1){
+                campo+='<input type="text" class="form-control  mb-2 col-md-12 borderColorElement" placeholder="'+data.label+'" />';
+            }else if(data.tipo_campo==2){
+                campo+='<textarea rows="4" class="form-control  mb-2 borderColorElement"  placeholder="'+data.label+'"></textarea>';
+            }else if(data.tipo_campo==3){
+                campo+='<input type="text" class="form-control  mb-2 col-md-12 borderColorElement"  placeholder="'+data.label+'"/>';
+            }else if(data.tipo_campo==4){
+                campo+='<select class="selectpicker  mb-2 borderColorElement opcionesId_'+data.id+' col-md-12 full-width-fix">';
+                if(data.opciones!=null){
+                    data.opciones.split('|').forEach(function(opcion){
+                        campo+='<option value="'+opcion+'">'+opcion+'</option>';
+                    });
+                }
+                campo+='</select>';
+            }else if(data.tipo_campo==6){
+                //campo+='<select class="selectpicker  mb-2 borderColorElement opcionesId_'+data.id+' col-md-12 full-width-fix">';
+                if(data.opciones!=null){
+                    data.opciones.split('|').forEach(function(opcion){
+                        campo+='<option value="'+opcion+'">'+opcion+'</option>';
+                    });
+                }
+                //campo+='</select>';
+            }else{
+                campo+='<div class="mb-2">&nbsp;</div>';
             }
-            campo+='</td><td><a href="#" class="btn btn-primary btn-fab btn-fab-mini btn-round bs-tooltip btnModificar" myid="'+data.id+'" title="Editar"><i class="fa fa-pencil"></i></a>';
-            if(data.tipoCampo==4){
-                campo+='<a href="#" class="btn btn-secondary btn-fab btn-fab-mini btn-round bs-tooltip btnOpciones" myid="'+data.id+'" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>';
+            campo+='</div><div class="col-md-3"><a href="#" class="label btn-primary text-white f-12 btnModificar" myid="'+data.id+'" title="Editar"><i class="fas fa-edit"></i></a>';
+            if(data.tipo_campo==4){
+                campo+='<a href="#" class="label btn-secondary text-white f-12 btnOpciones" myid="'+data.id+'" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>';
             }
-            campo+='<a href="#" class="btn btn-danger btn-fab btn-fab-mini btn-round bs-tooltip btnEliminar" myid="'+data.id+'" title="Eliminar"><i class="fa fa-trash"></i></a></td></tr>';
-            $('#tablaCampos').append(campo);
+            campo+='<a href="#" class="label btn-danger text-white f-12 btnEliminar" myid="'+data.id+'" title="Eliminar"><i class="fa fa-trash"></i></a>';
+            campo+='</div>';
+            $('#camposPreview').append(campo);
         })
     }
-    function llenaAnt(json){
-        $('#tablaCamposAnt').empty();
-        json.antecedentes.forEach(function(data){
-            var campo='<tr><td>'+data.orden+'</td><td>'+data.nombre+'</td><td>';
-            if(data.tipoCampo==1){
-                campo+='<input type="text" class="form-control col-md-12 borderColorElement" />';
-            }else if(data.tipoCampo==2){
-                campo+='<textarea rows="4" class="form-control borderColorElement" ></textarea>';
-            }else if(data.tipoCampo==3){
-                campo+='<input type="text" class="form-control col-md-12 borderColorElement" />';
-            }else if(data.tipoCampo==4){
-                campo+='<select class="selectpicker borderColorElement opcionesId_'+data.id+' col-md-12 full-width-fix">';
-                data.opciones.split(',').forEach(function(opcion){
-                    campo+='<option value="'+opcion+'">'+opcion+'</opcion>';
-                });
-                campo+='</select>'
-            }
-            campo+='</td><td><a href="#" class="btn btn-primary btn-fab btn-fab-mini btn-round bs-tooltip btnModificarAnt" myid="'+data.id+'" title="Editar"><i class="fa fa-pencil"></i></a>';
-            if(data.tipoCampo==4){
-                campo+='<a href="#" class="btn btn-secondary btn-fab btn-fab-mini btn-round bs-tooltip btnOpcionesAnt" myid="'+data.id+'" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>';
-            }
-            campo+='<a href="#" class="btn btn-danger btn-fab btn-fab-mini btn-round bs-tooltip btnEliminarAnt" myid="'+data.id+'" title="Eliminar"><i class="fa fa-trash"></i></a></td></tr>';
-            $('#tablaCamposAnt').append(campo);
-        })
-    }
+    
     var campos ={campos: JSON.parse($('#campos').val())};
     var ant={antecedentes:JSON.parse($('#camposAnt').val())};
     llenaCampos(campos);

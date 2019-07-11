@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PlantillaDetalle;
 use App\Models\Plantilla;
 use Auth;
 
@@ -90,5 +91,32 @@ class PlantillaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function creaCampo(Request $request,$id){
+        $plantilla = Plantilla::find($id);
+        $data=$request->all();
+        if($data['id']>0){
+            $plantilla->detalles()->where('id',$data['id'])->first()->update($data);
+        }else{
+            $data['orden']=$plantilla->detalles()->count();
+            $plantilla->detalles()->create($data);
+        }
+
+        return response()->json(['campos'=>$plantilla->detalles]);
+    }
+
+    public function opcionesCampo(Request $request){
+        $detalle = PlantillaDetalle::find($request->get('id'));
+        $detalle->opciones=implode('|',$request->get('opciones'));
+        $detalle->save();
+        return response()->json(['campos'=>Plantilla::find($detalle->plantilla_id)->detalles]);
+    }
+
+    public function eliminarCampo(Request $request){
+        $detalle = PlantillaDetalle::find($request->get('id'));
+        $plantilla = Plantilla::find($detalle->plantilla_id);
+        $detalle->delete();
+        return response()->json(['campos'=>$plantilla->detalles]);
     }
 }
