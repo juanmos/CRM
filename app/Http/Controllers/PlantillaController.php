@@ -103,20 +103,31 @@ class PlantillaController extends Controller
             $plantilla->detalles()->create($data);
         }
 
-        return response()->json(['campos'=>$plantilla->detalles]);
+        return response()->json(['campos'=>$plantilla->detalles()->orderBy('orden')->get()]);
     }
 
     public function opcionesCampo(Request $request){
         $detalle = PlantillaDetalle::find($request->get('id'));
         $detalle->opciones=implode('|',$request->get('opciones'));
         $detalle->save();
-        return response()->json(['campos'=>Plantilla::find($detalle->plantilla_id)->detalles]);
+        return response()->json(['campos'=>Plantilla::find($detalle->plantilla_id)->detalles()->orderBy('orden')->get()]);
     }
 
     public function eliminarCampo(Request $request){
         $detalle = PlantillaDetalle::find($request->get('id'));
         $plantilla = Plantilla::find($detalle->plantilla_id);
         $detalle->delete();
-        return response()->json(['campos'=>$plantilla->detalles]);
+        return response()->json(['campos'=>$plantilla->detalles()->orderBy('orden')->get()]);
+    }
+
+    public function ordenCampo(Request $request,$id){
+        $plantilla = Plantilla::find($id);
+        $ids = explode(',',$request->get('ids'));
+        foreach($ids as $index => $id){
+            $detalle = PlantillaDetalle::find($id);
+            $detalle->orden=$index+1;
+            $detalle->save();
+        }
+        return response()->json(['ordenado'=>true]);
     }
 }

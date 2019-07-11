@@ -48,6 +48,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::post('plantilla/campo/crear/{id}','PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::post('plantilla/campo/opciones/','PlantillaController@opcionesCampo')->name('plantilla.campo.opciones');
     Route::post('plantilla/campo/eliminar','PlantillaController@eliminarCampo')->name('plantilla.campo.eliminar');
+    Route::post('plantilla/campo/orden/{id}','PlantillaController@ordenCampo')->name('plantilla.campo.orden');
 
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);

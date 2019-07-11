@@ -36,40 +36,50 @@
                                         <div class="col-md-12" ><a href="#" class="btn btn-primary nuevoCampo float-right"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a></div>
                                         <div class="col-md-12" id="camposPreview">
                                             @if($plantilla->detalles->count()>0)
-                                            
-                                            
-                                                @foreach ($plantilla->detalles as $detalle )
-                                                <div class="row">
-                                                    <div class="col-md-1">
+                                            <ul class="list-group list-group-sortable">    
+                                                @foreach ($plantilla->detalles()->orderBy('orden')->get() as $detalle )
+                                                <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
+                                                    <div class="row">
+                                                        <div class="col-md-1">
+                                                            <span class="feather icon-move"></span>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <h6 class="mb-2">{{$detalle->label}}</h6>
+                                                            @if($detalle->tipo_campo==1)
+                                                            <input type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            @elseif($detalle->tipo_campo==2)
+                                                            <textarea rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
+                                                            @elseif($detalle->tipo_campo==3)
+                                                            <input type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            @elseif($detalle->tipo_campo==4)
+                                                            <select class="selectpicker borderColorElement mb-2 opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
+                                                                @foreach(explode('|',$detalle->opciones) as $opcion)
+                                                                    <option value="{{$opcion}}">{{$opcion}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @elseif($detalle->tipo_campo==6)
+                                                                @if($detalle->opciones!=null)
+                                                                @foreach(explode('|',$detalle->opciones) as $opcion)
+                                                                    <input type="checkbox" name="check_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                @endforeach
+                                                                @else
+                                                                    <input type="checkbox" name="check_{{$detalle->id}}"> Check 
+                                                                @endif
+                                                            @else
+                                                            <div class="mb-2">&nbsp;</div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <a href="#" class="label btn-primary text-white f-12 btnModificar" myid="{{$detalle->id}}" title="Editar"><i class="fas fa-edit"></i></a>
+                                                            @if($detalle->tipo_campo==4 || $detalle->tipo_campo==6)
+                                                                <a href="#" class="label btn-secondary text-white f-12 btnOpciones" myid="{{$detalle->id}}" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>
+                                                            @endif
+                                                            <a href="#" class="label btn-danger text-white f-12 btnEliminar" myid="{{$detalle->id}}" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <h6 class="mb-2">{{$detalle->label}}</h6>
-                                                        @if($detalle->tipo_campo==1)
-                                                        <input type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
-                                                        @elseif($detalle->tipo_campo==2)
-                                                        <textarea rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
-                                                        @elseif($detalle->tipo_campo==3)
-                                                        <input type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
-                                                        @elseif($detalle->tipo_campo==4)
-                                                        <select class="selectpicker borderColorElement mb-2 opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
-                                                            @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                <option value="{{$opcion}}">{{$opcion}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @else
-                                                        <div class="mb-2">&nbsp;</div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <a href="#" class="label btn-primary text-white f-12 btnModificar" myid="{{$detalle->id}}" title="Editar"><i class="fas fa-edit"></i></a>
-                                                        @if($detalle->tipo_campo==4)
-                                                            <a href="#" class="label btn-secondary text-white f-12 btnOpciones" myid="{{$detalle->id}}" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>
-                                                        @endif
-                                                        <a href="#" class="label btn-danger text-white f-12 btnEliminar" myid="{{$detalle->id}}" title="Eliminar"><i class="fa fa-trash"></i></a>
-                                                    </div>
-                                                </div>
+                                                </li>
                                                 @endforeach
-                                               
+                                            </ul>
                                             @else
                                                 <p>No hay vista previa de la plantilla</p>
                                                 <a href="#" class="btn btn-primary nuevoCampo"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a>
@@ -176,9 +186,26 @@
 @endsection
 
 @push('scripts')
+<script type="text/javascript" src="{{asset('assets/plugins/jquery-sortable/jquery.sortable.min.js')}}"></script>
 <script type="text/javascript">
     var opcionCount=1;
     var opcionCountAnt=1;
+
+    $(document).ready(function(){
+        $('.list-group-sortable').sortable({
+            placeholderClass: 'list-group-item'
+        }).on('sortupdate', function(e, ui) {
+            var orden = [];
+            for(var i=0;i<e.currentTarget.children.length ;i++){
+                orden[i]=e.currentTarget.children[i].id;
+            };
+            $.post("{{route('plantilla.campo.orden',$plantilla->id)}}",{ids:orden.join(','),_token:"{{csrf_token()}}"},function(json){
+
+            },'json');
+        });
+;
+    });
+
     $(document).on('click','.nuevoCampo',function(){
         $('#modalNuevoCampo').modal('show');
         // $('#tipoCampo').val('');
@@ -291,9 +318,10 @@
     })
 
     function llenaCampos(json){
-        $('#camposPreview').empty();
+        $('.list-group-sortable').empty();
         json.campos.forEach(function(data){
-            var campo='<div class="row"><div class="col-md-1"></div><div class="col-md-8"><h6 class="mb-2">'+data.label+'</h6>';
+            var campo='<li class="list-group-item"  id="'+data.id+'" orden="'+data.orden+'">';
+            campo+='<div class="row"><div class="col-md-1"><span class="feather icon-move"></span></div><div class="col-md-8"><h6 class="mb-2">'+data.label+'</h6>';
             if(data.tipo_campo==1){
                 campo+='<input type="text" class="form-control  mb-2 col-md-12 borderColorElement" placeholder="'+data.label+'" />';
             }else if(data.tipo_campo==2){
@@ -309,23 +337,37 @@
                 }
                 campo+='</select>';
             }else if(data.tipo_campo==6){
-                //campo+='<select class="selectpicker  mb-2 borderColorElement opcionesId_'+data.id+' col-md-12 full-width-fix">';
+                
                 if(data.opciones!=null){
                     data.opciones.split('|').forEach(function(opcion){
-                        campo+='<option value="'+opcion+'">'+opcion+'</option>';
+                        campo+='<input type="checkbox" value="'+opcion+'" name="check_'+data.id+'"/> '+opcion;
                     });
+                }else{
+                    campo+='<input type="checkbox" value="" name="check_'+data.id+'"/> Check';
                 }
-                //campo+='</select>';
+                
             }else{
                 campo+='<div class="mb-2">&nbsp;</div>';
             }
             campo+='</div><div class="col-md-3"><a href="#" class="label btn-primary text-white f-12 btnModificar" myid="'+data.id+'" title="Editar"><i class="fas fa-edit"></i></a>';
-            if(data.tipo_campo==4){
+            if(data.tipo_campo==4 || data.tipo_campo==6){
                 campo+='<a href="#" class="label btn-secondary text-white f-12 btnOpciones" myid="'+data.id+'" title="Opciones"><i class="fa fa-chevron-circle-down"></i></a>';
             }
             campo+='<a href="#" class="label btn-danger text-white f-12 btnEliminar" myid="'+data.id+'" title="Eliminar"><i class="fa fa-trash"></i></a>';
-            campo+='</div>';
-            $('#camposPreview').append(campo);
+            campo+='</div></li>';
+            $('.list-group-sortable').append(campo);
+            $('.list-group-sortable').sortable('destroy');
+            $('.list-group-sortable').sortable({
+                placeholderClass: 'list-group-item'
+            }).on('sortupdate', function(e, ui) {
+                var orden = [];
+                for(var i=0;i<e.currentTarget.children.length ;i++){
+                    orden[i]=e.currentTarget.children[i].id;
+                };
+                $.post("{{route('plantilla.campo.orden',$plantilla->id)}}",{ids:orden.join(','),_token:"{{csrf_token()}}"},function(json){
+
+                },'json');
+            });
         })
     }
     
