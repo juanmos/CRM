@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TipoVisita;
+use App\Models\Plantilla;
 use Auth;
 
 
@@ -28,7 +29,8 @@ class TipoVisitaController extends Controller
     public function create()
     {
         $tipoVisita = null;
-        return view('tipos.form',compact('tipoVisita'));
+        $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        return view('tipos.form',compact('tipoVisita','plantillas'));
     }
 
     /**
@@ -65,7 +67,8 @@ class TipoVisitaController extends Controller
     public function edit($id)
     {
         $tipoVisita = TipoVisita::find($id);
-        return view('tipos.form',compact('tipoVisita'));
+        $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        return view('tipos.form',compact('tipoVisita','plantillas'));
     }
 
     /**

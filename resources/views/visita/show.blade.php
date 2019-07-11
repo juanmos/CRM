@@ -121,42 +121,215 @@
                                 </div>
                             </div>
                             <!-- [ statistics year chart ] end -->
-                            <!--[ Recent Users ] start-->
-                            {{-- <div class="col-xl-8 col-md-6">
-                                <div class="card Recent-Users">
-                                    <div class="card-header">
-                                        <h5>Usuarios</h5>
-                                        <a href="{{route('empresa.usuario.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a>
+                            <div class="col-xl-8 col-md-8 m-b-30">
+                                <ul class="nav nav-pills" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Previsita</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Visita</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        @if($visita->tipoVisita->plantilla->detalles->count()>0)
+                                            <ul class="list-group list-group-sortable">    
+                                                @foreach ($visita->tipoVisita->plantilla->detalles()->orderBy('orden')->get() as $detalle )
+                                                <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h6 class="mb-2">{{$detalle->label}}</h6>
+                                                            @if($detalle->tipo_campo==1)
+                                                            <input name="custom_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            @elseif($detalle->tipo_campo==2)
+                                                            <textarea name="custom_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
+                                                            @elseif($detalle->tipo_campo==3)
+                                                            <input name="custom_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            @elseif($detalle->tipo_campo==4)
+                                                            <select name="custom_{{$detalle->id}}"  class="selectpicker borderColorElement mb-2 opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
+                                                                @foreach(explode('|',$detalle->opciones) as $opcion)
+                                                                    <option value="{{$opcion}}">{{$opcion}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @elseif($detalle->tipo_campo==6)
+                                                                @if($detalle->opciones!=null)
+                                                                @foreach(explode('|',$detalle->opciones) as $opcion)
+                                                                    <input type="checkbox" name="custom_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                @endforeach
+                                                                @else
+                                                                    <input type="checkbox" name="custom_{{$detalle->id}}"> Check 
+                                                                @endif
+                                                            @else
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                                <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-primary float-right" >Guardar</button>
+                                            </ul>
+                                        @endif
+
                                     </div>
-                                    <div class="card-block px-0 py-3">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    @forelse ($empresa->usuarios as $usuario )
-                                                        
-                                                    
-                                                    <tr class="unread">
-                                                        <td><img class="rounded-circle" style="width:40px;" src="{{Storage::url($usuario->foto)}}" alt="activity-user"></td>
-                                                        <td>
-                                                            <h6 class="mb-1">{{$usuario->nombre}} {{$usuario->apellido}}</h6>
-                                                            <p class="m-0">{{$usuario->telefono}}</p>
-                                                        </td>
-                                                        <td>
-                                                            <h6 class="text-muted"><i class="fas fa-circle {{($usuario->activo)?'text-c-green' :'text-c-red' }} f-10 m-r-15"></i>{{$usuario->email}}</h6>
-                                                        </td>
-                                                        <td><a href="{{route('empresa.usuario.edit',[$empresa->id,$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
-                                                    </tr>
-                                                    @empty
-                                                    <p>No hay usuarios</p>
-                                                    
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Activity</th>
+                                                    <th>Time</th>
+                                                    <th>Status</th>
+                                                    <th class="text-right"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">Jumps over the lazy</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">2:37 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-red">Missed</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">The quick brown fox</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">3:28 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-green">Done</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">The quick brown fox</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">4:28 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-green">Done</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">Dog the quick brown</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">10:23 AM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Activity</th>
+                                                    <th>Time</th>
+                                                    <th>Status</th>
+                                                    <th class="text-right"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">Dog the quick brown</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">10:23 AM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">The quick brown fox</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">3:28 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-green">Done</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">Jumps over the lazy</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">2:37 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-red">Missed</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">The quick brown fox</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">4:28 PM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-green">Done</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div> --}}
-                            <!--[ Recent Users ] end-->
+                            </div>
+                   
 
                         </div>
                         <!-- [ Main Content ] end -->

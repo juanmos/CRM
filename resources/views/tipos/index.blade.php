@@ -28,6 +28,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Tipo</th>
+                                                        <th>Plantilla</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -35,6 +36,7 @@
                                                     @foreach($tipos as $tipo)
                                                     <tr class="unread"></tr>
                                                         <td>{{$tipo->tipo}}</td>
+                                                        <td>{{$tipo->plantilla->nombre}}</td>
                                                         <td>
                                                             @if($tipo->empresa_id!=0)
                                                             <a href="{{ route('tipoVisita.edit',$tipo->id) }}" class="label theme-bg text-white f-12">Editar</a>
