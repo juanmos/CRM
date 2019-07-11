@@ -27,6 +27,7 @@
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
+                                                        <th>Nombre</th>
                                                         <th>Tipo</th>
                                                         <th>Acciones</th>
                                                     </tr>
@@ -35,6 +36,7 @@
                                                     @foreach($plantillas as $plantilla)
                                                     <tr class="unread"></tr>
                                                         <td>{{$plantilla->nombre}}</td>
+                                                        <td>{{($plantilla->previsita==1)?'Previsita':'Visita'}}</td>
                                                         <td>
                                                             <a href="{{ route('plantilla.show',$plantilla->id) }}" class="label theme-bg text-white f-12">Ver</a>
                                                             @if($plantilla->empresa_id!=0)

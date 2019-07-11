@@ -55,6 +55,10 @@ Route::resource('empresa', 'EmpresaController');
         Route::resource('visita', 'Empresa\VisitaController');
         Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
         Route::get('visitas/by/vendedor/{id}','Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
+        Route::get('visitas/visita/{id}/estado/{estado_id}','Empresa\VisitaController@cambiaEstado')->name('visita.estado');
+        Route::post('visitas/visita/{id}/previsita','Empresa\VisitaController@savePrevisita')->name('visita.save.previsita');
+        Route::post('visitas/visita/{id}/visita','Empresa\VisitaController@saveVisita')->name('visita.save.visita');
+
         Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
         Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
     });

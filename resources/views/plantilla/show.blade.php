@@ -19,6 +19,7 @@
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col">
                                                 <h5 class="m-0">{{$plantilla->nombre}}</h5>
+                                                <h6 class="mt-3">{{($plantilla->previsita==1)?'Previsita':'Visita'}}</h6>
                                             </div>
                                         </div>
                                         <h6 class="text-muted mt-4 mb-0">
@@ -35,8 +36,9 @@
                                     <div class="card-block px-0 py-3 row">
                                         <div class="col-md-12" ><a href="#" class="btn btn-primary nuevoCampo float-right"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a></div>
                                         <div class="col-md-12" id="camposPreview">
+                                            <ul class="list-group list-group-sortable">
                                             @if($plantilla->detalles->count()>0)
-                                            <ul class="list-group list-group-sortable">    
+                                                
                                                 @foreach ($plantilla->detalles()->orderBy('orden')->get() as $detalle )
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
@@ -52,7 +54,7 @@
                                                             @elseif($detalle->tipo_campo==3)
                                                             <input type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
                                                             @elseif($detalle->tipo_campo==4)
-                                                            <select class="selectpicker borderColorElement mb-2 opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
+                                                            <select class="form-control opcionesId_{{$detalle->id}} col-md-12 full-width-fix">
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                     <option value="{{$opcion}}">{{$opcion}}</option>
                                                                 @endforeach
@@ -79,11 +81,14 @@
                                                     </div>
                                                 </li>
                                                 @endforeach
-                                            </ul>
+                                            
                                             @else
-                                                <p>No hay vista previa de la plantilla</p>
-                                                <a href="#" class="btn btn-primary nuevoCampo"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a>
+                                                <li class="list-group-item">
+                                                    <p>No hay vista previa de la plantilla</p>
+                                                    <a href="#" class="btn btn-primary nuevoCampo"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Agregar campo</span></a>
+                                                </li>
                                             @endif
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>

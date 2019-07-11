@@ -29,8 +29,9 @@ class TipoVisitaController extends Controller
     public function create()
     {
         $tipoVisita = null;
-        $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        return view('tipos.form',compact('tipoVisita','plantillas'));
+        $plantillas = Plantilla::where('previsita',1)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        $plantillasVisitas = Plantilla::where('previsita',0)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        return view('tipos.form',compact('tipoVisita','plantillas','plantillasVisitas'));
     }
 
     /**
@@ -67,8 +68,9 @@ class TipoVisitaController extends Controller
     public function edit($id)
     {
         $tipoVisita = TipoVisita::find($id);
-        $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        return view('tipos.form',compact('tipoVisita','plantillas'));
+        $plantillas = Plantilla::where('previsita',1)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        $plantillasVisitas = Plantilla::where('previsita',0)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
+        return view('tipos.form',compact('tipoVisita','plantillas','plantillasVisitas'));
     }
 
     /**

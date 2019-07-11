@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
 use App\Models\Visita;
+use App\Models\EstadoVisita;
 use App\Models\User;
 use Carbon\Carbon;
 use Auth;
@@ -81,7 +82,8 @@ class VisitaController extends Controller
     public function show($id)
     {
         $visita=Visita::find($id);
-        return view('visita.show',compact('visita'));
+        $estados=EstadoVisita::get();
+        return view('visita.show',compact('visita','estados'));
     }
 
     /**
@@ -119,5 +121,20 @@ class VisitaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function cambiaEstado($id,$estado_id){
+        $visita = Visita::find($id);
+        $visita->estado_visita_id=$estado_id;
+        $visita->save();
+        return back();
+    }
+
+    public function savePrevisita(Request $request,$id){
+        dd($request->all());
+    }
+
+    public function saveVisita(Request $request,$id){
+
     }
 }

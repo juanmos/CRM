@@ -14,7 +14,8 @@ class TipoVisitaPlantilla extends Migration
     public function up()
     {
         Schema::table('tipo_visitas', function (Blueprint $table) {
-            $table->integer('plantilla_id')->default(1);
+            $table->integer('plantilla_pre_id')->default(1);
+            $table->integer('plantilla_visita_id')->default(1);
         });
     }
 
@@ -26,7 +27,8 @@ class TipoVisitaPlantilla extends Migration
     public function down()
     {
         Schema::table('tipo_visitas', function (Blueprint $table) {
-            $table->dropColumn('plantilla_id');
+            $table->dropColumn('plantilla_pre_id');
+            $table->dropColumn('plantilla_visita_id');
         });
     }
 }

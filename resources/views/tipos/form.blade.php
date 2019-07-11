@@ -51,8 +51,12 @@
                                                 <input type="text" value="@if($tipoVisita!=null){{$tipoVisita->tipo}}@endif" name="tipo" class="form-control" aria-describedby="emailHelp" placeholder="Tipo de visita">
                                             </div>
                                             <div class="form-group col-md-12 ">
-                                                <label for="exampleInputEmail1">Plantilla</label>
-                                                {!! Form::select('plantilla_id', $plantillas, ($tipoVisita!=null)?$tipoVisita->plantilla_id:1, ["class"=>"form-control"]) !!}
+                                                <label for="exampleInputEmail1">Plantilla previsita</label>
+                                                {!! Form::select('plantilla_pre_id', $plantillas, ($tipoVisita!=null)?$tipoVisita->plantilla_pre_id:1, ["class"=>"form-control"]) !!}
+                                            </div>
+                                            <div class="form-group col-md-12 ">
+                                                <label for="exampleInputEmail1">Plantilla visita</label>
+                                                {!! Form::select('plantilla_visita_id', $plantillasVisitas, ($tipoVisita!=null)?$tipoVisita->plantilla_visita_id:1, ["class"=>"form-control"]) !!}
                                             </div>
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>
