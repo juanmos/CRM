@@ -8,6 +8,7 @@ use App\Models\Contacto;
 use App\Models\Cliente;
 use App\Models\TipoVisita;
 use App\Models\EstadoVisita;
+use App\Models\PlantillaDetalle;
 use App\Models\User;
 
 class Visita extends Model
@@ -33,5 +34,10 @@ class Visita extends Model
 
     public function estado(){
         return $this->belongsTo(EstadoVisita::class,'estado_visita_id');
+    }
+
+    public function detalles()
+    {
+        return $this->belongsToMany(PlantillaDetalle::class,'plantilla_detalles_visitas','visita_id','plantilla_detalle_id')->as('respuestas')->withPivot('valor');
     }
 }

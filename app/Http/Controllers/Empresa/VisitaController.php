@@ -131,10 +131,24 @@ class VisitaController extends Controller
     }
 
     public function savePrevisita(Request $request,$id){
-        dd($request->all());
+        $inputs = $request->except(['_token']);
+        $visita = Visita::find($id)->detalles();
+        foreach($inputs as $key => $input){
+            $val=explode('_',$key)[1];
+            $visita->detach($val);
+            $visita->attach($val,['valor'=>$input]);
+        }
+        return back();
     }
 
     public function saveVisita(Request $request,$id){
-
+        $inputs = $request->except(['_token']);
+        $visita = Visita::find($id)->detalles();
+        foreach($inputs as $key => $input){
+            $val=explode('_',$key)[1];
+            $visita->detach($val);
+            $visita->attach($val,['valor'=>$input]);
+        }
+        return back();
     }
 }

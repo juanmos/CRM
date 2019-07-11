@@ -165,27 +165,27 @@
                                         @if($visita->tipoVisita->plantillaPre->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.previsita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
-                                                @foreach ($visita->tipoVisita->plantillaPre->detalles()->orderBy('orden')->get() as $detalle )
+                                                @foreach ($visita->tipoVisita->plantillaPre->detalles()->with('visita')->orderBy('orden')->get() as $detalle )
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <h6 class="mb-2">{{$detalle->label}}</h6>
                                                             @if($detalle->tipo_campo==1)
-                                                            <input name="custom_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
                                                             @elseif($detalle->tipo_campo==2)
-                                                            <textarea name="custom_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
+                                                            <textarea name="custom_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}">{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
                                                             @elseif($detalle->tipo_campo==3)
-                                                            <input name="custom_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
                                                             @elseif($detalle->tipo_campo==4)
                                                             <select name="custom_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} ">
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <option value="{{$opcion}}">{{$opcion}}</option>
+                                                                    <option value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'selected="selected"':'':''}}>{{$opcion}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @elseif($detalle->tipo_campo==6)
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <input type="checkbox" name="custom_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> {{$opcion}}
                                                                 @endforeach
                                                                 @else
                                                                     <input type="checkbox" name="custom_{{$detalle->id}}"> Check 
@@ -204,6 +204,7 @@
                                                     </div>
                                                 </li>
                                             </ul>
+                                            
                                         {!! Form::close() !!}
                                         @endif
 
@@ -212,27 +213,27 @@
                                         @if($visita->tipoVisita->plantillaVisita->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.visita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
-                                                @foreach ($visita->tipoVisita->plantillaVisita->detalles()->orderBy('orden')->get() as $detalle )
+                                                @foreach ($visita->tipoVisita->plantillaVisita->detalles()->with('visita')->orderBy('orden')->get() as $detalle )
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <h6 class="mb-2">{{$detalle->label}}</h6>
                                                             @if($detalle->tipo_campo==1)
-                                                            <input name="visita_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
                                                             @elseif($detalle->tipo_campo==2)
-                                                            <textarea name="visita_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}"></textarea>
+                                                            <textarea name="visita_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}">{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
                                                             @elseif($detalle->tipo_campo==3)
-                                                            <input name="visita_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
                                                             @elseif($detalle->tipo_campo==4)
                                                             <select name="visita_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} ">
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <option value="{{$opcion}}">{{$opcion}}</option>
+                                                                    <option value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'selected="selected"':'':''}}>{{$opcion}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @elseif($detalle->tipo_campo==6)
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> {{$opcion}}
                                                                 @endforeach
                                                                 @else
                                                                     <input type="checkbox" name="visita_{{$detalle->id}}"> Check 
