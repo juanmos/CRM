@@ -183,13 +183,18 @@
                                                                 @endforeach
                                                             </select>
                                                             @elseif($detalle->tipo_campo==6)
+                                                            
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> {{$opcion}}
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" id="visita_{{$detalle->id}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> 
+                                                                    <label class="custom-control-label" for="visita_{{$detalle->id}}">{{$opcion}}</label>
+                                                                </div>
                                                                 @endforeach
                                                                 @else
-                                                                    <input type="checkbox" name="custom_{{$detalle->id}}"> Check 
+                                                                    <input type="checkbox" name="custom_{{$detalle->id}}" class="custom-control-input"> Check 
                                                                 @endif
+                                                            
                                                             @else
                                                             @endif
                                                         </div>
@@ -231,13 +236,18 @@
                                                                 @endforeach
                                                             </select>
                                                             @elseif($detalle->tipo_campo==6)
+                                                            
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> {{$opcion}}
+                                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" id="visita_{{$detalle->id}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}>
+                                                                    <label class="custom-control-label" for="visita_{{$detalle->id}}">{{$opcion}}</label>
+                                                                </div>
                                                                 @endforeach
                                                                 @else
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}"> Check 
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" class="custom-control-input"> Check 
                                                                 @endif
+                                                            </div>
                                                             @else
                                                             @endif
                                                         </div>
@@ -257,77 +267,50 @@
 
                                     </div>
                                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalTarea">
+                                            <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
+                                        </a>
+                                        
                                         <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>User</th>
-                                                    <th>Activity</th>
-                                                    <th>Time</th>
-                                                    <th>Status</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </thead>
+                                            
                                             <tbody>
+                                                @foreach($visita->tareas as $tarea)
                                                 <tr>
                                                     <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <span class="text-muted f-12">Tarea:</span><br>
+                                                                <h6 class="m-0">{{$tarea->nombre}}</h6>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <h6 class="m-0 text-muted">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</h6>
+                                                            </div>
+                                                            <div class="col-md-2 text-right">
+                                                                <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
+                                                                
+                                                            </div>
+                                                            <div class="col-md-1 text-right">
+                                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                                    <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>
+                                                                    <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <span class="text-muted f-12">Descripción:</span><br>
+                                                                <h6 class="m-0">{{$tarea->detalle}}</h6>
+                                                            </div>
+                                                            <div class="col-md-4"> 
+                                                                <h6 class="m-0 text-muted  float-right">
+                                                                    <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                    {{$tarea->usuarioCrea->full_name}}
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </td>
-                                                    <td>
-                                                        <h6 class="m-0">Dog the quick brown</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">10:23 AM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">3:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Jumps over the lazy</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">2:37 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-red">Missed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">4:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
+                                                
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -343,4 +326,70 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bd-example-modal-md" name="modalTarea" id="modalTarea" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>"tarea.store","method"=>"POST"]) !!}
+                <div class="">
+                  <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="material-icons">clear</i>
+                    </button>
+
+                    <h4 class="card-title">Nueva tarea</h4>
+                  </div>
+                </div>
+                <div class="modal-body" align="center">    
+                    
+                    <div class="row">                
+                        <div class="form-group-select col-md-12">   
+                            <div class="form-group col-md-12 ">                     
+                                <label class="col-md-4">Nombre de la tarea:</label>                            
+                                {!! Form::text('nombre', "", ["class"=>"form-control","placeholder"=>"Nombre de la tarea"]) !!}
+                            </div>
+                        </div>
+                        <div class="form-group-select col-md-12">
+                            <div class="form-group col-md-12 ">
+                                <label for="exampleInputEmail1">Descripción de la tarea</label>
+                                <input type="text" id="detalle" value="" name="detalle" class="form-control" aria-describedby="emailHelp" placeholder="Descripción">
+                            </div>
+                        </div> 
+                        <div class="form-group-select col-md-12">
+                            <div class="form-group col-md-12 ">
+                                <label for="exampleInputEmail1">Fecha</label>
+                                <input type="text" id="fecha" value="" name="fecha" class="form-control datetime" aria-describedby="emailHelp" placeholder="Fecha">
+                            </div>
+                        </div> 
+                    </div>
+                    
+                    
+                     
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
+                            <i class="fa fa-save"> </i> GUARDAR
+                        </button>
+                        <input type="hidden" value="{{$visita->id}}" name="visita_id"/>
+                    </div>    
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+@push('scripts')
+<script type="text/javacript">
+$(document).ready(function(){
+    $('.tareaCheckbox').on('change',function(){
+        console.log('val',$(this).prop('checked'))
+    })
+});
+</script>
+@endpush

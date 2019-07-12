@@ -9,6 +9,7 @@ use App\Models\Cliente;
 use App\Models\TipoVisita;
 use App\Models\EstadoVisita;
 use App\Models\PlantillaDetalle;
+use App\Models\Tarea;
 use App\Models\User;
 
 class Visita extends Model
@@ -39,5 +40,9 @@ class Visita extends Model
     public function detalles()
     {
         return $this->belongsToMany(PlantillaDetalle::class,'plantilla_detalles_visitas','visita_id','plantilla_detalle_id')->as('respuestas')->withPivot('valor');
+    }
+
+    public function tareas(){
+        return $this->hasMany(Tarea::class,'visita_id');
     }
 }

@@ -62,10 +62,12 @@
                                                             @elseif($detalle->tipo_campo==6)
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
-                                                                    <input type="checkbox" name="check_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input" name="check_{{$detalle->id}}" value="{{$opcion}}"> {{$opcion}}
+                                                                </div>
                                                                 @endforeach
                                                                 @else
-                                                                    <input type="checkbox" name="check_{{$detalle->id}}"> Check 
+                                                                    <input type="checkbox" class="custom-control-input" name="check_{{$detalle->id}}"> Check 
                                                                 @endif
                                                             @else
                                                             <div class="mb-2">&nbsp;</div>

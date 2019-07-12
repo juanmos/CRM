@@ -53,6 +53,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
         Route::resource('visita', 'Empresa\VisitaController');
+        Route::resource('tarea', 'Empresa\TareasController');
         Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
         Route::get('visitas/by/vendedor/{id}','Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
         Route::get('visitas/visita/{id}/estado/{estado_id}','Empresa\VisitaController@cambiaEstado')->name('visita.estado');
