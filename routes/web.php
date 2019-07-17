@@ -53,7 +53,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
         Route::resource('visita', 'Empresa\VisitaController');
-        Route::resource('tarea', 'Empresa\TareasController');
+        
         Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
         Route::get('visitas/by/vendedor/{id}','Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
         Route::get('visitas/visita/{id}/estado/{estado_id}','Empresa\VisitaController@cambiaEstado')->name('visita.estado');
@@ -62,5 +62,8 @@ Route::resource('empresa', 'EmpresaController');
 
         Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
         Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
+
+        Route::post('e/tarea/crear', 'Empresa\TareasController@store')->name('tarea.store');
+        Route::post('e/tarea/completada', 'Empresa\TareasController@update')->name('tarea.completada');
     });
 });

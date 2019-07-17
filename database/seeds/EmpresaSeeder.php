@@ -19,5 +19,8 @@ class EmpresaSeeder extends Seeder
             'costo'=>0,
             'ciudad_id'=>1
         ]);
+        DB::table('configuracions')->insert([
+            'empresa_id' => "1",
+        ]);
     }
 }

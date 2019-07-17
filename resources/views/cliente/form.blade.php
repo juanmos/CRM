@@ -65,6 +65,11 @@
                                                 {!! Form::select('clasificacion_id', $clasificacion, ($cliente!=null)?$cliente->clasificacion_id : 1 ,["class"=>"form-control"]) !!}
                                             </div>
                                             
+                                            <div class="form-group col-md-{{($cliente!=null)?'6':'12'}}">
+                                                <label for="exampleInputPassword1">Vendedor</label>
+                                                {{-- <input type="text" value="@if($cliente!=null){{$cliente->activo}}@endif" name="activo" class="form-control" id="exampleInputPassword1" placeholder="Activo"> --}}
+                                                {!! Form::select('usuario_id', $vendedores, ($cliente!=null)?$cliente->usuario_id : 1 ,["class"=>"form-control"]) !!}
+                                            </div>
                                             
                                             @if($cliente!=null)
                                             <div class="form-group col-md-6">
@@ -82,6 +87,10 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <label for="exampleInputPassword1">Ciudad</label>
+                                                {!! Form::select('ciudad_id', $ciudades, ($cliente!=null)?$oficina->ciudad_id : 1 ,["class"=>"form-control"]) !!}
+                                            </div> 
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Dirección</label>
                                                 <input type="text" value="@if($cliente!=null){{$cliente->facturacion->direccion}}@endif" name="direccion" class="form-control" placeholder="Dirección">
@@ -98,11 +107,50 @@
                                                 <label for="exampleInputPassword1">Email</label>
                                                 <input type="text" value="@if($cliente!=null){{$cliente->facturacion->email}}@endif" name="email" class="form-control" placeholder="Email">
                                             </div>
-                                             
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
+                                @if($cliente==null)
+                                
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Datos del contacto</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-6 ">
+                                                <label for="exampleInputEmail1">Nombre</label>
+                                                <input type="text"  name="nombre_contacto" class="form-control" aria-describedby="emailHelp" placeholder="Nombre">
+                                            </div>
+                                            <div class="form-group col-md-6 ">
+                                                <label for="exampleInputPassword1">Apellido</label>
+                                                <input type="text" name="apellido_contacto" class="form-control" id="exampleInputPassword1" placeholder="Apellido">
+                                            </div>
+                                            
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">Email</label>
+                                                <input type="email" name="email_contacto" class="form-control" id="exampleInputPassword1" placeholder="Email">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">Cargo</label>
+                                                <input type="text" name="cargo_contacto" class="form-control" id="exampleInputPassword1" placeholder="Cargo">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">Teléfono</label>
+                                                <input type="text" name="telefono_contacto" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">Extensión</label>
+                                                <input type="text" name="extension_contacto" class="form-control" id="exampleInputPassword1" placeholder="Extensión">
+                                            </div> 
+                                            
+                                            
+                                            <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <!-- [ Main Content ] end -->

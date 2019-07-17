@@ -7,6 +7,7 @@ use App\Models\TipoVisita;
 use App\Models\Visita;
 use App\Models\Cliente;
 use App\Models\User;
+use App\Models\Ciudad;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -53,7 +54,9 @@ class ClienteController extends Controller
     {
         $cliente=null;
         $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
-        return view('cliente.form',compact('cliente','clasificacion'));
+        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
+        $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
+        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores'));
     }
 
     /**
@@ -63,14 +66,13 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {  
         $cliente = Cliente::create([
             'nombre'=>$request->get('nombre'),
             'telefono'=>$request->get('telefono'),
             'web'=>$request->get('web'),
-            //'activo'=>$request->get('activo'),
             'clasificacion_id'=>$request->get('clasificacion_id'),
-            //'usuario_id'=>$request->get(''),
+            'usuario_id'=>$request->get('usuario_id'),
             'empresa_id'=>Auth::user()->empresa_id
         ]);
         $cliente->facturacion()->create([
@@ -80,7 +82,23 @@ class ClienteController extends Controller
             'email'=>$request->get('email'),
             'ruc'=>$request->get('ruc'),
         ]);
-        return redirect('cliente');
+        $oficina=$cliente->oficinas()->create([
+            'ciudad_id'=>$request->get('ciudad_id'),
+            'direccion'=>$request->get('direccion'),
+            'matriz'=>1
+        ]);
+        $cliente->contactos()->create([
+            'nombre'=>$request->get('nombre_contacto'),
+            'apellido'=>$request->get('apellido_contacto'),
+            'email'=>$request->get('email_contacto'),
+            'telefono'=>$request->get('telefono_contacto'),
+            'extension'=>$request->get('extension_contacto'),
+            'cargo'=>$request->get('cargo_contacto'),
+            'ciudad_id'=>$request->get('ciudad_id'),
+            'oficina_id'=>$oficina->id
+        ]);
+        
+        return redirect('cliente/'.$cliente->id);
     }
 
     public function vendedor($id){
@@ -133,7 +151,9 @@ class ClienteController extends Controller
     {
         $cliente=Cliente::find($id);
         $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
-        return view('cliente.form',compact('cliente','clasificacion'));
+        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id'); 
+        $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
+        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores'));
     }
 
     /**

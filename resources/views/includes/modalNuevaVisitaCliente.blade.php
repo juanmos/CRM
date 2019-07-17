@@ -17,7 +17,9 @@
                                 <div class="form-group-select col-md-6">
                                     <label class="col-md-7 control-label ">Contacto: </label>
                                     <div class="col-md-12">
-                                      {!! Form::select("contacto_id", $cliente->contactos->pluck('name_cargo','id'), 0, ["class"=>"form-control tipoCitaId required selectpicker full-width-fix"]) !!}
+                                        @if($cliente!=null)
+                                        {!! Form::select("contacto_id", $cliente->contactos->pluck('name_cargo','id'), 0, ["class"=>"form-control tipoCitaId required selectpicker full-width-fix"]) !!}
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group-select col-md-6">

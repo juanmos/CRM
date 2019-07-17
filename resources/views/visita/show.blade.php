@@ -118,7 +118,7 @@
                                     <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
-                                                <i class="feather icon-zap f-30 text-c-green"></i>
+                                                <i class="feather icon-inbox f-30 text-c-green"></i>
                                             </div>
                                             <div class="col">
                                                 <span class="d-block text-uppercase">ESTADO </span>
@@ -134,7 +134,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="card-block">
+                                    <div class="card-block  border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
                                                 <i class="feather icon-map-pin f-30 text-c-blue"></i>
@@ -142,6 +142,18 @@
                                             <div class="col">                                                
                                                 <span class="d-block text-uppercase">Tipo de visita </span>
                                                 <h3 class="f-w-300">{{$visita->tipoVisita->tipo}}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
+                                                <i class="feather icon-calendar f-30 text-c-blue"></i>
+                                            </div>
+                                            <div class="col">                                                
+                                                <span class="d-block text-uppercase">Proxima visita </span>
+                                                <h3 class="f-w-300"></h3>
+                                                <h3 class="f-w-300"><a href="#" id="abrirCalendario" data-toggle="modal" data-target="#modalProxima" class="label theme-bg2 text-white f-12">Nueva visita</a></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -158,6 +170,9 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="calendario-tab" data-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="false">Visitas anteriores</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
@@ -282,18 +297,17 @@
                                                                 <span class="text-muted f-12">Tarea:</span><br>
                                                                 <h6 class="m-0">{{$tarea->nombre}}</h6>
                                                             </div>
-                                                            <div class="col-md-2">
-                                                                <h6 class="m-0 text-muted">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</h6>
-                                                            </div>
-                                                            <div class="col-md-2 text-right">
-                                                                <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
+                                                            
+                                                            <div class="col-md-4 text-right">
+                                                                <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
                                                                 
                                                             </div>
                                                             <div class="col-md-1 text-right">
                                                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                                                    <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>
+                                                                    <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
                                                                     <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
                                                                 </div>
+                                                                
                                                             </div>
                                                             <div class="col-md-8">
                                                                 <span class="text-muted f-12">Descripción:</span><br>
@@ -304,12 +318,45 @@
                                                                     <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
                                                                     {{$tarea->usuarioCrea->full_name}}
                                                                 </h6>
+                                                                <h6 class="m-0 text-muted float-right">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</h6>
                                                             </div>
                                                         </div>
                                                         
                                                     </td>
                                                 </tr>
                                                 
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Tipo</th>
+                                                    <th>Time</th>
+                                                    <th>Estado</th>
+                                                    <th class="text-right"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($visitasAnteriores as $ultima)
+                                                <tr>
+                                                    <td>
+                                                        <h6 class="m-0">{{date('d-m-Y H:i',strtotime($ultima->fecha_inicio))}}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">{{$ultima->tipoVisita->tipo}}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0">10:23 AM</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="m-0 text-c-purple">{{$ultima->estado->estado}}</h6>
+                                                    </td>
+                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -326,7 +373,38 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-md modal-xl" name="modalProxima" id="modalProxima" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="width: 80vw;margin-left:-20vw;height:70vh;">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>"tarea.store","method"=>"POST"]) !!}
+                <div class="">
+                    <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
 
+                    <h4 class="card-title">Nueva visita</h4>
+                    </div>
+                </div>
+                <div class="modal-body" align="center">                        
+                    <div class="row">   
+                        <div id="calendar"></div>             
+                    </div>
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <input type="hidden" value="{{$visita->id}}" name="visita_id"/>
+                    </div>    
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade bd-example-modal-md" name="modalTarea" id="modalTarea" tabindex="-1" role="">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -342,7 +420,6 @@
                   </div>
                 </div>
                 <div class="modal-body" align="center">    
-                    
                     <div class="row">                
                         <div class="form-group-select col-md-12">   
                             <div class="form-group col-md-12 ">                     
@@ -363,9 +440,6 @@
                             </div>
                         </div> 
                     </div>
-                    
-                    
-                     
                 </div>
                 <div class="modal-footer">    
                     <div class="col-md-12">                                    
@@ -383,13 +457,254 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-lg" name="modalAddCita" id="modalAddCita" tabindex="-1" role="">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {{-- <div class="modal-header"> --}}
+                    <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">   
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="card-title"> Datos de la visita</h4> 
+                    </div>
+                {{-- </div> --}}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group-select col-md-4">
+                                    <label class="col-md-7 control-label ">Tipo: </label>
+                                    <div class="col-md-12">
+                                        {!! Form::select('tipo_visita_id', $tiposVisita, 0 ,array("class"=>"form-control tipoCitaId required selectpicker full-width-fix")); !!}                                         
+                                    </div>
+                                </div>
+                                <div class="form-group-select col-md-4">
+                                    <label class="col-md-7 control-label ">Duración: </label>
+                                    <div class="col-md-12">
+                                        {!! Form::select('tiempo_visita', $tiempoVisita, Auth::user()->empresa->configuracion->tiempo_visita ,["class"=>"form-control"]) !!}
+                                    </div>
+                                </div>
+                                <div class="form-group-select col-md-4">
+                                    <label class="col-md-7 control-label ">Hora: </label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <select name="horaModal" id="horaModal" required class="form-control selectpicker col-md-12 full-width-fix">
+                                                @for ($i = 1; $i < 23; $i++)
+                                                    @if($i < 10)
+                                                        <option value="0{{$i}}" > 0{{$i}} </option>
+                                                    @else
+                                                        <option value="{{$i}}" > {{$i}} </option>
+                                                    @endif
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <select name="minModal" id="minModal" align="center" required class="form-control selectpicker col-md-12 full-width-fix">
+                                                @for ($j = 0; $j <= 59; $j = $j+5)
+                                                    @if($j < 10)
+                                                        <option value="0{{$j}}" > 0{{$j}} </option>
+                                                    @else
+                                                        <option value="{{$j}}" > {{$j}} </option>
+                                                    @endif
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group-select pickFecha" >
+                                <label class="col-md-3 control-label">Fecha:</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select name="diaModal" id="diaModal" required class="form-control selectpicker col-md-12 full-width-fix">
+                                            @for ($i = 1; $i < 32; $i++)
+                                                @if($i < 10)
+                                                    <option value="0{{$i}}" > 0{{$i}} </option>
+                                                @else
+                                                    <option value="{{$i}}" > {{$i}} </option>
+                                                @endif
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select name="mesModal" id="mesModal" align="center" required class="form-control selectpicker col-md-12 full-width-fix">
+                                            @for ($j = 1; $j <= 12; $j++)
+                                                @if($j < 10)
+                                                    <option value="0{{$j}}" > 0{{$j}} </option>
+                                                @else
+                                                    <option value="{{$j}}" > {{$j}} </option>
+                                                @endif
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php 
+                                            $fecha = new DateTime();
+                                            $anio=$fecha->format('Y');
+                                            $anio1 = intval($anio) + 1;
+                                        ?>
+                                        <input type="hidden" id="mesAct" value="{{$fecha->format('m')}}">
+                                        <input type="hidden" id="diaAct" value="{{$fecha->format('d')}}">
+                                        
+                                        <select name="anioModal" id="anioModal" align="center" required class="form-control selectpicker col-md-12 full-width-fix">
+                                            <option value="{{$anio}}" > {{$anio}} </option>
+                                            <option value="{{$anio1}}" > {{$anio1}} </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 color1" id="horariosDiv"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">                
+                    <div class="col-md-12">
+                        <button type="button" data-dismiss="modal" class="btn float-left btn-danger" data-dismiss="modal">                      
+                        <i class="far fa-times-circle"></i> CANCELAR
+                        </button>  
+                        <button type="button" class="btn btn-success float-right" name="aceptCreate" id="aceptCreate">
+                            <i class="fa fa-save"> </i> ACEPTAR
+                        </button>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
-<script type="text/javacript">
+<script src='{{asset("assets/plugins/fullcalendar/packages/core/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/interaction/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/daygrid/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/timegrid/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/list/main.js")}}'></script>
+<script src='{{asset("assets/plugins/fullcalendar/packages/core/locales-all.js")}}'></script>
+<script type="text/javascript">
 $(document).ready(function(){
-    $('.tareaCheckbox').on('change',function(){
-        console.log('val',$(this).prop('checked'))
+      $(document).on('click','#aceptCreate',function(e){
+        if ($('#cliente_id').val() != '') {
+          var data = {cliente_id:{{$visita->cliente_id}} ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:{{$visita->usuario_id}},tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:{{$visita->contacto_id}},_token:'{{csrf_token()}}'};
+          saveVisita(data);
+          
+        }else {
+          alert('Campo requerido');
+          $("#nombreAdd").focus();
+        }
+      });
+      function saveVisita(data) { 
+        $.post("{{route('visita.store')}}",data,function(json){          
+          $('#modalAddCita').modal('hide');      
+          $('#modalProxima').modal('hide');
+          if(json.validate){
+              try{
+                calendar.refetchEvents();
+                $.notify('Cita creada con éxito',{className: "success",globalPosition:'top center'});                      
+              }catch(e){
+                  $.notify('Cita creada con éxito',{className: "success",globalPosition:'top center'});   
+              }                    
+          }else{
+            alert("La cita no pudo ser creada por conflictos de horario, por favor revise e intente nuevamente");
+          }
+        },'json');
+      }
+      
     })
-});
+  </script>
+<script>
+    var calendar=null;
+$(document).ready(function(){
+    var calendarEl = document.getElementById('calendar');
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
+        locale:'es',
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        defaultView:'{{Auth::user()->empresa->configuracion->defaultView}}',
+        hiddenDays: [ 0 ],
+        minTime:"{{Auth::user()->empresa->configuracion->min_time}}",
+        maxTime:'{{Auth::user()->empresa->configuracion->max_time}}',
+        scrollTime:'08:00:00',
+        slotDuration:'00:15:00',
+        eventSources: [
+            {
+            url: "{{route('visita.vendedor',$visita->usuario_id)}}", // use the `url` property
+            }
+        ],
+        dateClick: function(info) {
+            var fecha=moment(info.dateStr);
+            
+            $('#mesModal').val(fecha.format('MM'))
+            $('#diaModal').val(fecha.format('DD'));
+            $('#anioModal').val(fecha.format('YYYY'));
+            $('#horaModal').val(fecha.format('HH'));
+            $('#minModal').val(fecha.format('mm'));
+            $('#modalAddCita').modal('show');
+        },
+        eventDrop: function(event) {
+            if (!confirm("La visita a "+event.event.title + " se reagendara para el: " + moment(event.event.start).format('dddd, DD-MM-YYYY HH:mm')+". Es esto correcto?")) {
+                event.revert();
+            }else{
+                $.ajax({
+                    url: '{{url("e/visita")}}/'+event.event.id,
+                    type: 'PUT',
+                    data:{_token:"{{csrf_token()}}",fecha_inicio:moment(event.event.start).format('YYYY-MM-DD HH:mm:ss'),fecha_fin:moment(event.event.end).format('YYYY-MM-DD HH:mm:ss')},
+                    success: function(response) {
+                        calendar.refetchEvents();
+                    }
+                });
+            }
+        },
+        eventResize: function(event) {
+            if (!confirm("La visita a "+event.event.title + " terminara ahora: " + moment(event.event.end).format('dddd, DD-MM-YYYY HH:mm')+". Es esto correcto?")) {
+                event.revert();
+            }else{
+                $.ajax({
+                    url: '{{url("e/visita")}}/'+event.event.id,
+                    type: 'PUT',
+                    data:{_token:"{{csrf_token()}}",fecha_fin:moment(event.event.end).format('YYYY-MM-DD HH:mm:ss')},
+                    success: function(response) {
+                        calendar.refetchEvents();
+                    }
+                });
+            }
+        },
+    });
+
+    calendar.render();
+})
 </script>
+<script>
+    $(document).ready(function(){
+        $('.tareaCheckbox').on('change',function(){
+            var valor=$(this).prop('checked');
+            $.post("{{route('tarea.completada')}}",{'valor':(valor)?1:0,id:$(this).prop('id').split('_')[1],_token:"{{csrf_token()}}"},function(json){
+                if(valor){
+                    $('#tarea_estado_'+json.id).html('Realizado');
+                    $('#tarea_estado_'+json.id).removeClass('text-c-purple');
+                    $('#tarea_estado_'+json.id).addClass('text-c-green');
+                }else{
+                    $('#tarea_estado_'+json.id).html('Por hacer');                    
+                    $('#tarea_estado_'+json.id).removeClass('text-c-green');
+                    $('#tarea_estado_'+json.id).addClass('text-c-purple');
+                }
+                
+            },'json');
+        })
+    });
+</script>
+@endpush
+@push('styles')
+<link href='{{asset("assets/plugins/fullcalendar/packages/core/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/daygrid/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/timegrid/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/list/main.css")}}' rel='stylesheet' />
+<link href='{{asset("assets/plugins/fullcalendar/packages/bootstrap/main.css")}}' rel='stylesheet' />
 @endpush
