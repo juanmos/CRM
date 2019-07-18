@@ -43,7 +43,9 @@ class OficinaController extends Controller
             'direccion'=>$request->get('direccion'),
             'matriz'=>$request->get('matriz'),
             'ciudad_id'=>$request->get('ciudad_id'),
-            'cliente_id'=>$cliente_id
+            'cliente_id'=>$cliente_id,
+            'latitud'=>$request->get('latitud'),
+            'longitud'=>$request->get('longitud')
         ]);
         return redirect('cliente/'.$cliente_id);
     }
@@ -85,7 +87,9 @@ class OficinaController extends Controller
         $oficina->update([
             'direccion'=>$request->get('direccion'),
             'matriz'=>$request->get('matriz'),
-            'ciudad_id'=>$request->get('ciudad_id')
+            'ciudad_id'=>$request->get('ciudad_id'),
+            'latitud'=>$request->get('latitud'),
+            'longitud'=>$request->get('longitud')
         ]);
         return redirect('cliente/'.$oficina->cliente_id);
     }
