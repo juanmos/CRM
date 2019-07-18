@@ -63,6 +63,7 @@ Route::resource('empresa', 'EmpresaController');
         Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
         Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
 
+        Route::get('e/tarea/mias/{usuario_id?}', 'Empresa\TareasController@index')->name('tarea.index');
         Route::post('e/tarea/crear', 'Empresa\TareasController@store')->name('tarea.store');
         Route::post('e/tarea/completada', 'Empresa\TareasController@update')->name('tarea.completada');
     });

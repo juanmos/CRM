@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/animation/css/animate.min.css')}}">
     <!-- vendor css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" />
     @stack('styles')
 </head>
 <body>
@@ -281,8 +282,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/es.js"></script>
     <script src="{{asset('assets/plugins/notify/bootstrap-notify.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+    <script>
+        $(document).ready(function(){
+            $('.datetime').datetimepicker({
+                format: 'YYYY/MM/DD HH:mm:ss',
+                inline: true,
+                sideBySide: true,
+                locale: 'es',
+                icons: {
+                    time: "far fa-clock",
+                    date: "far fa-calendar-alt",
+                    up: "fas fa-chevron-up",
+                    down: "fas fa-chevron-down"
+                }
+            });
+        })
+    </script>
     @stack('scripts')
 </body>
 </html>

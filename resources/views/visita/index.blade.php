@@ -25,7 +25,7 @@
                                           <tbody>
                                               @foreach($usuarios as $user)
                                               <tr class="unread">
-                                                  <td><img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">{{$user->nombre}} {{$user->apellido}}
+                                                  <td><img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">{{$user->nombre}} {{$user->apellido}}
                                                   </td>
                                                   <td>
                                                     <a href="{{ route('visita.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>

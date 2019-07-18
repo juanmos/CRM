@@ -353,9 +353,12 @@
                                                         <h6 class="m-0">10:23 AM</h6>
                                                     </td>
                                                     <td>
-                                                        <h6 class="m-0 text-c-purple">{{$ultima->estado->estado}}</h6>
+                                                        
+                                                        <h6 class="m-0 text-c-purple"><i class="fas fa-circle text-c-purple f-10"></i> {{$ultima->estado->estado}}</h6>
                                                     </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
+                                                    <td class="text-right">
+                                                        <a href="{{route('visita.show',$ultima->id)}}" class="btn btn-primary">Ir a visita</a>
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

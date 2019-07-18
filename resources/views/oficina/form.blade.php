@@ -19,7 +19,7 @@
                                 </div>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="feather icon-home"></i></a></li>
-                                    <li class="breadcrumb-item"><a href="{{route('hotel.index')}}">oficina</a></li>
+                                    <li class="breadcrumb-item"><a href="{{route('cliente.index')}}">Cliente</a></li>
                                     @if($oficina!=null)
                                     <li class="breadcrumb-item"><a href="javascript:">Editar</a></li>
                                     @else

@@ -85,7 +85,7 @@ class VisitaController extends Controller
         $estados=EstadoVisita::get();
         $tiposVisita=TipoVisita::get()->pluck('tipo','id');
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
-        $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->get();
+        $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
         $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
         return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita'));
     }

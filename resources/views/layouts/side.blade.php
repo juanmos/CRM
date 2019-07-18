@@ -33,6 +33,16 @@
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
+                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                    <a href="{{route('tarea.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-check-square"></i></span><span class="pcoded-mtext">Tareas vendedores</span></a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('Vendedor') || Auth::user()->hasRole('JefeVentas'))
+                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                    <a href="{{route('tarea.index',Auth::user()->id)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-check-square"></i></span><span class="pcoded-mtext">Mis tareas</span></a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
                 </li>
