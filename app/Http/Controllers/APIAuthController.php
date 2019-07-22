@@ -74,7 +74,7 @@ class APIAuthController extends Controller
     public function me()
     {
         try {
-            $user = User::where('id',auth('api')->user()->id)->with(['conductor'])->first();
+            $user = User::where('id',auth('api')->user()->id)->with(['empresa'])->first();
             $roles = $user->getRoleNames();
             return response()->json(compact('user','roles'));
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
