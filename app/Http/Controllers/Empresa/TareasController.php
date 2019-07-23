@@ -22,8 +22,9 @@ class TareasController extends Controller
         }else{
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
-        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas','tipoVisita','estado'])->paginate(50);
-        $tareas = Tarea::where('usuario_id',$usuario_id)->where('visita_id',0)->paginate(50);
+        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado'])->paginate(50);
+        $tareas = Tarea::where('usuario_id',$usuario_id)->where('visita_id',0)->with(['usuario','usuarioCrea'])->paginate(50);
+        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas'));
         return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas'));
     }
 

@@ -30,9 +30,12 @@ class VisitaController extends Controller
         return view('visita.index',compact('usuarios','usuario_id','tiposVisita','tiempoVisita'));
     }
 
-    public function visitasByUsuario(Request $request,$usuario_id){
+    public function visitasByUsuario(Request $request,$usuario_id=null){
         $fechaIni = new Carbon($request->get('start'));
         $fechaFin = new Carbon($request->get('end'));
+        if($usuario_id==null){
+            $usuario_id=Auth::user()->id;
+        }
         $visitas = Visita::where("usuario_id",$usuario_id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
         foreach($visitas as $visita){
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;

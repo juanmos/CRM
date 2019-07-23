@@ -18,9 +18,10 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($usuario_id=null)
+    public function index(Request $request,$usuario_id=null)
     {
-        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(20);
+        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas'])->paginate(20);
+        if($request->is('api/*')) return response()->json(compact('clientes','usuario_id'));
         return view('cliente.index',compact('clientes','usuario_id'));
     }
 
