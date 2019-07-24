@@ -16,9 +16,10 @@ class UsuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        if($request->is('api/*')) return response()->json(compact('usuarios'));
         return view('usuario.index',compact('usuarios'));
     }
 

@@ -13,9 +13,10 @@ class ClasificacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $clasificaciones = Clasificacion::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('clasificacion')->get();
+        if($request->is('api/*')) return response()->json(compact('clasificaciones'));
         return view('clasificacion.index',compact('clasificaciones'));
     }
 

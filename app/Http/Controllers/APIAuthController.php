@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Tymon\JWTAuthExceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Ciudad;
 use Carbon\Carbon;
 use JWTAuth;
 use DateTime;
@@ -76,7 +77,8 @@ class APIAuthController extends Controller
         try {
             $user = User::where('id',auth('api')->user()->id)->with(['empresa'])->first();
             $roles = $user->getRoleNames();
-            return response()->json(compact('user','roles'));
+            $ciudades = Ciudad::orderBy('ciudad')->get();
+            return response()->json(compact('user','roles','ciudades'));
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
             return response()->json(['token_absent'], $e->getStatusCode());
