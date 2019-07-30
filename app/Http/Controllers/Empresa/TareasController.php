@@ -37,19 +37,18 @@ class TareasController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['usuario_crea_id']=Auth::user()->id;
         if($request->has('visita_id') && $data['visita_id']!=null){
             $visita = Visita::find($request->get('visita_id'));
-            $data['usuario_id']=$visita->usuario_id;
-            $data['usuario_crea_id']=Auth::user()->id;
+            $data['usuario_id']=$visita->usuario_id;            
             $visita->tareas()->create($data);
         }else{
             $data['usuario_id']=$data['usuario_id'];
-            $data['usuario_crea_id']=Auth::user()->id;
             $data['visita_id']=0;
             Tarea::create($data);
         }
         
-        
+        if($request->is('api/*')) return response()->json(['created'=>true]);
         return back();
     }
 

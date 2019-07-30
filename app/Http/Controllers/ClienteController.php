@@ -98,7 +98,7 @@ class ClienteController extends Controller
             'ciudad_id'=>$request->get('ciudad_id'),
             'oficina_id'=>$oficina->id
         ]);
-        
+        if($request->is('api/*')) return response()->json(['created'=>true]);
         return redirect('cliente/'.$cliente->id);
     }
 
