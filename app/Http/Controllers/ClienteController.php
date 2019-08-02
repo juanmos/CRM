@@ -20,7 +20,7 @@ class ClienteController extends Controller
      */
     public function index(Request $request,$usuario_id=null)
     {
-        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas'])->paginate(20);
+        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
         if($request->is('api/*')) return response()->json(compact('clientes','usuario_id'));
         return view('cliente.index',compact('clientes','usuario_id'));
     }
@@ -184,6 +184,34 @@ class ClienteController extends Controller
             'ruc'=>$request->get('ruc'),
         ]);
         return redirect('cliente');
+    }
+
+    public function actualizaCliente(Request $request)
+    {
+        $cliente = Cliente::find($request->get('id'));
+        $cliente->update([
+            'nombre'=>$request->get('nombre'),
+            'telefono'=>$request->get('telefono'),
+            'web'=>$request->get('web'),
+            //'activo'=>$request->get('activo'),
+            'clasificacion_id'=>$request->get('clasificacion_id'),
+            //'usuario_id'=>$request->get(''),
+            'empresa_id'=>Auth::user()->empresa_id
+        ]);
+        return response()->json(compact('cliente'));
+    }
+
+    public function actualizaFacturacion(Request $request)
+    {
+        $cliente = Cliente::find($request->get('id'));
+        $cliente->facturacion->update([
+            'nombre'=>$request->get('nombre'),
+            'telefono_facturacion'=>$request->get('telefono_facturacion'),
+            'direccion'=>$request->get('direccion'),
+            'email'=>$request->get('email'),
+            'ruc'=>$request->get('ruc'),
+        ]);
+        return response()->json(compact('cliente'));
     }
 
     /**

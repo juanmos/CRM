@@ -33,4 +33,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('cliente','ClienteController@store');
     Route::post('tareas','Empresa\TareasController@store');
     Route::put('tareas','Empresa\TareasController@update');
+
+    Route::put('cliente','ClienteController@actualizaCliente');
+    Route::put('cliente/facturacion','ClienteController@actualizaFacturacion');
+
+    Route::post('contacto','ContactoController@store');
 });

@@ -87,10 +87,12 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
+                                            @if($cliente==null)
                                             <div class="form-group col-md-12">
                                                 <label for="exampleInputPassword1">Ciudad</label>
                                                 {!! Form::select('ciudad_id', $ciudades, ($cliente!=null)?$oficina->ciudad_id : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
+                                            @endif
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputEmail1">Dirección</label>
                                                 <input type="text" value="@if($cliente!=null){{$cliente->facturacion->direccion}}@endif" name="direccion" class="form-control" placeholder="Dirección">
@@ -144,12 +146,14 @@
                                                 <input type="text" name="extension_contacto" class="form-control" id="exampleInputPassword1" placeholder="Extensión">
                                             </div> 
                                             
-                                            
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
+                                            
                                         </div>
                                         
                                     </div>
                                 </div>
+                                @else
+                                <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                 @endif
                             </div>
                         </div>
