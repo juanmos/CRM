@@ -14,9 +14,10 @@ class OficinaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request,$cliente_id)
     {
-        //
+        $oficinas=Oficina::where('cliente_id',$cliente_id)->with('ciudad')->get();
+        return response()->json(compact('oficinas'));
     }
 
     /**
@@ -41,12 +42,16 @@ class OficinaController extends Controller
     {
         Oficina::create([
             'direccion'=>$request->get('direccion'),
-            'matriz'=>$request->get('matriz'),
+            'matriz'=>($request->get('matriz')=='true')?1:0,
             'ciudad_id'=>$request->get('ciudad_id'),
             'cliente_id'=>$cliente_id,
-            'latitud'=>$request->get('latitud'),
-            'longitud'=>$request->get('longitud')
+            'latitud'=>($request->has('latitud'))?$request->get('latitud'):0,
+            'longitud'=>($request->has('longitud'))?$request->get('longitud'):0
         ]);
+        if($request->is('api/*')){
+            $oficinas=Oficina::where('cliente_id',$cliente_id)->with('ciudad')->orderBy('direccion')->get();
+            return response()->json(compact('oficinas'));
+        };
         return redirect('cliente/'.$cliente_id);
     }
 
@@ -86,11 +91,15 @@ class OficinaController extends Controller
         $oficina=Oficina::find($id);
         $oficina->update([
             'direccion'=>$request->get('direccion'),
-            'matriz'=>$request->get('matriz'),
+            'matriz'=>($request->get('matriz')=='true')?1:0,
             'ciudad_id'=>$request->get('ciudad_id'),
-            'latitud'=>$request->get('latitud'),
-            'longitud'=>$request->get('longitud')
+            'latitud'=>($request->has('latitud'))?$request->get('latitud'):0,
+            'longitud'=>($request->has('longitud'))?$request->get('longitud'):0
         ]);
+        if($request->is('api/*')){
+            $oficinas=Oficina::where('cliente_id',$oficina->cliente_id)->with('ciudad')->orderBy('direccion')->get();
+            return response()->json(compact('oficinas'));
+        };
         return redirect('cliente/'.$oficina->cliente_id);
     }
 

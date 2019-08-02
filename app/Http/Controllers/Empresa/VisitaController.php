@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Configuracion;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
 use App\Models\Visita;
@@ -45,8 +46,35 @@ class VisitaController extends Controller
             $visita->color=$visita->estado->color;
             $visita->textColor=$visita->estado->textColor;
             $visita->url=route('visita.show',$visita->id);
+            $visita->template='userTemplate';
         }
-        return $visitas;//response()->json(compact('visitas'));
+        if(!$request->is('api/*') || $request->get('libres')==0)return $visitas;
+
+        $config = Configuracion::where('empresa_id',Auth::user()->empresa_id)->first();
+        $start = Carbon::parse($config->min_time);
+        $end = Carbon::parse($config->max_time);
+        $horas = array();
+        do {            
+            $horas[]=array(
+                'title'=>'Horario disponible',
+                'start'=>$start->toDateTimeString(),
+                'end'=>$start->addMinutes($config->tiempo_visita)->toDateTimeString(),
+                'color'=>'#A389D4',
+                'textColor'=>'#fff',
+                'template'=>'libreTemplate'
+            );            
+        } while ($start->lessThanOrEqualTo($end));
+        if($visitas->count()>0){
+            foreach($horas as $index => $hora){
+                foreach($visitas as $visita){
+                    if(Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) )){
+                        $horas[$index]=$visita;
+                        break;
+                    }
+                }
+            }
+        }
+        return $horas;
     }
 
     /**

@@ -29,6 +29,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
     Route::get('clasificaciones','ClasificacionController@index');
     Route::get('vendedores','Empresa\UsuarioController@index');
+    Route::get('oficinas/{cliente_id}','OficinaController@index');
 
     Route::post('cliente','ClienteController@store');
     Route::post('tareas','Empresa\TareasController@store');
@@ -37,5 +38,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::put('cliente','ClienteController@actualizaCliente');
     Route::put('cliente/facturacion','ClienteController@actualizaFacturacion');
 
-    Route::post('contacto','ContactoController@store');
+    Route::post('contacto/{cliente_id}','ContactoController@store');
+    Route::put('contacto/{id}','ContactoController@update');
+
+    Route::post('oficina/{cliente_id}','OficinaController@store');
+    Route::put('oficina/{id}','OficinaController@update');
 });

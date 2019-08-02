@@ -75,7 +75,7 @@ class APIAuthController extends Controller
     public function me()
     {
         try {
-            $user = User::where('id',auth('api')->user()->id)->with(['empresa'])->first();
+            $user = User::where('id',auth('api')->user()->id)->with(['empresa.configuracion'])->first();
             $roles = $user->getRoleNames();
             $ciudades = Ciudad::orderBy('ciudad')->get();
             return response()->json(compact('user','roles','ciudades'));

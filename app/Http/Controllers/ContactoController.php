@@ -110,6 +110,10 @@ class ContactoController extends Controller
             'ciudad_id'=>$request->get('ciudad_id'),
             'oficina_id'=>$request->get('oficina_id')
         ]);
+        if($request->is('api/*')) {
+            $contactos=Contacto::where('cliente_id',$contacto->cliente_id)->orderBy('nombre')->get();
+            return response()->json(compact('contactos'));
+        }
         return redirect('cliente/'.$contacto->cliente_id);
     }
 
