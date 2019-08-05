@@ -37,7 +37,7 @@ class VisitaController extends Controller
         if($usuario_id==null){
             $usuario_id=Auth::user()->id;
         }
-        $visitas = Visita::where("usuario_id",$usuario_id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+        $visitas = Visita::where("usuario_id",$usuario_id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
         foreach($visitas as $visita){
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
@@ -117,7 +117,7 @@ class VisitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $visita=Visita::find($id);
         $estados=EstadoVisita::get();
@@ -125,6 +125,11 @@ class VisitaController extends Controller
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
         $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
         $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
+        if($request->is('api/*')) {
+            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with('visita')->orderBy('orden')->get();
+            $postvisita= $visita->tipoVisita->plantillaVisita->detalles()->with('visita')->orderBy('orden')->get();
+            return response()->json(compact('visita','visitasAnteriores','proximaVisita','previsita','postvisita'));
+        };
         return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita'));
     }
 

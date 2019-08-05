@@ -28,6 +28,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('cliente','ClienteController@store');
 
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
+    Route::get('visita/{id}','Empresa\VisitaController@show');
     Route::post('visita','Empresa\VisitaController@store');
 
     Route::get('clasificaciones','ClasificacionController@index');
