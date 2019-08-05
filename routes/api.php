@@ -25,13 +25,18 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('usuario/{plataforma}', 'APIAuthController@logout');//Cerrar sesion del usuario actual
     Route::post('usuario/registroPush', 'APIAuthController@registroPush');//Cerrar sesion del usuario actual
     Route::get('clientes','ClienteController@index');
-    Route::get('tareas','Empresa\TareasController@index');
+    Route::post('cliente','ClienteController@store');
+
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
+    Route::post('visita','Empresa\VisitaController@store');
+
     Route::get('clasificaciones','ClasificacionController@index');
     Route::get('vendedores','Empresa\UsuarioController@index');
     Route::get('oficinas/{cliente_id}','OficinaController@index');
 
-    Route::post('cliente','ClienteController@store');
+    
+
+    Route::get('tareas','Empresa\TareasController@index');
     Route::post('tareas','Empresa\TareasController@store');
     Route::put('tareas','Empresa\TareasController@update');
 
@@ -43,4 +48,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
     Route::post('oficina/{cliente_id}','OficinaController@store');
     Route::put('oficina/{id}','OficinaController@update');
+
+    Route::get('tipoVisitas','TipoVisitaController@index');
 });

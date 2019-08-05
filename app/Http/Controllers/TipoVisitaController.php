@@ -15,9 +15,10 @@ class TipoVisitaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $tipos = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get();
+        if($request->is('api/*')) return response()->json(compact('tipos'));
         return view('tipos.index',compact('tipos'));
     }
 

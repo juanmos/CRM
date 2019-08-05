@@ -51,8 +51,8 @@ class VisitaController extends Controller
         if(!$request->is('api/*') || $request->get('libres')==0)return $visitas;
 
         $config = Configuracion::where('empresa_id',Auth::user()->empresa_id)->first();
-        $start = Carbon::parse($config->min_time);
-        $end = Carbon::parse($config->max_time);
+        $start = Carbon::parse($request->get('start').' '.$config->min_time);
+        $end = Carbon::parse($request->get('start').' '.$config->max_time);
         $horas = array();
         do {            
             $horas[]=array(
@@ -67,9 +67,14 @@ class VisitaController extends Controller
         if($visitas->count()>0){
             foreach($horas as $index => $hora){
                 foreach($visitas as $visita){
-                    if(Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) )){
-                        $horas[$index]=$visita;
-                        break;
+                    $hora['in']=Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),false );
+                    $hora['out']=Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) );
+                    if(Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),true ) && Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),true ) ) {
+                        //if(Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) )){
+                            //unset($horas[$index]);
+                            $horas[$index]=$visita;
+                            break;
+                       // }
                     }
                 }
             }
@@ -97,8 +102,10 @@ class VisitaController extends Controller
     {
         $data=$request->all();
         $data['estado_visita_id']=1;
-        $data['fecha_inicio']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->toDateTimeString();
-        $data['fecha_fin']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
+        if(!$request->is('api/*')){
+            $data['fecha_inicio']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->toDateTimeString();
+            $data['fecha_fin']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
+        }
         $visita=Visita::create($data);
         $validate=true;
         return response()->json(compact('visita','validate'));
