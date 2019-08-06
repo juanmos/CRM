@@ -180,7 +180,7 @@
                                         @if($visita->tipoVisita->plantillaPre->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.previsita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
-                                                @foreach ($visita->tipoVisita->plantillaPre->detalles()->with('visita')->orderBy('orden')->get() as $detalle )
+                                                @foreach ($visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function($query) use($visita){$query->where('id',$visita->id);}])->orderBy('orden')->get() as $detalle )
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -202,8 +202,10 @@
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" id="visita_{{$detalle->id}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}> 
-                                                                    <label class="custom-control-label" for="visita_{{$detalle->id}}">{{$opcion}}</label>
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}[]" id="visita_{{$detalle->id.'_'.$opcion}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?
+                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}}> 
+                                                                    <label class="custom-control-label" for="visita_{{$detalle->id.'_'.$opcion}}">{{$opcion}}</label>
+                                                                    
                                                                 </div>
                                                                 @endforeach
                                                                 @else
@@ -233,7 +235,7 @@
                                         @if($visita->tipoVisita->plantillaVisita->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.visita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
-                                                @foreach ($visita->tipoVisita->plantillaVisita->detalles()->with('visita')->orderBy('orden')->get() as $detalle )
+                                                @foreach ($visita->tipoVisita->plantillaVisita->detalles()->with(['visita'=>function($query) use($visita){$query->where('id',$visita->id);}])->orderBy('orden')->get() as $detalle )
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -255,8 +257,9 @@
                                                                 @if($detalle->opciones!=null)
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" id="visita_{{$detalle->id}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'checked="checked"':'':''}}>
-                                                                    <label class="custom-control-label" for="visita_{{$detalle->id}}">{{$opcion}}</label>
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}[]" id="visita_{{$detalle->id.'_'.$opcion}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?
+                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}}> 
+                                                                    <label class="custom-control-label" for="visita_{{$detalle->id.'_'.$opcion}}">{{$opcion}}</label>
                                                                 </div>
                                                                 @endforeach
                                                                 @else

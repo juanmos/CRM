@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PlantillaDetalle;
 use App\Models\Configuracion;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
+use App\Models\Tarea;
 use App\Models\Visita;
 use App\Models\EstadoVisita;
 use App\Models\User;
 use Carbon\Carbon;
 use Auth;
+use DB;
 
 class VisitaController extends Controller
 {
@@ -126,9 +129,14 @@ class VisitaController extends Controller
         $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
         $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
         if($request->is('api/*')) {
-            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with('visita')->orderBy('orden')->get();
-            $postvisita= $visita->tipoVisita->plantillaVisita->detalles()->with('visita')->orderBy('orden')->get();
-            return response()->json(compact('visita','visitasAnteriores','proximaVisita','previsita','postvisita'));
+            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function($query) use($id){
+                $query->where('id',$id);
+            }])->orderBy('orden')->get();
+            $postvisita= $visita->tipoVisita->plantillaVisita->detalles()->with(['visita'=>function($query) use($id){
+                $query->where('id',$id);
+            }])->orderBy('orden')->get();
+            $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
+            return response()->json(compact('previsita','postvisita','visita','visitasAnteriores','proximaVisita','tareas','estados'));
         };
         return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita'));
     }
@@ -178,14 +186,39 @@ class VisitaController extends Controller
     }
 
     public function savePrevisita(Request $request,$id){
-        $inputs = $request->except(['_token']);
-        $visita = Visita::find($id)->detalles();
-        foreach($inputs as $key => $input){
-            $val=explode('_',$key)[1];
-            $visita->detach($val);
-            $visita->attach($val,['valor'=>$input]);
+        if($request->is('api/*')){
+            $visita = Visita::find($id)->detalles();
+            if( PlantillaDetalle::find($request->get('id'))->tipo_campo!=6){
+                $visita->detach($request->get('id'));
+                $visita->attach($request->get('id'),['valor'=>$request->get('valor')]);
+            }else{
+                if($request->get('value')=='0'){
+                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ? and valor = ? ', [$request->get('id'),$id,$request->get('valor')]);    
+                }else{
+                    if($visita->wherePivot('valor',$request->get('valor'))->get()->count()>0){
+                        DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id=? and valor=?', [$request->get('id'),$id,$request->get('valor')]);
+                    }
+                    $visita->attach($request->get('id'),['valor'=>$request->get('valor')]);
+                }                
+            }            
+            return response()->json(['guardado'=>true]);
+        }else{
+            $inputs = $request->except(['_token']);
+            $visita = Visita::find($id)->detalles();
+            foreach($inputs as $key => $input){
+                $val=explode('_',$key);
+                if( PlantillaDetalle::find($val[1])->tipo_campo!=6){
+                    $visita->detach($val[1]);
+                    $visita->attach($val[1],['valor'=>$input]);
+                }else{
+                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);    
+                    foreach($input as $value){
+                        $visita->attach($val[1],['valor'=>$value]);
+                    }                    
+                }                
+            }
+            return back();
         }
-        return back();
     }
 
     public function saveVisita(Request $request,$id){
@@ -193,9 +226,21 @@ class VisitaController extends Controller
         $visita = Visita::find($id)->detalles();
         foreach($inputs as $key => $input){
             $val=explode('_',$key)[1];
-            $visita->detach($val);
-            $visita->attach($val,['valor'=>$input]);
+            if( PlantillaDetalle::find($val)->tipo_campo!=6){
+                $visita->detach($val);
+                $visita->attach($val,['valor'=>$input]);
+            }else{
+                DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);    
+                foreach($input as $value){
+                    $visita->attach($val[1],['valor'=>$value]);
+                }
+            }                
         }
         return back();
+    }
+
+    public function tareasVisita(Request $request ,$id){
+        $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
+        return response()->json(compact('tareas'));
     }
 }

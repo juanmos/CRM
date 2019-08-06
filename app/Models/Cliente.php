@@ -15,7 +15,7 @@ class Cliente extends Model
 {
     use SoftDeletes;
     protected $fillable=['nombre','telefono','web','activo','clasificacion_id','usuario_id','empresa_id'];
-    protected $with = ['clasificacion','vendedor','facturacion'];
+    protected $with = ['clasificacion','vendedor','facturacion','contactos'];
     public function empresa(){
         return $this->belongsTo(Empresa::class,'empresa_id');
     }

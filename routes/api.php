@@ -30,6 +30,10 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
     Route::get('visita/{id}','Empresa\VisitaController@show');
     Route::post('visita','Empresa\VisitaController@store');
+    Route::put('visita/{id}','Empresa\VisitaController@update');
+    Route::post('visitas/visita/{id}/previsita','Empresa\VisitaController@savePrevisita');
+    Route::post('visitas/visita/{id}/visita','Empresa\VisitaController@saveVisita');
+    Route::get('visita/tareas/{id}','Empresa\VisitaController@tareasVisita');
 
     Route::get('clasificaciones','ClasificacionController@index');
     Route::get('vendedores','Empresa\UsuarioController@index');
