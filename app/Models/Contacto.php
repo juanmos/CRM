@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Cliente;
+use App\Models\Oficina;
 use App\Models\Ciudad;
 
 class Contacto extends Model
@@ -15,6 +16,9 @@ class Contacto extends Model
     }
     public function ciudad(){
         return $this->belongsTo(Ciudad::class,'ciudad_id');
+    }
+    public function oficina(){
+        return $this->belongsTo(Oficina::class,'oficina_id');
     }
 
     public function getFullNameAttribute()

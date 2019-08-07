@@ -134,7 +134,7 @@ class VisitaController extends Controller
                 $query->where('id',$id);
             }])->orderBy('orden')->get();
             $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
-            $visita=Visita::where('id',$id)->with(['cliente.clasificacion','vendedor','tipoVisita','estado'])->first();
+            $visita=Visita::where('id',$id)->with(['cliente.clasificacion','vendedor','tipoVisita','estado','contacto.oficina.ciudad'])->first();
             return response()->json(compact('previsita','postvisita','visita','tareas','estados'));
         };
         $tiposVisita=TipoVisita::get()->pluck('tipo','id');
