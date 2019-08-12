@@ -55,4 +55,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::put('oficina/{id}','OficinaController@update');
 
     Route::get('tipoVisitas','TipoVisitaController@index');
+
+    Route::put('direccion/{id}','OficinaController@update');
 });
