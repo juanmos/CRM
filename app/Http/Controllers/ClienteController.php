@@ -31,9 +31,14 @@ class ClienteController extends Controller
     }
 
     public function visitas(Request $request,$id){
-        $fechaIni = new Carbon($request->get('start'));
-        $fechaFin = new Carbon($request->get('end'));
-        $visitas = Visita::where("cliente_id",$id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+        if($request->is('api/*')){
+            $visitas = Visita::where("cliente_id",$id)->with('cliente')->orderBy('fecha_inicio','desc')->paginate(20);
+        }else{
+            $fechaIni = new Carbon($request->get('start'));
+            $fechaFin = new Carbon($request->get('end'));
+            $visitas = Visita::where("cliente_id",$id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+        }
+        
         foreach($visitas as $visita){
             $visita->title=$visita->vendedor->full_name.' Visita: '.$visita->tipoVisita->tipo;;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;

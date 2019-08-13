@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Cliente;
 use App\Models\Oficina;
 use App\Models\Ciudad;
 
 class Contacto extends Model
 {
+    use SoftDeletes;
     protected $fillable=['cliente_id','nombre','apellido','email','telefono','extension','cargo','ciudad_id','oficina_id'];
 
     public function cliente(){

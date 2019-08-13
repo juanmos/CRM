@@ -85,6 +85,24 @@ class VisitaController extends Controller
         return $horas;
     }
 
+    public function visitasByUsuarioHistorial(Request $request,$usuario_id=null){
+        if($usuario_id==null){
+            $usuario_id=Auth::user()->id;
+        }
+        $visitas = Visita::where("usuario_id",$usuario_id)->with('vendedor')->orderBy('fecha_inicio','desc')->paginate(20);
+        foreach($visitas as $visita){
+            $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
+            $visita->description='Visita: '.$visita->tipoVisita->tipo;
+            $visita->start=$visita->fecha_inicio;
+            $visita->end=$visita->fecha_fin;
+            $visita->color=$visita->estado->color;
+            $visita->textColor=$visita->estado->textColor;
+            $visita->url=route('visita.show',$visita->id);
+            $visita->template='userTemplate';
+        }
+        return $visitas;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -31,11 +31,13 @@ Route::resource('empresa', 'EmpresaController');
     Route::get('contacto/edit/{id}','ContactoController@edit')->name('contacto.edit');
     Route::put('contacto/update/{id}','ContactoController@update')->name('contacto.update');
     Route::post('contacto/buscar/','ContactoController@buscar')->name('contacto.buscar');
+    Route::delete('contacto/{id}','ContactoController@destroy')->name('contacto.destroy');
 
     Route::get('oficina/create/{cliente_id}', 'OficinaController@create')->name('oficina.create');
     Route::post('oficina/store/{cliente_id}','OficinaController@store')->name('oficina.store');
     Route::get('oficina/edit/{id}','OficinaController@edit')->name('oficina.edit');
     Route::put('oficina/update/{id}','OficinaController@update')->name('oficina.update');
+    Route::delete('oficina/{id}','OficinaController@destroy')->name('oficina.destroy');
 
     Route::get('cliente/vendedor/{cliente_id}','ClienteController@vendedor')->name('cliente.vendedor');
     Route::get('cliente/listado/{user_id}','ClienteController@index')->name('cliente.listado');
@@ -49,6 +51,9 @@ Route::resource('empresa', 'EmpresaController');
     Route::post('plantilla/campo/opciones/','PlantillaController@opcionesCampo')->name('plantilla.campo.opciones');
     Route::post('plantilla/campo/eliminar','PlantillaController@eliminarCampo')->name('plantilla.campo.eliminar');
     Route::post('plantilla/campo/orden/{id}','PlantillaController@ordenCampo')->name('plantilla.campo.orden');
+
+    Route::post('cliente/nota','NotaController@store')->name('cliente.nota.store');
+    Route::delete('cliente/nota/{id}','NotaController@destroy')->name('cliente.nota.destroy');
 
     Route::group(['prefix' => 'e'], function () {
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);

@@ -196,13 +196,74 @@
                                                             <h6 class="mb-1"><i class="fas fa-id-card-alt"></i> {{$contacto->cargo}}</h6>
                                                             <p class="m-0"><i class="fas fa-envelope-open-text"></i> {{$contacto->email}}</p>
                                                         </td>
-                                                        <td><a href="{{route('contacto.edit',[$contacto->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
+                                                        <td>
+                                                            <a href="{{route('contacto.edit',[$contacto->id] )}}" class="label theme-bg text-white f-12">Editar</a>
+                                                            {!! Form::open(['route'=>['contacto.destroy',$contacto->id],'method'=>'POST','style'=>'display:inline-block']) !!}
+                                                            <input type="hidden" value="DELETE" name="_method"/>
+                                                            {!! Form::token() !!}
+                                                            <button type="submit" class="label theme-danger text-white f-12">Eliminar</button>
+                                                            {!! Form::close() !!}
+                                                        </td>
                                                     </tr>
                                                     @empty
                                                     <p>No hay contactos registrados</p>
                                                     @endforelse
                                                 </tbody>
                                             </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card Recent-Users">
+                                    <div class="card-header">
+                                        <h5>Notas importantes</h5>
+                                        <a href="#" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalNota">
+                                            <i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nueva nota
+                                        </a>
+                                    </div>
+                                    <div class="card-block px-0 py-3">
+                                        <div class="table-responsive">
+                                            @if($cliente->notas->count() > 0)
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        
+                                                        <th>Nota</th>
+                                                        <th>Fecha</th>
+                                                        <th>Usuario</th>
+                                                        <th class="text-right"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($cliente->notas as $nota)
+                                                    <tr>
+                                                        
+                                                        <td>
+                                                            <h6 class="m-0">{{$nota->nota}}</h6>
+                                                        </td>
+                                                        <td>
+                                                            <h6 class="m-0">{{date('d-m-Y H:i',strtotime($nota->created_at))}}</h6>
+                                                        </td>
+                                                        <td>
+                                                            <h6 class="m-0">
+                                                                {{-- <img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user"> --}}
+                                                                {{$nota->usuario->full_name}}
+                                                            </h6>
+                                                        </td>
+                                                        <td>
+                                                            {!! Form::open(['route'=>['cliente.nota.destroy',$nota->id],'method'=>'POST','style'=>'display:inline-block']) !!}
+                                                            <input type="hidden" value="DELETE" name="_method"/>
+                                                            {!! Form::token() !!}
+                                                            <button type="submit" class="label theme-danger text-white f-12">Eliminar</button>
+                                                            {!! Form::close() !!}
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    
+                                                </tbody>
+                                            </table>
+                                            @else
+                                            <h4>No hay notas importantes</h4>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -224,7 +285,15 @@
                                                             <br>
                                                             <h6 class="text-muted"><i class="fas fa-globe-americas"></i> {{$oficina->ciudad->ciudad}}</h6>
                                                         </br>
-                                                        <td><a href="{{route('oficina.edit',[$oficina->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
+                                                        <td>
+                                                            <a href="{{route('oficina.edit',[$oficina->id] )}}" class="label theme-bg text-white f-12">Editar</a>
+                                                            {!! Form::open(['route'=>['oficina.destroy',$oficina->id],'method'=>'POST','style'=>'display:inline-block']) !!}
+                                                            <input type="hidden" value="DELETE" name="_method"/>
+                                                            {!! Form::token() !!}
+                                                            <button type="submit" class="label theme-danger text-white f-12">Eliminar</button>
+                                                            {!! Form::close() !!}
+                                                            
+                                                        </td>
                                                     </tr>
                                                     @empty
                                                     <p>No hay oficinas registradas</p>
@@ -241,250 +310,7 @@
                             
                             
                             
-                            <div class="col-xl-8 col-md-12 m-b-30">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Today</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active show" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">This Week</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">All</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>User</th>
-                                                    <th>Activity</th>
-                                                    <th>Time</th>
-                                                    <th>Status</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">3:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Jumps over the lazy</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">2:37 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-red">Missed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Dog the quick brown</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">10:23 AM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">4:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                    <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>User</th>
-                                                    <th>Activity</th>
-                                                    <th>Time</th>
-                                                    <th>Status</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Jumps over the lazy</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">2:37 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-red">Missed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">3:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">4:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Dog the quick brown</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">10:23 AM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>User</th>
-                                                    <th>Activity</th>
-                                                    <th>Time</th>
-                                                    <th>Status</th>
-                                                    <th class="text-right"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-3.jpg" alt="activity-user">Silje Larsen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Dog the quick brown</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">10:23 AM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-purple">Delayed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-purple f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">3:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-2.jpg" alt="activity-user">Albert Andersen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">Jumps over the lazy</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">2:37 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-red">Missed</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-red f-10"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <h6 class="m-0"><img class="rounded-circle  m-r-10" style="width:40px;" src="assets/images/user/avatar-1.jpg" alt="activity-user">Ida Jorgensen</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">The quick brown fox</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0">4:28 PM</h6>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="m-0 text-c-green">Done</h6>
-                                                    </td>
-                                                    <td class="text-right"><i class="fas fa-circle text-c-green f-10"></i></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                         </div>
                         <!-- [ Main Content ] end -->
@@ -495,6 +321,46 @@
     </div>
 </div>
 @include('includes.modalNuevaVisitaCliente')
+<div class="modal fade bd-example-modal-md" name="modalNota" id="modalNota" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>"cliente.nota.store","method"=>"POST"]) !!}
+                <div class="">
+                  <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="material-icons">clear</i>
+                    </button>
+
+                    <h4 class="card-title">Nueva nota</h4>
+                  </div>
+                </div>
+                <div class="modal-body" align="center">    
+                    <div class="row">                
+                        <div class="form-group-select col-md-12">   
+                            <div class="form-group col-md-12 ">                     
+                                <label class="col-md-4">Nota:</label>                            
+                                {!! Form::text('nota', "", ["class"=>"form-control","placeholder"=>"Nota"]) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
+                            <i class="fa fa-save"> </i> GUARDAR
+                        </button>
+                        <input type="hidden" value="{{$cliente->id}}" name="cliente_id"/>
+                    </div>    
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
 <script src='{{asset("assets/plugins/fullcalendar/packages/core/main.js")}}'></script>

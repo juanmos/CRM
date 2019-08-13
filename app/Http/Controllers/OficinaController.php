@@ -111,6 +111,8 @@ class OficinaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $oficina =Oficina::find($id);
+        $oficina->delete();
+        return redirect('cliente/'.$oficina->cliente_id);
     }
 }
