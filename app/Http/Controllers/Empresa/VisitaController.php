@@ -159,7 +159,8 @@ class VisitaController extends Controller
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
         $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
         $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
-        return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita'));
+        $pest=($request->has('pest'))?$request->get('pest'):'pre';
+        return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita','pest'));
     }
 
     /**
@@ -185,6 +186,7 @@ class VisitaController extends Controller
         $data=$request->all();
         $visita = Visita::find($id);
         $visita->update($data);
+        if(!$request->is('api/*') && $visita->estado_visita_id==6) return back();
         return $visita;
     }
 
@@ -224,7 +226,7 @@ class VisitaController extends Controller
             }            
             return response()->json(['guardado'=>true]);
         }else{
-            $inputs = $request->except(['_token']);
+            $inputs = $request->except(['_token','pest']);
             $visita = Visita::find($id)->detalles();
             foreach($inputs as $key => $input){
                 $val=explode('_',$key);
@@ -238,12 +240,12 @@ class VisitaController extends Controller
                     }                    
                 }                
             }
-            return back();
+            return redirect('e/visita/'.$id.'?pest=pre');
         }
     }
 
     public function saveVisita(Request $request,$id){
-        $inputs = $request->except(['_token']);
+        $inputs = $request->except(['_token','pest']);
         $visita = Visita::find($id)->detalles();
         foreach($inputs as $key => $input){
             $val=explode('_',$key)[1];
@@ -257,7 +259,7 @@ class VisitaController extends Controller
                 }
             }                
         }
-        return back();
+        return redirect('e/visita/'.$id.'?pest=post');
     }
 
     public function tareasVisita(Request $request ,$id){

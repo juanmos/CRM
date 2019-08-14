@@ -131,7 +131,7 @@
                                                             <h6 class="m-0">{{Carbon\Carbon::parse($visita->fecha_inicio)->toDayDateTimeString()}}</h6>
                                                         </td>
                                                         <td>
-                                                            <h6 class="m-0 @if($visita->estado_visita_id==1)text-c-purple @elseif( $visita->estado_visita_id==6) @elseif( $visita->estado_visita_id==5) text-c-green @else text-c-blue  @endif">{{$visita->estado->estado}}</h6>
+                                                            <h6 class="m-0 @if($visita->estado_visita_id==1)text-c-purple @elseif( $visita->estado_visita_id==6)text-c-red @elseif( $visita->estado_visita_id==5) text-c-green @else text-c-blue  @endif">{{$visita->estado->estado}}</h6>
                                                         </td>
                                                         <td class="text-right">
                                                             <a href="{{route('visita.show',$visita->id)}}" class="label theme-bg2 text-white f-12">Ver</a>
@@ -168,7 +168,7 @@
                                                             <h6 class="m-0">{{Carbon\Carbon::parse($visita->fecha_inicio)->toDayDateTimeString()}}</h6>
                                                         </td>
                                                         <td>
-                                                            <h6 class="m-0 @if($visita->estado_visita_id==1)text-c-purple @elseif( $visita->estado_visita_id==6) @elseif( $visita->estado_visita_id==5) text-c-green @else text-c-blue  @endif">{{$visita->estado->estado}}</h6>
+                                                            <h6 class="m-0 @if($visita->estado_visita_id==1)text-c-purple @elseif( $visita->estado_visita_id==6)text-c-red @elseif( $visita->estado_visita_id==5) text-c-green @else text-c-blue  @endif">{{$visita->estado->estado}}</h6>
                                                         </td>
                                                         <td class="text-right">
                                                             <a href="{{route('visita.show',$visita->id)}}" class="label theme-bg2 text-white f-12">Ver</a>

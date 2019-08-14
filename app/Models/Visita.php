@@ -15,7 +15,7 @@ use App\Models\User;
 class Visita extends Model
 {
     use SoftDeletes;
-    protected $fillable=['cliente_id','usuario_id','contacto_id','tipo_visita_id','estado_visita_id','fecha_inicio','fecha_fin','codigo','descripcion'];
+    protected $fillable=['cliente_id','usuario_id','contacto_id','tipo_visita_id','estado_visita_id','fecha_inicio','fecha_fin','codigo','descripcion','razon_cancelacion'];
 
     public function vendedor(){
         return $this->belongsTo(User::class,'usuario_id');

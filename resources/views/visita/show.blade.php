@@ -126,11 +126,21 @@
                                         </div>
                                         <div class="row d-flex align-items-center">
                                             <ul class="nav nav-pills" id="myEstado" role="tablist" style="background-color:transparent;box-shadow:0 0px 0px 0 rgba(0, 0, 0, 0.05);overflow-x: auto;width: 500px;display: -webkit-inline-box;">
+                                                @if($visita->estado_visita_id<5)
                                                 @foreach ($estados as $estado)
                                                 <li class="nav-item">
                                                     <a class="nav-link {{($estado->id==$visita->estado_visita_id)?'active show':' '}}" id="creado-tab"  href="{{route('visita.estado',[$visita->id,$estado->id])}}" aria-selected="{{($estado->id==$visita->estado_visita_id)?'true':'false' }}">{{$estado->estado}}</a>
                                                 </li>    
                                                 @endforeach
+                                                @elseif($visita->estado_visita_id==6)
+                                                <li class="nav-item">                                                    
+                                                    <a class="nav-link theme-danger show text-white" id="creado-tab"  aria-selected="true">{{$visita->estado->estado}}</a>
+                                                </li> 
+                                                @else
+                                                <li class="nav-item">                                                    
+                                                    <a class="nav-link active show" id="creado-tab"  aria-selected="true">{{$visita->estado->estado}}</a>
+                                                </li> 
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
@@ -145,7 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-block">
+                                    <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
                                                 <i class="feather icon-calendar f-30 text-c-blue"></i>
@@ -157,26 +167,44 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if($visita->estado_visita_id<5)
+                                    <div class="card-block">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
+                                                <i class="feather icon-x-circle f-30 text-c-red"></i>
+                                            </div>
+                                            <div class="col">                                                
+                                                {{-- <span class="d-block text-uppercase">Cancelar visita </span>
+                                                <h3 class="f-w-300"></h3> --}}
+                                                <h3 class="f-w-300"><a href="#" data-toggle="modal" data-target="#modalCancelar" class="label theme-danger text-white f-12">Cancelar visita</a></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
+                            <?php function seleccionado($val,$pes){
+                                if($val==$pes) return 'active show';
+                                else return '';
+                            }?>
                             <!-- [ Previsita y visita ] end -->
                             <div class="col-xl-8 col-md-8 m-b-30">
                                 <ul class="nav nav-pills" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active show" id="previsita-tab" data-toggle="tab" href="#previsita" role="tab" aria-controls="previsita" aria-selected="false">Previsita</a>
+                                        <a class="nav-link {{seleccionado('pre',$pest)}}" id="previsita-tab" data-toggle="tab" href="#previsita" role="tab" aria-controls="previsita" aria-selected="false">Previsita</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="visita-tab" data-toggle="tab" href="#visita" role="tab" aria-controls="visita" aria-selected="true">Visita</a>
+                                        <a class="nav-link {{seleccionado('post',$pest)}}" id="visita-tab" data-toggle="tab" href="#visita" role="tab" aria-controls="visita" aria-selected="true">Visita</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas</a>
+                                        <a class="nav-link {{seleccionado('T',$pest)}}" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="calendario-tab" data-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="false">Visitas anteriores</a>
+                                        <a class="nav-link {{seleccionado('C',$pest)}}" id="calendario-tab" data-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="false">Visitas anteriores</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade active show" id="previsita" role="tabpanel" aria-labelledby="previsita-tab">
+                                    <div class="tab-pane fade {{seleccionado('pre',$pest)}}" id="previsita" role="tabpanel" aria-labelledby="previsita-tab">
                                         @if($visita->tipoVisita->plantillaPre->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.previsita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
@@ -186,13 +214,13 @@
                                                         <div class="col-md-12">
                                                             <h6 class="mb-2">{{$detalle->label}}</h6>
                                                             @if($detalle->tipo_campo==1)
-                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif />
                                                             @elseif($detalle->tipo_campo==2)
-                                                            <textarea name="custom_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}">{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
+                                                            <textarea name="custom_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif>{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
                                                             @elseif($detalle->tipo_campo==3)
-                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}" name="custom_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif/>
                                                             @elseif($detalle->tipo_campo==4)
-                                                            <select name="custom_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} ">
+                                                            <select name="custom_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} " @if($visita->estado_visita_id==6)disabled="disabled"@endif>
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                     <option value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'selected="selected"':'':''}}>{{$opcion}}</option>
                                                                 @endforeach
@@ -203,13 +231,13 @@
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                 <div class="custom-control custom-checkbox">
                                                                     <input type="checkbox" name="visita_{{$detalle->id}}[]" id="visita_{{$detalle->id.'_'.$opcion}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?
-                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}}> 
+                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}} @if($visita->estado_visita_id==6)disabled="disabled"@endif> 
                                                                     <label class="custom-control-label" for="visita_{{$detalle->id.'_'.$opcion}}">{{$opcion}}</label>
                                                                     
                                                                 </div>
                                                                 @endforeach
                                                                 @else
-                                                                    <input type="checkbox" name="custom_{{$detalle->id}}" class="custom-control-input"> Check 
+                                                                    <input type="checkbox" name="custom_{{$detalle->id}}" class="custom-control-input" @if($visita->estado_visita_id==6)readonly="readonly"@endif> Check 
                                                                 @endif
                                                             
                                                             @else
@@ -218,6 +246,7 @@
                                                     </div>
                                                 </li>
                                                 @endforeach
+                                                @if($visita->estado_visita_id<6)
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -225,13 +254,14 @@
                                                         </div>
                                                     </div>
                                                 </li>
+                                                @endif
                                             </ul>
-                                            
+                                            {!! Form::hidden('pest', 'pre') !!}
                                         {!! Form::close() !!}
                                         @endif
 
                                     </div>
-                                    <div class="tab-pane fade" id="visita" role="tabpanel" aria-labelledby="visita-tab">
+                                    <div class="tab-pane fade {{seleccionado('post',$pest)}}" id="visita" role="tabpanel" aria-labelledby="visita-tab">
                                         @if($visita->tipoVisita->plantillaVisita->detalles->count()>0)
                                         {!! Form::open(["method"=>"POST","route"=>["visita.save.visita",$visita->id] ]) !!}
                                             <ul class="list-group list-group-sortable">    
@@ -241,13 +271,13 @@
                                                         <div class="col-md-12">
                                                             <h6 class="mb-2">{{$detalle->label}}</h6>
                                                             @if($detalle->tipo_campo==1)
-                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" />
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}" type="text" class="form-control col-md-12 borderColorElement mb-2" placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif />
                                                             @elseif($detalle->tipo_campo==2)
-                                                            <textarea name="visita_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}">{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
+                                                            <textarea name="visita_{{$detalle->id}}"  rows="4" class="form-control borderColorElement mb-2"  placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif>{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}</textarea>
                                                             @elseif($detalle->tipo_campo==3)
-                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}"/>
+                                                            <input value="{{($detalle->visita->count()>0)?$detalle->visita[0]->respuestas->valor:''}}"  name="visita_{{$detalle->id}}"  type="text" class="form-control col-md-12 borderColorElement mb-2"  placeholder="{{$detalle->label}}" @if($visita->estado_visita_id==6)readonly="readonly"@endif/>
                                                             @elseif($detalle->tipo_campo==4)
-                                                            <select name="visita_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} ">
+                                                            <select name="visita_{{$detalle->id}}"  class="form-control opcionesId_{{$detalle->id}} " @if($visita->estado_visita_id==6)disabled="disabled"@endif>
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                     <option value="{{$opcion}}" {{($detalle->visita->count()>0)?($detalle->visita[0]->respuestas->valor==$opcion)?'selected="selected"':'':''}}>{{$opcion}}</option>
                                                                 @endforeach
@@ -258,12 +288,12 @@
                                                                 @foreach(explode('|',$detalle->opciones) as $opcion)
                                                                 <div class="custom-control custom-checkbox custom-control-inline">
                                                                     <input type="checkbox" name="visita_{{$detalle->id}}[]" id="visita_{{$detalle->id.'_'.$opcion}}" class="custom-control-input" value="{{$opcion}}" {{($detalle->visita->count()>0)?
-                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}}> 
+                                                                        ( array_search($opcion,array_column(array_column($detalle->visita->toArray(),"respuestas"),"valor"),true )!==FALSE )  ?'checked="checked"':'':''}} @if($visita->estado_visita_id==6)disabled="disabled"@endif> 
                                                                     <label class="custom-control-label" for="visita_{{$detalle->id.'_'.$opcion}}">{{$opcion}}</label>
                                                                 </div>
                                                                 @endforeach
                                                                 @else
-                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" class="custom-control-input"> Check 
+                                                                    <input type="checkbox" name="visita_{{$detalle->id}}" class="custom-control-input" @if($visita->estado_visita_id==6)readonly="readonly"@endif> Check 
                                                                 @endif
                                                             </div>
                                                             @else
@@ -272,6 +302,7 @@
                                                     </div>
                                                 </li>
                                                 @endforeach
+                                                @if($visita->estado_visita_id<6)
                                                 <li class="list-group-item"  id="{{$detalle->id}}" orden="{{$detalle->orden}}">
                                                     <div class="row">
                                                         <div class="col-md-12">
@@ -279,16 +310,21 @@
                                                         </div>
                                                     </div>
                                                 </li>
+                                                @endif
                                             </ul>
+                                            
+                                            {!! Form::hidden('pest', 'post') !!}
+                                            
                                         {!! Form::close() !!}
                                         @endif
 
                                     </div>
-                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                    <div class="tab-pane fade {{seleccionado('T',$pest)}}" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                        @if($visita->estado_visita_id<6)
                                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalTarea">
                                             <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
                                         </a>
-                                        
+                                        @endif
                                         <table class="table table-hover">
                                             
                                             <tbody>
@@ -332,7 +368,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+                                    <div class="tab-pane fade {{seleccionado('C',$pest)}}" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
@@ -356,8 +392,8 @@
                                                         <h6 class="m-0">10:23 AM</h6>
                                                     </td>
                                                     <td>
-                                                        
-                                                        <h6 class="m-0 text-c-purple"><i class="fas fa-circle text-c-purple f-10"></i> {{$ultima->estado->estado}}</h6>
+                                                        <h6 class="m-0 @if($ultima->estado_visita_id==1)text-c-purple @elseif( $ultima->estado_visita_id==6)text-c-red @elseif( $ultima->estado_visita_id==5) text-c-green @else text-c-blue  @endif">{{$ultima->estado->estado}}</h6>
+                                                        {{-- <h6 class="m-0 text-c-purple"><i class="fas fa-circle text-c-purple f-10"></i> {{$ultima->estado->estado}}</h6> --}}
                                                     </td>
                                                     <td class="text-right">
                                                         <a href="{{route('visita.show',$ultima->id)}}" class="btn btn-primary">Ir a visita</a>
@@ -574,6 +610,53 @@
                         </button>
                     </div>    
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-md" name="modalCancelar" id="modalCancelar" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>["visita.update",$visita->id],"method"=>"POST"]) !!}
+                
+                {!! Form::hidden('_method', 'PUT' ) !!}
+                
+                <div class="">
+                  <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="material-icons">clear</i>
+                    </button>
+
+                    <h4 class="card-title">Cancelar visita</h4>
+                  </div>
+                </div>
+                <div class="modal-body" align="center">    
+                    <div class="row">                
+                        <div class="form-group-select col-md-12">   
+                            <div class="form-group col-md-12 ">                     
+                                <label class="col-md-4">Razón de cancelación:</label>                            
+                                {!! Form::text('razon_cancelacion', "", ["class"=>"form-control","placeholder"=>"Razón de cancelación","required"=>"required"]) !!}
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
+                            <i class="fa fa-save"> </i> GUARDAR
+                        </button>
+                        
+                    </div>    
+                </div>
+                
+                {!! Form::hidden('estado_visita_id', 6) !!}
+                
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

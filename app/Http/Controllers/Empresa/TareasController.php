@@ -42,6 +42,8 @@ class TareasController extends Controller
             $visita = Visita::find($request->get('visita_id'));
             $data['usuario_id']=$visita->usuario_id;            
             $visita->tareas()->create($data);
+            if($request->is('api/*')) return response()->json(['created'=>true]);
+            return redirect('e/visita/'.$visita->id.'?pest=T');
         }else{
             $data['usuario_id']=$data['usuario_id'];
             $data['visita_id']=0;
