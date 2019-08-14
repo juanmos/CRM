@@ -7,7 +7,9 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
+use App\Models\Visita;
 use App\Models\User;
+use Carbon\Carbon;
 use Auth;
 class UsuarioController extends Controller
 {
@@ -65,13 +67,17 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $usuario = User::find($id);
         $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
         $usuario_id=$usuario->id;
-        return view('usuario.show',compact('usuario','tiposVisita','tiempoVisita','usuario_id'));
+        $visitasSemana = Visita::whereBetween('fecha_inicio',[Carbon::now()->subDays(7)->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->orderBy('fecha_inicio','desc')->paginate(50);
+        $visitasTotal = Visita::orderBy('fecha_inicio','desc')->paginate(50);
+        $visitasTerminadas = Visita::whereIn('estado_visita_id',[5])->orderBy('fecha_inicio','desc')->get()->count();
+        $pest=($request->has('pest'))?$request->get('pest'):'C';
+        return view('usuario.show',compact('usuario','tiposVisita','tiempoVisita','usuario_id','visitasSemana','visitasTotal','visitasTerminadas','pest'));
     }
 
     /**
