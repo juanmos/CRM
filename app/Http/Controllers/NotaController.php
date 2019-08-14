@@ -14,9 +14,10 @@ class NotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $cliente = Cliente::find($id);
+        return $cliente->notas;
     }
 
     /**
@@ -40,6 +41,7 @@ class NotaController extends Controller
         $data=$request->all();
         $data['usuario_id']=Auth::user()->id;
         $nota = NotaCliente::create($data);
+        if($request->is('api/*')) return $nota;
         return redirect('cliente/'.$nota->cliente_id);
     }
 
@@ -83,10 +85,11 @@ class NotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $nota = NotaCliente::find($id);
         $nota->delete();
+        if($request->is('api/*')) return response()->json(['eliminado'=>true]);
         return redirect('cliente/'.$nota->cliente_id);
     }
 }

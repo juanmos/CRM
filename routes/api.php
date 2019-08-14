@@ -28,6 +28,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('clientes','ClienteController@index');
     Route::post('cliente','ClienteController@store');
     Route::get('cliente/visitas/{id}','ClienteController@visitas');
+    Route::get('cliente/notas/{cliente_id}','NotaController@index');
+    Route::post('cliente/nota','NotaController@store');
+    Route::delete('cliente/nota/{id}','NotaController@destroy');
 
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
     Route::get('visita/{id}','Empresa\VisitaController@show');
@@ -60,4 +63,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('tipoVisitas','TipoVisitaController@index');
 
     Route::put('direccion/{id}','OficinaController@update');
+
+    
 });

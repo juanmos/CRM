@@ -115,4 +115,19 @@ class OficinaController extends Controller
         $oficina->delete();
         return redirect('cliente/'.$oficina->cliente_id);
     }
+
+    public function direccion(){
+        $ciudad=Ciudad::find(Input::get('ciudad'));
+        $response = \GoogleMaps::load('geocoding')
+        ->setParam ([
+            'address'    =>Input::get('calle'),
+                'components' => [
+                        'administrative_area'  => $ciudad->ciudad,
+                        'country'              => 'EC',
+                      ]
+
+                ])
+                ->get();
+        return response()->json(['response'=>json_decode($response)]);
+    }
 }
