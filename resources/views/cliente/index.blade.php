@@ -46,7 +46,7 @@
                                                         <td>{{$cliente->nombre}}</td>
                                                         <td>{{$cliente->facturacion->direccion}}</td>
                                                         <td>{{$cliente->telefono}}</td>
-                                                        <td>{{($cliente->usuario!=null)?$cliente->usuario->nombre.' '.$cliente->usuario->apellido:'Sin asignar'}}</td>
+                                                        <td>{{($cliente->usuario_id!=null)?$cliente->vendedor->nombre.' '.$cliente->vendedor->apellido:'Sin asignar'}}</td>
                                                         <td>
                                                             {{-- <a href="{{ route('afiche.pdf',$afiche->id) }}" class="label theme-bg2 text-white f-12">Descargar</a> --}}
                                                             @if(Request::is('cliente/listado/*'))
