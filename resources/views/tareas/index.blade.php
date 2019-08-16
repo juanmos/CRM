@@ -40,129 +40,186 @@
                             <!-- [ statistics year chart ] end -->
                             <!--[ Recent Users ] start-->
                             <div class="col-xl-9 col-md-9">
-                                <div class="card Recent-Users">
-                                    <div class="card-header">
-                                        <h5>Tareas de visitas</h5>
-                                        {{-- <a href="{{route('empresa.contacto.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a> --}}
-                                    </div>
-                                    <div class="card-block px-0 py-3">
-                                        <div class="table-responsive">
-                                            
-                                            @foreach ($visitas as $visita)
-                                            <div class="accordion" id="accordionExample">
-                                                <div class="card">
-                                                    <div class="card-header" id="heading{{$visita->id}}">
-                                                            <a href="#!" data-toggle="collapse" data-target="#collapse{{$visita->id}}" aria-expanded="false" aria-controls="collapse{{$visita->id}}" class="row" style="color:#000">
-                                                                <span class="col-md-8 mb-0 f-16">{{$visita->cliente->nombre}}<br><small class="f-12">Fecha: {{$visita->fecha_inicio}}</small></span>
-                                                                <span class="col-md-3 f-12"><span class="float-right"> {{$visita->estado->estado}}<br>Tipo: {{$visita->tipoVisita->tipo}}</span></span>
-                                                                <span class="col-md-1"><i class="fa fa-eye"></i></span>
-                                                            </a>
-                                                    </div>
-                                                    <div id="collapse{{$visita->id}}" class="card-body collapse" aria-labelledby="heading{{$visita->id}}" data-parent="#accordionExample" style="">
-                                                        <a href="#" class="btn btn-primary float-right tareaVisita" visitaId="{{$visita->id}}" data-toggle="modal" data-target="#modalTarea" >
-                                                            <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
-                                                        </a>
-                                                        <table class="table table-hover">
-                                                            <tbody>
-                                                                @foreach($visita->tareas as $tarea)
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="row">
-                                                                            <div class="col-md-7">
-                                                                                <span class="text-muted f-12">Tarea:</span><br>
-                                                                                <h6 class="m-0">{{$tarea->nombre}}</h6>
-                                                                            </div>
-                                                                            
-                                                                            <div class="col-md-4 text-right">
-                                                                                <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
-                                                                                
-                                                                            </div>
-                                                                            <div class="col-md-1 text-right">
-                                                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                                                    <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
-                                                                                    <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
-                                                                                </div>
-                                                                                
-                                                                            </div>
-                                                                            <div class="col-md-8">
-                                                                                <span class="text-muted f-12">Descripción:</span><br>
-                                                                                <h6 class="m-0">{{$tarea->detalle}}</h6>
-                                                                            </div>
-                                                                            <div class="col-md-4"> 
-                                                                                <h6 class="m-0 text-muted text-right">
-                                                                                    <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
-                                                                                    {{$tarea->usuarioCrea->full_name}}
-                                                                                </h6>                                                                                
-                                                                                <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                                
-                                                                            </div>
+                                <ul class="nav nav-pills" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active show" id="previsita-tab" data-toggle="tab" href="#previsita" role="tab" aria-controls="previsita" aria-selected="false">Tareas de hoy</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="visita-tab" data-toggle="tab" href="#visita" role="tab" aria-controls="visita" aria-selected="true">Tareas de visitas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas sin visita</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade active show" id="previsita" role="tabpanel" aria-labelledby="previsita-tab">
+                                        <div class="card Recent-Users">
+                                            <div class="card-block px-0 py-3">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            @foreach($tareasHoy as $tarea)
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-md-7">
+                                                                            <span class="text-muted f-12">Tarea:</span><br>
+                                                                            <h6 class="m-0">{{$tarea->nombre}}</h6>
                                                                         </div>
                                                                         
-                                                                    </td>
-                                                                </tr>
-                                                                
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>                                            
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                                <div class="card Recent-Users">
-                                    <div class="card-header">
-                                        <h5>Tareas sin visitas</h5>
-                                        {{-- <a href="{{route('empresa.contacto.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a> --}}
-                                    </div>
-                                    <div class="card-block px-0 py-3">
-                                        <div class="table-responsive">
-                                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalTarea">
-                                                <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
-                                            </a>
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    @foreach($tareas as $tarea)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="row">
-                                                                <div class="col-md-7">
-                                                                    <span class="text-muted f-12">Tarea:</span><br>
-                                                                    <h6 class="m-0">{{$tarea->nombre}}</h6>
-                                                                </div>
-                                                                
-                                                                <div class="col-md-4 text-right">
-                                                                    <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
-                                                                    
-                                                                </div>
-                                                                <div class="col-md-1 text-right">
-                                                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                                                        <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
-                                                                        <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
+                                                                        <div class="col-md-4 text-right">
+                                                                            <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
+                                                                            
+                                                                        </div>
+                                                                        <div class="col-md-1 text-right">
+                                                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                                                <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
+                                                                                <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <span class="text-muted f-12">Descripción:</span><br>
+                                                                            <h6 class="m-0">{{$tarea->detalle}}</h6>
+                                                                        </div>
+                                                                        <div class="col-md-4"> 
+                                                                            <h6 class="m-0 text-muted text-right">
+                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                {{$tarea->usuarioCrea->full_name}}
+                                                                            </h6>                                                                                
+                                                                            <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
+                                                                        </div>
                                                                     </div>
                                                                     
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <span class="text-muted f-12">Descripción:</span><br>
-                                                                    <h6 class="m-0">{{$tarea->detalle}}</h6>
-                                                                </div>
-                                                                <div class="col-md-4"> 
-                                                                    <h6 class="m-0 text-muted text-right">
-                                                                        <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
-                                                                        {{$tarea->usuarioCrea->full_name}}
-                                                                    </h6>                                                                                
-                                                                    <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                </div>
-                                                            </div>
+                                                                </td>
+                                                            </tr>
                                                             
-                                                        </td>
-                                                    </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="visita" role="tabpanel" aria-labelledby="visita-tab">
+                                        <div class="card Recent-Users">
+                                            <div class="card-block px-0 py-3">
+                                                <div class="table-responsive">
                                                     
+                                                    @foreach ($visitas as $visita)
+                                                    <div class="accordion" id="accordionExample">
+                                                        <div class="card">
+                                                            <div class="card-header" id="heading{{$visita->id}}">
+                                                                    <a href="#!" data-toggle="collapse" data-target="#collapse{{$visita->id}}" aria-expanded="false" aria-controls="collapse{{$visita->id}}" class="row" style="color:#000">
+                                                                        <span class="col-md-8 mb-0 f-16">{{$visita->cliente->nombre}}<br><small class="f-12">Fecha: {{$visita->fecha_inicio}}</small></span>
+                                                                        <span class="col-md-3 f-12"><span class="float-right"> {{$visita->estado->estado}}<br>Tipo: {{$visita->tipoVisita->tipo}}</span></span>
+                                                                        <span class="col-md-1"><i class="fa fa-eye"></i></span>
+                                                                    </a>
+                                                            </div>
+                                                            <div id="collapse{{$visita->id}}" class="card-body collapse" aria-labelledby="heading{{$visita->id}}" data-parent="#accordionExample" style="">
+                                                                <a href="#" class="btn btn-primary float-right tareaVisita" visitaId="{{$visita->id}}" data-toggle="modal" data-target="#modalTarea" >
+                                                                    <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
+                                                                </a>
+                                                                <table class="table table-hover">
+                                                                    <tbody>
+                                                                        @foreach($visita->tareas as $tarea)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-7">
+                                                                                        <span class="text-muted f-12">Tarea:</span><br>
+                                                                                        <h6 class="m-0">{{$tarea->nombre}}</h6>
+                                                                                    </div>
+                                                                                    
+                                                                                    <div class="col-md-4 text-right">
+                                                                                        <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
+                                                                                        
+                                                                                    </div>
+                                                                                    <div class="col-md-1 text-right">
+                                                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                                                            <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
+                                                                                            <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                    <div class="col-md-8">
+                                                                                        <span class="text-muted f-12">Descripción:</span><br>
+                                                                                        <h6 class="m-0">{{$tarea->detalle}}</h6>
+                                                                                    </div>
+                                                                                    <div class="col-md-4"> 
+                                                                                        <h6 class="m-0 text-muted text-right">
+                                                                                            <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                            {{$tarea->usuarioCrea->full_name}}
+                                                                                        </h6>                                                                                
+                                                                                        <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                            </td>
+                                                                        </tr>
+                                                                        
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                            
                                                     @endforeach
-                                                </tbody>
-                                            </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                        <div class="card Recent-Users">
+                                            <div class="card-block px-0 py-3">
+                                                <div class="table-responsive">
+                                                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalTarea">
+                                                        <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
+                                                    </a>
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            @foreach($tareas as $tarea)
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-md-7">
+                                                                            <span class="text-muted f-12">Tarea:</span><br>
+                                                                            <h6 class="m-0">{{$tarea->nombre}}</h6>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-4 text-right">
+                                                                            <h6 class="m-0 text-right text-c-{{($tarea->realizado)?'green' :'purple'}}" id="tarea_estado_{{$tarea->id}}">{{($tarea->realizado)? 'Realizado': 'Por hacer'}}</h6>
+                                                                            
+                                                                        </div>
+                                                                        <div class="col-md-1 text-right">
+                                                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                                                <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
+                                                                                <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                                        <div class="col-md-8">
+                                                                            <span class="text-muted f-12">Descripción:</span><br>
+                                                                            <h6 class="m-0">{{$tarea->detalle}}</h6>
+                                                                        </div>
+                                                                        <div class="col-md-4"> 
+                                                                            <h6 class="m-0 text-muted text-right">
+                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                {{$tarea->usuarioCrea->full_name}}
+                                                                            </h6>                                                                                
+                                                                            <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

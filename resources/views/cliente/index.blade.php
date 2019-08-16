@@ -21,6 +21,7 @@
                                         <h5>Clientes</h5>
                                         @if(!Request::is('cliente/listado/*'))
                                         <a class="btn btn-primary float-right" href="{{route('cliente.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear cliente</span></a>
+                                        <a class="btn btn-secondary float-right" href="{{route('cliente.upload')}}"><span class="pcoded-micon"><i class="feather icon-upload-cloud"></i></span><span class="pcoded-mtext">Cargar clientes</span></a>
                                         @endif
                                     </div>
                                     <div class="card-block px-0 py-3">

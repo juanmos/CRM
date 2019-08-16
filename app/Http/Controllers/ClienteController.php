@@ -9,8 +9,11 @@ use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Ciudad;
 use Illuminate\Http\Request;
+use App\Imports\ClientesImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Auth;
+
 class ClienteController extends Controller
 {
     /**
@@ -228,5 +231,17 @@ class ClienteController extends Controller
     public function destroy(Cliente $cliente)
     {
         //
+    }
+
+    public function cargar(){
+        return view('cliente.carga');
+    }
+
+    public function import(Request $request) 
+    {
+        
+        //Excel::import(new ClientesImport, $request->file('archivo'));
+        Excel::import(new ClientesImport, public_path('archivos/clientes.xlsx'));
+        return redirect('/cliente')->with('success', 'All good!');
     }
 }

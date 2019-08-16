@@ -24,8 +24,9 @@ class TareasController extends Controller
         }
         $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado'])->paginate(50);
         $tareas = Tarea::where('usuario_id',$usuario_id)->where('visita_id',0)->with(['usuario','usuarioCrea'])->paginate(50);
-        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas'));
-        return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas'));
+        $tareasHoy = Tarea::where('usuario_id',$usuario_id)->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea'])->paginate(50);
+        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
+        return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
     }
 
     /**

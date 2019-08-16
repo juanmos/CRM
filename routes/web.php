@@ -46,6 +46,8 @@ Route::resource('empresa', 'EmpresaController');
     Route::get('cliente/desasignar/{user_id}/{cliente_id}','ClienteController@desasignar')->name('cliente.desasignar');
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/visitas/{id}','ClienteController@visitas')->name('cliente.visitas');
+    Route::get('cliente/upload/csv','ClienteController@cargar')->name('cliente.upload');
+    Route::post('cliente/import/csv','ClienteController@import')->name('cliente.import');
 
     Route::post('plantilla/campo/crear/{id}','PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::post('plantilla/campo/opciones/','PlantillaController@opcionesCampo')->name('plantilla.campo.opciones');
