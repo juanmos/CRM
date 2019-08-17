@@ -58,6 +58,10 @@ class UsuarioController extends Controller
             $usuario->save();
         }
         $usuario->syncRoles($request->get('role'));
+        if($request->is('api/*')){
+            $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
+            return response()->json(compact('vendedores'));
+        }
         return redirect('e/usuario');
     }
 
@@ -128,5 +132,9 @@ class UsuarioController extends Controller
     {
         $user = User::where('id',$id)->onlyTrashed()->first()->restore();
         return redirect('e/usuario');
+    }
+
+    public function roles(){
+        return Role::orderBy('name')->where('name','!=','SuperAdministrador')->get();
     }
 }

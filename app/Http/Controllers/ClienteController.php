@@ -23,7 +23,20 @@ class ClienteController extends Controller
      */
     public function index(Request $request,$usuario_id=null)
     {
-        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
+        if(Auth::user()->hasRole('Administrador')){
+            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad']);
+            if($usuario_id!=null && $usuario_id!=0){
+                $clientes=$clientes->where('usuario_id',$usuario_id)->paginate(50);
+            }else{
+                $clientes=$clientes->paginate(50);
+            }
+            
+        }else{
+            $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->where('usuario_id',$usuario_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
+        }
+        
         if($request->is('api/*')) return response()->json(compact('clientes','usuario_id'));
         return view('cliente.index',compact('clientes','usuario_id'));
     }
@@ -181,7 +194,7 @@ class ClienteController extends Controller
             'web'=>$request->get('web'),
             //'activo'=>$request->get('activo'),
             'clasificacion_id'=>$request->get('clasificacion_id'),
-            //'usuario_id'=>$request->get(''),
+            'usuario_id'=>$request->get('usuario_id'),
             'empresa_id'=>Auth::user()->empresa_id
         ]);
         $cliente->facturacion()->update([

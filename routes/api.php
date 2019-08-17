@@ -64,5 +64,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
     Route::put('direccion/{id}','OficinaController@update');
 
+    Route::post('usuario','Empresa\UsuarioController@store');
+    Route::get('usuario/roles','Empresa\UsuarioController@roles');
     
 });
