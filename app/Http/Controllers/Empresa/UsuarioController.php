@@ -58,6 +58,10 @@ class UsuarioController extends Controller
             $usuario->save();
         }
         $usuario->syncRoles($request->get('role'));
+        if($usuario->empresa_id==0){
+            $usuario->empresa_id=Auth::user()->empresa_id;
+            $usuario->save();
+        }
         if($request->is('api/*')){
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores'));
