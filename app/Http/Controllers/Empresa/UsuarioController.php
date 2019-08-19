@@ -117,7 +117,11 @@ class UsuarioController extends Controller
             $usuario->foto=$request->file('foto')->store('public/usuarios');
             $usuario->save();
         }
-        $usuario->syncRoles($request->get('role'));
+        if($request->has('role')) $usuario->syncRoles($request->get('role'));
+        if($request->is('api/*')){
+            $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
+            return response()->json(compact('vendedores','exito'));
+        }
         return redirect('e/usuario');
     }
 
@@ -127,9 +131,14 @@ class UsuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $user = User::find($id)->delete();
+        if($request->is('api/*')){
+            $exito=true;
+            $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
+            return response()->json(compact('vendedores','exito'));
+        }
         return redirect('e/usuario');
     }
     public function restaurar($id)

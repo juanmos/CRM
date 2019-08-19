@@ -66,5 +66,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
     Route::post('usuario','Empresa\UsuarioController@store');
     Route::get('usuario/roles','Empresa\UsuarioController@roles');
-    
+    Route::put('usuario/{id}','Empresa\UsuarioController@update');
+    Route::delete('usuario/borrar/{id}','Empresa\UsuarioController@destroy');
 });

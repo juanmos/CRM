@@ -78,7 +78,7 @@ class APIAuthController extends Controller
             $user = User::where('id',auth('api')->user()->id)->with(['empresa.configuracion'])->first();
             $roles = $user->getRoleNames();
             $ciudades = Ciudad::orderBy('ciudad')->get();
-            $vendedores = User::where('empresa_id',auth('api')->user()->empresa_id)->get();
+            $vendedores = User::where('empresa_id',auth('api')->user()->empresa_id)->with(['roles'])->get();
             return response()->json(compact('user','roles','ciudades','vendedores'));
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
 
