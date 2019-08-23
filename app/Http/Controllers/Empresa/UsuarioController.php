@@ -52,9 +52,13 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $usuario = User::create($request->except(['foto']));
+        $usuario = User::create($request->except(['foto','password']));
         if($request->has('foto')){
             $usuario->foto=$request->file('foto')->store('public/usuarios');
+            $usuario->save();
+        }
+        if($request->has('password')){
+            $usuario->password=bcrypt($request->get('password'));
             $usuario->save();
         }
         $usuario->syncRoles($request->get('role'));
@@ -112,9 +116,13 @@ class UsuarioController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
-        $usuario->update($request->except(['foto']));
+        $usuario->update($request->except(['foto','password']));
         if($request->has('foto')){
             $usuario->foto=$request->file('foto')->store('public/usuarios');
+            $usuario->save();
+        }
+        if($request->has('password')){
+            $usuario->password=bcrypt($request->get('password'));
             $usuario->save();
         }
         if($request->has('role')) $usuario->syncRoles($request->get('role'));

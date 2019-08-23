@@ -74,8 +74,11 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Activo</label>
-                                                {{-- <input type="text" value="@if($empresa!=null){{$empresa->activo}}@endif" name="activo" class="form-control" id="exampleInputPassword1" placeholder="Activo"> --}}
                                                 {!! Form::select('activo', ["0"=>"Inactivo","1"=>"Activo"], ($empresa!=null)?$empresa->activo : 1 ,["class"=>"form-control"]) !!}
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">En pruebas</label>
+                                                {!! Form::select('pruebas', ["0"=>"Empresa de pago","1"=>"Empresa de preubas"], ($empresa!=null)?$empresa->pruebas : 0 ,["class"=>"form-control"]) !!}
                                             </div>
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>

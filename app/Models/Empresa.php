@@ -11,7 +11,7 @@ use App\Models\User;
 
 class Empresa extends Model
 {
-    protected $fillable=['nombre','ruc','direccion','telefono','costo','ciudad_id','activo'];
+    protected $fillable=['nombre','ruc','direccion','telefono','costo','ciudad_id','activo','pruebas','fecha_inicio','fecha_fin_pruebas','usuarios_permitidos'];
 
     public function ciudad(){
         return $this->belongsTo(Ciudad::class,'ciudad_id');

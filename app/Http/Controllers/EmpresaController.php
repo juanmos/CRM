@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Configuracion;
 use App\Models\Empresa;
+use App\Models\Visita;
 use App\Models\Ciudad;
+use App\Models\Cliente;
 
 class EmpresaController extends Controller
 {
@@ -54,7 +56,14 @@ class EmpresaController extends Controller
     public function show($id)
     {
         $empresa = Empresa::find($id);
-        return view('empresa.show',compact('empresa'));
+        $clientes = Cliente::where('empresa_id',$id)->get();
+        $visitas = Visita::whereHas('cliente',function($query) use($clientes){
+            $query->whereIn('cliente_id',$clientes->pluck('id'));
+        })->get()->count();
+        $visitasTerminadas = Visita::whereHas('cliente',function($query) use($clientes){
+            $query->whereIn('cliente_id',$clientes->pluck('id'));
+        })->where('estado_visita_id',5)->get()->count();
+        return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes'));
     }
 
     /**

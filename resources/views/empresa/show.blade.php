@@ -99,11 +99,22 @@
                                     <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
+                                                <i class="feather icon-users f-30 text-c-purple"></i>
+                                            </div>
+                                            <div class="col">
+                                                <h3 class="f-w-300">{{$clientes->count()}}</h3>
+                                                <span class="d-block text-uppercase">TOTAL DE CLIENTES</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-block border-bottom">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
                                                 <i class="feather icon-zap f-30 text-c-green"></i>
                                             </div>
                                             <div class="col">
-                                                <h3 class="f-w-300">235</h3>
-                                                <span class="d-block text-uppercase">TOTAL CARRERAS</span>
+                                                <h3 class="f-w-300">{{$visitas}}</h3>
+                                                <span class="d-block text-uppercase">TOTAL DE VISITAS</span>
                                             </div>
                                         </div>
                                     </div>
@@ -113,8 +124,8 @@
                                                 <i class="feather icon-map-pin f-30 text-c-blue"></i>
                                             </div>
                                             <div class="col">
-                                                <h3 class="f-w-300">26</h3>
-                                                <span class="d-block text-uppercase">TOTAL TERMINADAS</span>
+                                                <h3 class="f-w-300">{{$visitasTerminadas}}</h3>
+                                                <span class="d-block text-uppercase">TOTAL VISITAS TERMINADAS</span>
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +136,7 @@
                             <div class="col-xl-8 col-md-6">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Usuarios</h5>
+                                        <h5>Usuarios # <b>$empresa->usuarios->count()</b></h5>
                                         <a href="{{route('empresa.usuario.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a>
                                     </div>
                                     <div class="card-block px-0 py-3">
