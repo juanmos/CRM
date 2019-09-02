@@ -136,7 +136,7 @@
                             <div class="col-xl-8 col-md-6">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Usuarios # <b>$empresa->usuarios->count()</b></h5>
+                                        <h5>Usuarios # <b>{{$empresa->usuarios->count()}}</b></h5>
                                         <a href="{{route('empresa.usuario.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a>
                                     </div>
                                     <div class="card-block px-0 py-3">
