@@ -77,24 +77,33 @@
                                                 
                                                 
                                             </div>
+                                           
                                             <div class="form-group col-md-6 ">
-                                                <label for="exampleInputEmail1">Nombre</label>
-                                                <input type="text" value="@if($usuario!=null){{$usuario->nombre}}@endif" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Nombre">
-                                                <label for="exampleInputPassword1">Apellido</label>
-                                                <input type="text" value="@if($usuario!=null){{$usuario->apellido}}@endif" name="apellido" class="form-control" id="exampleInputPassword1" placeholder="Apellido">
+                                                <label for="exampleInputEmail1">Nombre *</label>
+                                                <input type="text" value="@if($usuario!=null){{$usuario->nombre}} @else {{old('nombre')}} @endif" name="nombre"  required="required" class="form-control" aria-describedby="emailHelp" placeholder="Nombre">
+                                                <label for="exampleInputPassword1">Apellido *</label>
+                                                <input type="text" value="@if($usuario!=null){{$usuario->apellido}} @else {{old('apellido')}} @endif" name="apellido"  required="required" class="form-control" id="exampleInputPassword1" placeholder="Apellido">
                                             </div>
-                                            
+                                                @if ($errors->has('email'))
+                                                    <div class="error">{{ $errors->first('email') }}</div>
+                                                @endif
                                             <div class="form-group col-md-6">
-                                                <label for="exampleInputPassword1">Email</label>
-                                                <input type="email" value="@if($usuario!=null){{$usuario->email}}@endif" name="email" class="form-control" id="exampleInputPassword1" placeholder="Email">
+                                                <label for="exampleInputPassword1">Email *</label>
+                                                <input type="email" value="@if($usuario!=null){{$usuario->email}} @else {{old('email')}} @endif" name="email" class="form-control" required="required" id="exampleInputPassword1" placeholder="Email" @if($usuario!=null) readonly="readonly" @endif>
+                                                @if ($errors->has('email'))
+                                                    <div class="text-c-red">{{ $errors->first('email') }}</div>
+                                                @endif
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="exampleInputPassword1">Contraseña</label>
-                                                <input type="password" value="@if($usuario!=null){{$usuario->telefono}}@endif" name="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+                                                <label for="exampleInputPassword1">Contraseña @if($usuario==null) * @else <small>Si escribe la contraseña se cambiara para el usuario</small> @endif</label>
+                                                <input type="password" value="" name="password" class="form-control" @if($usuario==null) required="required" @endif id="exampleInputPassword1" placeholder="Contraseña">
+                                                @if ($errors->has('password'))
+                                                    <div class="text-c-red">{{ $errors->first('password') }}</div>
+                                                @endif
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Teléfono</label>
-                                                <input type="text" value="@if($usuario!=null){{$usuario->telefono}}@endif" name="telefono" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
+                                                <input type="text" value="@if($usuario!=null){{$usuario->telefono}} @else {{old('telefono')}} @endif" name="telefono" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
                                             </div>
                                             @if($usuario!=null)
                                             <div class="form-group col-md-6">

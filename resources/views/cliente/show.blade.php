@@ -340,7 +340,7 @@
                         <div class="form-group-select col-md-12">   
                             <div class="form-group col-md-12 ">                     
                                 <label class="col-md-4">Nota:</label>                            
-                                {!! Form::text('nota', "", ["class"=>"form-control","placeholder"=>"Nota"]) !!}
+                                {!! Form::text('nota', "", ["class"=>"form-control","placeholder"=>"Nota","required"=>"required"]) !!}
                             </div>
                         </div>
                     </div>

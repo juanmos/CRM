@@ -69,8 +69,8 @@
                                                 <div id="markers-map" class="set-map" style="height:400px;"></div>
                                             </div>  
                                             
-                                            {!! Form::hidden('latitud', ($oficina!=null)?$oficina->latitud:'', ["id"=>"latitud"]) !!}
-                                            {!! Form::hidden('longitud', ($oficina!=null)?$oficina->longitud:'', ["id"=>"longitud"]) !!}
+                                            {!! Form::hidden('latitud', ($oficina!=null)?$oficina->latitud:'-2.1694287158396386', ["id"=>"latitud"]) !!}
+                                            {!! Form::hidden('longitud', ($oficina!=null)?$oficina->longitud:'-79.89842174504395', ["id"=>"longitud"]) !!}
                                             
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>
@@ -130,12 +130,12 @@ function initMap() {
     @if($oficina!=null)
     var myLatLng = {lat: {{$oficina->latitud}}, lng: {{$oficina->longitud}}};
     @else
-    var myLatLng = {lat: -2.8973976371277064, lng: -79.00446597672118};
+    var myLatLng = {lat: -2.1694287158396386, lng: -79.89842174504395};
     @endif
     
     
     var map = new google.maps.Map(document.getElementById('markers-map'), {
-        zoom: 17,
+        zoom: 16,
         center: myLatLng
     });
 

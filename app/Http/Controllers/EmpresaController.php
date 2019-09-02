@@ -89,7 +89,7 @@ class EmpresaController extends Controller
     public function update(Request $request, $id)
     {
         $empresa = Empresa::find($id)->update($request->all());
-        return redirect('empresa');
+        return redirect('empresa/'.$id);
     }
 
     /**

@@ -159,7 +159,7 @@
                                                 @foreach ($visitasTotal as $visita)
                                                     <tr>
                                                         <td>
-                                                            <h6 class="m-0">{{$visita->cliente->nombre}}</h6>
+                                                            <h6 class="m-0">{{($visita->cliente!=null)?$visita->cliente->nombre:'Cliente no encontrado o eliminado'}}</h6>
                                                         </td>
                                                         <td>
                                                             <h6 class="m-0">{{$visita->tipoVisita->tipo}}</h6>

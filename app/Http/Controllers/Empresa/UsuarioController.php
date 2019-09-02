@@ -27,7 +27,10 @@ class UsuarioController extends Controller
 
     public function eliminados()
     {
-        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->onlyTrashed()->paginate(50);
+        if(Auth::user()->hasRole('SuperAdministrador')) 
+            $usuarios = User::orderBy('nombre')->onlyTrashed()->paginate(50);
+        else
+            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->onlyTrashed()->paginate(50);
         return view('usuario.index',compact('usuarios'));
     }
 
@@ -36,9 +39,13 @@ class UsuarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request,$id=null)
     {
-        $empresa=Empresa::find(Auth::user()->empresa_id);
+        if(Auth::user()->hasRole('SuperAdministrador')){
+            $empresa=Empresa::find($id);
+        }else {
+            $empresa=Empresa::find(Auth::user()->empresa_id);
+        }
         $usuario = null;
         $roles = Role::orderBy('name')->where('name','!=','SuperAdministrador')->get()->pluck('name','name');
         return view('usuario.form',compact('empresa','id','usuario','roles'));
@@ -52,15 +59,24 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $usuario = User::create($request->except(['foto','password']));
+        $data=$request->except(['foto','password']);
+        $email = User::where('email',$data['email'])->withTrashed()->get();        
+        if($email->count()>0){
+            return back()->withErrors(['email'=>'Email ya existe'])->withInput();
+        }
+        if($request->has('password')){
+            if(strlen($request->get('password'))>5)
+                $data['password']=bcrypt($request->get('password'));
+            else {
+                return back()->withErrors(['password'=>'Contraseña demasiado corta, minimo 6 caracteres'])->withInput();
+            }
+        }        
+        $usuario = User::create($data);
         if($request->has('foto')){
             $usuario->foto=$request->file('foto')->store('public/usuarios');
             $usuario->save();
         }
-        if($request->has('password')){
-            $usuario->password=bcrypt($request->get('password'));
-            $usuario->save();
-        }
+        
         $usuario->syncRoles($request->get('role'));
         if($usuario->empresa_id==0){
             $usuario->empresa_id=Auth::user()->empresa_id;
@@ -70,6 +86,7 @@ class UsuarioController extends Controller
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores'));
         }
+        if(Auth::user()->hasRole('SuperAdministrador')) return redirect('empresa/'.$usuario->empresa_id);
         return redirect('e/usuario');
     }
 
@@ -130,6 +147,7 @@ class UsuarioController extends Controller
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores','exito'));
         }
+        if(Auth::user()->hasRole('SuperAdministrador')) return redirect('empresa/'.$usuario->empresa_id);
         return redirect('e/usuario');
     }
 
@@ -147,11 +165,13 @@ class UsuarioController extends Controller
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores','exito'));
         }
+        if(Auth::user()->hasRole('SuperAdministrador')) return redirect('usuario');
         return redirect('e/usuario');
     }
     public function restaurar($id)
     {
         $user = User::where('id',$id)->onlyTrashed()->first()->restore();
+        if(Auth::user()->hasRole('SuperAdministrador')) return redirect('usuario');
         return redirect('e/usuario');
     }
 

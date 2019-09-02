@@ -80,6 +80,7 @@
                                                     @endforeach
                                                 </tbody>
                                             </table>
+                                            {{$usuarios->links()}}
                                         @else
                                             <h4>No hay usuarios registrados</h4>
                                             @if(Auth::user()->hasRole('SuperAdmin'))

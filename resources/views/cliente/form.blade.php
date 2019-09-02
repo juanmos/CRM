@@ -47,8 +47,8 @@
                                         <div class="row">
                                             
                                             <div class="form-group col-md-6 ">
-                                                <label for="exampleInputEmail1">Cliente</label>
-                                                <input type="text" value="@if($cliente!=null){{$cliente->nombre}}@endif" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Cliente">
+                                                <label for="exampleInputEmail1">Cliente *</label>
+                                                <input type="text" value="@if($cliente!=null){{$cliente->nombre}}@endif" name="nombre" class="form-control" required="required" aria-describedby="emailHelp" placeholder="Cliente">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Teléfono</label>
@@ -121,12 +121,12 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-md-6 ">
-                                                <label for="exampleInputEmail1">Nombre</label>
-                                                <input type="text"  name="nombre_contacto" class="form-control" aria-describedby="emailHelp" placeholder="Nombre">
+                                                <label for="exampleInputEmail1">Nombre *</label>
+                                                <input type="text"  name="nombre_contacto" class="form-control" aria-describedby="emailHelp"  required="required" placeholder="Nombre">
                                             </div>
                                             <div class="form-group col-md-6 ">
-                                                <label for="exampleInputPassword1">Apellido</label>
-                                                <input type="text" name="apellido_contacto" class="form-control" id="exampleInputPassword1" placeholder="Apellido">
+                                                <label for="exampleInputPassword1">Apellido *</label>
+                                                <input type="text" name="apellido_contacto" class="form-control" id="exampleInputPassword1" required="required" placeholder="Apellido">
                                             </div>
                                             
                                             <div class="form-group col-md-6">

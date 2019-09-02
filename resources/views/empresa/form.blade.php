@@ -47,8 +47,8 @@
                                         <div class="row">
                                             
                                             <div class="form-group col-md-6 ">
-                                                <label for="exampleInputEmail1">Empresa</label>
-                                                <input type="text" value="@if($empresa!=null){{$empresa->nombre}}@endif" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Empresa">
+                                                <label for="exampleInputEmail1">Empresa*</label>
+                                                <input type="text" value="@if($empresa!=null){{$empresa->nombre}}@endif" name="nombre" class="form-control" required="required" aria-describedby="emailHelp" placeholder="Empresa">
                                             </div>
                                             
                                             <div class="form-group col-md-6">
@@ -69,8 +69,8 @@
                                                 <input type="text" value="@if($empresa!=null){{$empresa->telefono}}@endif" name="telefono" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="exampleInputPassword1">Costo</label>
-                                                <input type="text" value="@if($empresa!=null){{$empresa->costo}}@endif" name="costo" class="form-control" id="exampleInputPassword1" placeholder="Costo">
+                                                <label for="exampleInputPassword1">Costo*</label>
+                                                <input type="text" value="@if($empresa!=null){{$empresa->costo}}@endif" name="costo" class="form-control" id="exampleInputPassword1" required="required" placeholder="Costo">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Activo</label>
