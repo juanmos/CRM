@@ -47,8 +47,8 @@
                                         <div class="row">
                                             
                                             <div class="form-group col-md-12 ">
-                                                <label for="exampleInputEmail1">Clasificación</label>
-                                                <input type="text" value="@if($clasificacion!=null){{$clasificacion->clasificacion}}@endif" name="clasificacion" class="form-control" aria-describedby="emailHelp" placeholder="Clasificación">
+                                                <label for="exampleInputEmail1">Clasificación *</label>
+                                                <input type="text" value="@if($clasificacion!=null){{$clasificacion->clasificacion}}@endif" name="clasificacion" class="form-control" aria-describedby="emailHelp" placeholder="Clasificación"  required="required">
                                             </div>
                                             
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>

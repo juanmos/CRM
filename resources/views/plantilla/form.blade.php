@@ -47,8 +47,8 @@
                                         <div class="row">
                                             
                                             <div class="form-group col-md-12 ">
-                                                <label for="exampleInputEmail1">Nombre de la Plantilla</label>
-                                                <input type="text" value="@if($plantilla!=null){{$plantilla->nombre}}@endif" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Plantilla">
+                                                <label for="exampleInputEmail1">Nombre de la Plantilla *</label>
+                                                <input type="text" value="@if($plantilla!=null){{$plantilla->nombre}}@endif" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Plantilla"  required="required">
                                             </div>
                                             <div class="form-group col-md-12 ">
                                                 <label for="exampleInputEmail1">Tipo de Plantilla</label>

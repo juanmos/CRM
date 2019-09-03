@@ -47,8 +47,8 @@
                                         <div class="row">
                                             
                                             <div class="form-group col-md-12 ">
-                                                <label for="exampleInputEmail1">Tipo de Visita</label>
-                                                <input type="text" value="@if($tipoVisita!=null){{$tipoVisita->tipo}}@endif" name="tipo" class="form-control" aria-describedby="emailHelp" placeholder="Tipo de visita">
+                                                <label for="exampleInputEmail1">Tipo de Visita *</label>
+                                                <input type="text" value="@if($tipoVisita!=null){{$tipoVisita->tipo}}@endif" name="tipo" class="form-control" required="required" aria-describedby="emailHelp" placeholder="Tipo de visita">
                                             </div>
                                             <div class="form-group col-md-12 ">
                                                 <label for="exampleInputEmail1">Plantilla previsita</label>

@@ -251,8 +251,8 @@
                     <div class="row">                
                         <div class="form-group-select col-md-12">   
                             <div class="form-group col-md-12 ">                     
-                                <label class="col-md-4">Nombre de la tarea:</label>                            
-                                {!! Form::text('nombre', "", ["class"=>"form-control","placeholder"=>"Nombre de la tarea"]) !!}
+                                <label class="col-md-4">Nombre de la tarea: *</label>                            
+                                {!! Form::text('nombre', "", ["class"=>"form-control","placeholder"=>"Nombre de la tarea","required"=>"required"]) !!}
                             </div>
                         </div>
                         <div class="form-group-select col-md-12">
