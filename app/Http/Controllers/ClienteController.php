@@ -34,7 +34,9 @@ class ClienteController extends Controller
             
         }else{
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
-            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->where('usuario_id',$usuario_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
+            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)
+                //->where('usuario_id',$usuario_id)
+                ->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
         }
         
         if($request->is('api/*')) return response()->json(compact('clientes','usuario_id'));
