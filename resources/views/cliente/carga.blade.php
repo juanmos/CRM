@@ -39,7 +39,7 @@
                                         <div class="row">
                                             <div class="form-group col-md-12 ">
                                                 <p>Por favor carga el archivo en el formato especificado en el siguiente archivo. El formato debe ser "csv"
-                                                    <a href="{{asset('archivos/clientes.csv')}}" class="btn btn-primary">Descarga el archivo de ejemplo</a>
+                                                    <a href="{{asset('archivos/clientes.xlsx')}}" class="btn btn-primary">Descarga el archivo de ejemplo</a>
                                                 </p>
                                             </div>
                                             <div class="form-group col-md-12 ">
