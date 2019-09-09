@@ -51,6 +51,10 @@
                                             <div class="form-group col-md-6 ">
                                                 <div class="row">
                                                     <div class="form-group col-md-12">
+                                                        <label for="exampleInputPassword1">País</label>
+                                                        {!! Form::select('pais_id', $paises, ($oficina!=null)?$oficina->pais_is : 1 ,["class"=>"form-control","id"=>"pais_id"]) !!}
+                                                    </div> 
+                                                    <div class="form-group col-md-12">
                                                         <label for="exampleInputPassword1">Ciudad</label>
                                                         {!! Form::select('ciudad_id', $ciudades, ($oficina!=null)?$oficina->ciudad_id : 1 ,["class"=>"form-control","id"=>"ciudad_id"]) !!}
                                                     </div> 
@@ -157,7 +161,7 @@ function initMap() {
 
 }
 function geocodeAddress(geocoder, resultsMap,marker) {
-    var address = document.getElementById('direccion').value+' , '+$('#ciudad_id option:selected').text()+', Ecuador';
+    var address = document.getElementById('direccion').value+' , '+$('#ciudad_id option:selected').text()+', '+$('#pais_id option:selected').text();
     console.log(address);
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {

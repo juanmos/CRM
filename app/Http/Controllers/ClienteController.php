@@ -8,6 +8,7 @@ use App\Models\Visita;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Ciudad;
+use App\Models\Pais;
 use Illuminate\Http\Request;
 use App\Imports\ClientesImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -78,9 +79,10 @@ class ClienteController extends Controller
     {
         $cliente=null;
         $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
+        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
         $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
         $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
-        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores'));
+        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores','paises'));
     }
 
     /**
@@ -107,6 +109,7 @@ class ClienteController extends Controller
             'ruc'=>$request->get('ruc'),
         ]);
         $oficina=$cliente->oficinas()->create([
+            'pais_id'=>$request->get('pais_id'),
             'ciudad_id'=>$request->get('ciudad_id'),
             'direccion'=>$request->get('direccion'),
             'matriz'=>1
@@ -176,8 +179,9 @@ class ClienteController extends Controller
         $cliente=Cliente::find($id);
         $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
         $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id'); 
+        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
         $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
-        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores'));
+        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores','paises'));
     }
 
     /**

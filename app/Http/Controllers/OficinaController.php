@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Ciudad;
+use App\Models\Pais;
 use App\Models\Oficina;
 
 class OficinaController extends Controller
@@ -29,7 +30,8 @@ class OficinaController extends Controller
     {
         $oficina = null;
         $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('oficina.form',compact('oficina','cliente_id','ciudades'));
+        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
+        return view('oficina.form',compact('oficina','cliente_id','ciudades','paises'));
     }
 
     /**
@@ -44,6 +46,7 @@ class OficinaController extends Controller
             'direccion'=>$request->get('direccion'),
             'matriz'=>($request->get('matriz')=='true')?1:0,
             'ciudad_id'=>$request->get('ciudad_id'),
+            'pais_id'=>$request->get('pais_id'),
             'cliente_id'=>$cliente_id,
             'latitud'=>($request->has('latitud'))?$request->get('latitud'):0,
             'longitud'=>($request->has('longitud'))?$request->get('longitud'):0
@@ -76,7 +79,8 @@ class OficinaController extends Controller
     {
         $oficina = Oficina::find($id);
         $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('oficina.form',compact('oficina','ciudades'));
+        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
+        return view('oficina.form',compact('oficina','ciudades','paises'));
     }
 
     /**
@@ -93,6 +97,7 @@ class OficinaController extends Controller
             'direccion'=>$request->get('direccion'),
             'matriz'=>($request->get('matriz')=='true')?1:0,
             'ciudad_id'=>$request->get('ciudad_id'),
+            'pais_id'=>$request->get('pais_id'),
             'latitud'=>($request->has('latitud'))?$request->get('latitud'):0,
             'longitud'=>($request->has('longitud'))?$request->get('longitud'):0
         ]);

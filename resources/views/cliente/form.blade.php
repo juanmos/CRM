@@ -88,7 +88,11 @@
                                     <div class="card-body">
                                         <div class="row">
                                             @if($cliente==null)
-                                            <div class="form-group col-md-12">
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">País</label>
+                                                {!! Form::select('pais_id', $paises, ($cliente!=null)?$oficina->pais_is : 1 ,["class"=>"form-control"]) !!}
+                                            </div> 
+                                            <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Ciudad</label>
                                                 {!! Form::select('ciudad_id', $ciudades, ($cliente!=null)?$oficina->ciudad_id : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
