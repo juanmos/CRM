@@ -31,7 +31,7 @@ class HomeController extends Controller
         $user= User::find(Auth::user()->id);
         if($user->hasRole('SuperAdministrador')){
             return view('admin.panel');
-        }else if($user->hasRole('Administrador')){
+        }else if(!$user->hasRole('SuperAdministrador')){
             $empresa = Empresa::find($user->empresa_id);
             $clientes = Cliente::where('empresa_id',$user->empresa_id)->get();
             $visitas = Visita::whereHas('cliente',function($query) use($clientes){
