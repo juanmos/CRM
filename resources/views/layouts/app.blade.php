@@ -171,6 +171,8 @@
             </header>
             <!-- [ Header ] end -->
         
+            <!-- [ Mensaje Content ] start -->
+            
             <!-- [ Main Content ] start -->
             @yield('content')
             <!-- [ Main Content ] end -->

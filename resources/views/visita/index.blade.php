@@ -22,18 +22,25 @@
                                             </div>
                                         </div>
                                         <table class="table table-hover">
-                                          <tbody>
-                                              @foreach($usuarios as $user)
-                                              <tr class="unread">
-                                                  <td><img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">{{$user->nombre}} {{$user->apellido}}
-                                                  </td>
-                                                  <td>
-                                                    <a href="{{ route('visita.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
-                                                  </td>
-                                              </tr>                                              
-                                              @endforeach
-                                          </tbody>
-                                      </table>
+                                            <tbody>
+                                                @foreach($usuarios as $user)
+                                                <tr class="unread">
+                                                    <td class="row">
+                                                        <div class="col-md-4">
+                                                            <img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            {{$user->nombre}} {{$user->apellido}}<br>
+                                                            <a href="{{ route('visita.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
+                                                        </div>
+                                                    </td>
+                                                    {{-- <td>
+                                                        
+                                                    </td> --}}
+                                                </tr>                                              
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

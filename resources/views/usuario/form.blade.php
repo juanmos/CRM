@@ -89,7 +89,7 @@
                                                 @endif
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Email *</label>
-                                                <input type="email" value="@if($usuario!=null){{$usuario->email}} @else {{old('email')}} @endif" name="email" class="form-control" required="required" id="exampleInputPassword1" placeholder="Email" @if($usuario!=null) readonly="readonly" @endif>
+                                                <input type="email" value="@if($usuario!=null){{$usuario->email}} @else {{old('email')}} @endif" name="email" class="form-control" required="required" id="exampleInputPassword1" placeholder="Email" @if($usuario!=null && !Auth::user()->hasRole('Administrador')) readonly="readonly" @endif>
                                                 @if ($errors->has('email'))
                                                     <div class="text-c-red">{{ $errors->first('email') }}</div>
                                                 @endif
@@ -111,12 +111,12 @@
                                                 {!! Form::select('activo', ["0"=>"Inactivo","1"=>"Activo"], ($usuario!=null)?$usuario->activo : 1 ,["class"=>"form-control"]) !!}
                                             </div>  
                                             @endif
-                                            
+                                            @if(!Auth::user()->hasRole('Vendedor'))
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Rol</label>
-                                                {!! Form::select('role', $roles, ($usuario!=null)?$usuario->activo : 1 ,["class"=>"form-control"]) !!}
+                                                {!! Form::select('role', $roles, ($usuario!=null)?$usuario->getRoleNames()[0] : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
-                                            
+                                            @endif
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>
                                         

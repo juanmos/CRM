@@ -65,13 +65,14 @@ Route::resource('empresa', 'EmpresaController');
         Route::post('visitas/visita/{id}/previsita','Empresa\VisitaController@savePrevisita')->name('visita.save.previsita');
         Route::post('visitas/visita/{id}/visita','Empresa\VisitaController@saveVisita')->name('visita.save.visita');
 
-        Route::get('e/usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
-        Route::get('e/usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
-        
+        Route::get('usuario/eliminados','Empresa\UsuarioController@eliminados')->name('empresa.usuario.eliminados');
+        Route::get('usuario/restaurar/{id}','Empresa\UsuarioController@restaurar')->name('empresa.usuario.restaurar');
+        Route::get('usuario/asignar','Empresa\UsuarioController@asignar')->name('empresa.usuario.asignar');
+        Route::get('usuario/asignarme/{id}','Empresa\UsuarioController@asignarme')->name('empresa.usuario.asignarme');
 
-        Route::get('e/tarea/mias/{usuario_id?}', 'Empresa\TareasController@index')->name('tarea.index');
-        Route::post('e/tarea/crear', 'Empresa\TareasController@store')->name('tarea.store');
-        Route::post('e/tarea/completada', 'Empresa\TareasController@update')->name('tarea.completada');
+        Route::get('tarea/mias/{usuario_id?}', 'Empresa\TareasController@index')->name('tarea.index');
+        Route::post('tarea/crear', 'Empresa\TareasController@store')->name('tarea.store');
+        Route::post('tarea/completada', 'Empresa\TareasController@update')->name('tarea.completada');
 
 
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);

@@ -20,7 +20,16 @@ class UsuarioController extends Controller
      */
     public function index(Request $request)
     {
-        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        $user= User::find(Auth::user()->id);
+        if(Auth::user()->hasRole('Administrador')){
+            $usuarios=User::where('empresa_id',$user->empresa_id)->paginate(50);
+        }elseif(Auth::user()->hasRole('JefeVentas')){
+            $usuarios=User::where('empresa_id',$user->empresa_id)->where('user_id',$user->id)->paginate(50);
+           // $usuarios->push($user);
+        }else{
+            $usuarios=User::where('id',$user->id)->get();
+        }
+        //$usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         if($request->is('api/*')) return response()->json(compact('usuarios'));
         return view('usuario.index',compact('usuarios'));
     }
@@ -47,7 +56,11 @@ class UsuarioController extends Controller
             $empresa=Empresa::find(Auth::user()->empresa_id);
         }
         $usuario = null;
-        $roles = Role::orderBy('name')->where('name','!=','SuperAdministrador')->get()->pluck('name','name');
+        if(Auth::user()->hasRole('Administrador')){
+            $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador'])->get()->pluck('name','name');
+        }else{
+            $roles = Role::orderBy('name')->whereIn('name',['Vendedor'])->get()->pluck('name','name');
+        }
         return view('usuario.form',compact('empresa','id','usuario','roles'));
     }
 
@@ -119,7 +132,11 @@ class UsuarioController extends Controller
     {
         $empresa =Empresa::find(Auth::user()->empresa_id);;
         $usuario = User::find($id);
-        $roles = Role::orderBy('name')->where('name','!=','SuperAdministrador')->get()->pluck('name','name');
+        if(Auth::user()->hasRole('Administrador')){
+            $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador'])->get()->pluck('name','name');
+        }else{
+            $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador','Administrador'])->get()->pluck('name','name');
+        }
         return view('usuario.form',compact('empresa','id','usuario','roles'));
     }
 
@@ -177,5 +194,17 @@ class UsuarioController extends Controller
 
     public function roles(){
         return Role::orderBy('name')->where('name','!=','SuperAdministrador')->get();
+    }
+
+    public function asignar(){
+        $usuarios = User::role('Vendedor')->where('empresa_id',Auth::user()->empresa_id)->paginate(50);
+        return view('usuario.index',compact('usuarios'));
+    }
+
+    public function asignarme($id){
+        $user = User::find($id);
+        $user->user_id=Auth::user()->id;
+        $user->save();
+        return redirect('e/usuario')->with('mensaje', 'Usuario asignado!');
     }
 }

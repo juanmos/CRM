@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="pcoded-main-container">
     <div class="pcoded-wrapper">
+        @include('includes.mensaje')
         <div class="pcoded-content">
             <div class="pcoded-inner-content">
                 <!-- [ breadcrumb ] start -->
@@ -19,12 +21,16 @@
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Usuarios</h5>
-                                        @if(!Request::is('cliente/vendedor/*'))  
-                                            @if(Auth::user()->hasRole('SuperAdmin'))
+                                        
+                                        @if(!Request::is('e/usuario/asignar'))  
+                                            @if(Auth::user()->hasRole('SuperAdministrador'))
                                             <a class="btn btn-primary float-right" href="{{route('usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
-                                            @else
+                                            @elseif(Auth::user()->hasRole('Administrador'))
                                             <a class="btn btn-primary float-right" href="{{route('empresa.usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
                                             <a class="btn btn-secondary float-right" href="{{route('empresa.usuario.eliminados')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Usuarios eliminados</span></a>
+                                            @elseif(Auth::user()->hasRole('JefeVentas'))
+                                            <a class="btn btn-primary float-right" href="{{route('empresa.usuario.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear usuario</span></a>
+                                            <a class="btn btn-secondary float-right" href="{{route('empresa.usuario.asignar')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Asignarme vendedores</span></a>
                                             @endif
                                         @endif
                                     </div>
@@ -53,9 +59,9 @@
                                                         <td>{{$user->telefono}}</td>
                                                         <td>{{$user->getRoleNames()->implode(',')}}</td>
                                                         <td>
-                                                        @if(Request::is('cliente/vendedor/*'))  
+                                                        @if(Request::is('e/usuario/asignar'))  
                                                         
-                                                            <a href="{{ route('cliente.asignar',[$user->id,$id]) }}" class="label theme-bg2 text-white f-12">Asignar</a>
+                                                            <a href="{{ route('empresa.usuario.asignarme',[$user->id]) }}" class="label theme-bg2 text-white f-12">Asignarme</a>
                                                         @else
                                                             @if(Auth::user()->hasRole('SuperAdmin'))
                                                             <a href="{{ route('usuario.show',$user->id) }}" class="label theme-bg2 text-white f-12">Ver</a>

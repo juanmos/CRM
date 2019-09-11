@@ -40,7 +40,16 @@ class HomeController extends Controller
             $visitasTerminadas = Visita::whereHas('cliente',function($query) use($clientes){
                 $query->whereIn('cliente_id',$clientes->pluck('id'));
             })->where('estado_visita_id',5)->get()->count();
-            return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes'));
+            if(Auth::user()->hasRole('Administrador')){
+                $usuarios=$empresa->usuarios;
+            }elseif(Auth::user()->hasRole('JefeVentas')){
+                $usuarios=User::where('empresa_id',$user->empresa_id)->where('user_id',$user->id)->get();
+                $usuarios->push($user);
+            }else{
+                $usuarios=User::where('id',$user->id)->get();
+            }
+            
+            return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes','usuarios'));
             
         }
         dd('No rol');

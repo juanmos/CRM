@@ -22,17 +22,22 @@
                                             </div>
                                         </div>
                                         <table class="table table-hover">
-                                          <tbody>
-                                              @foreach($usuarios as $user)
-                                              <tr class="unread">
-                                                  <td><img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">{{$user->nombre}} {{$user->apellido}}
-                                                  </td>
-                                                  <td>
-                                                    <a href="{{ route('tarea.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
-                                                  </td>
-                                              </tr>                                              
-                                              @endforeach
-                                          </tbody>
+                                            <tbody>
+                                                @foreach($usuarios as $user)
+                                                
+                                                <tr class="unread">
+                                                    <td class="row">
+                                                        <div class="col-md-4">
+                                                            <img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            {{$user->nombre}} {{$user->apellido}}<br>
+                                                            <a href="{{ route('tarea.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                              
+                                                @endforeach
+                                            </tbody>
                                       </table>
                                     </div>
                                 </div>
@@ -56,6 +61,7 @@
                                         <div class="card Recent-Users">
                                             <div class="card-block px-0 py-3">
                                                 <div class="table-responsive">
+                                                    @if($tareasHoy->count()>0)
                                                     <table class="table table-hover">
                                                         <tbody>
                                                             @foreach($tareasHoy as $tarea)
@@ -97,6 +103,9 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                    @else
+                                                    <h5>No hay tareas para hoy</h5>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -152,7 +161,7 @@
                                                                                             {{$tarea->usuarioCrea->full_name}}
                                                                                         </h6>                                                                                
                                                                                         <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                                        
+                                                                                        <a class="m-0 text-right float-right f-12 col" href="">Agregar personas</a>
                                                                                     </div>
                                                                                 </div>
                                                                                 

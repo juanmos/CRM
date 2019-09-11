@@ -63,7 +63,8 @@ class EmpresaController extends Controller
         $visitasTerminadas = Visita::whereHas('cliente',function($query) use($clientes){
             $query->whereIn('cliente_id',$clientes->pluck('id'));
         })->where('estado_visita_id',5)->get()->count();
-        return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes'));
+        $usuarios=$empresa->usuarios;
+        return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes','usuarios'));
     }
 
     /**

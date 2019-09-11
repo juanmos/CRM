@@ -89,8 +89,10 @@
                                             </div> --}}
                                         </div>
                                         <h6 class="text-muted mt-4 mb-0">
+                                            @if(Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('SuperAdminsitrador'))
                                             <a href="{{route('empresa.edit',$empresa->id)}}" class="label theme-bg text-white f-12">Editar</a> 
                                             <a href="{{route('configuracion.edit',$empresa->id)}}" class="label theme-bg2 text-white f-12">Configuraciones</a>
+                                            @endif
                                         </h6>
                                         <i class="far fa-building text-c-purple f-50"></i>
                                     </div>
@@ -136,14 +138,16 @@
                             <div class="col-xl-8 col-md-6">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Usuarios # <b>{{$empresa->usuarios->count()}}</b></h5>
+                                        <h5>Usuarios # <b>{{$usuarios->count()}}</b></h5>
+                                        @if(!Auth::user()->hasRole('Vendedor'))
                                         <a href="{{route('empresa.usuario.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a>
+                                        @endif
                                     </div>
                                     <div class="card-block px-0 py-3">
                                         <div class="table-responsive">
                                             <table class="table table-hover">
                                                 <tbody>
-                                                    @forelse ($empresa->usuarios as $usuario )
+                                                    @forelse ($usuarios as $usuario )
                                                         
                                                     
                                                     <tr class="unread">
@@ -159,6 +163,11 @@
                                                         <td>
                                                             <a href="{{route('empresa.usuario.show',[$usuario->id] )}}" class="label theme-bg2 text-white f-12">Ver</a>
                                                             <a href="{{route('empresa.usuario.edit',[$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a>
+                                                            @if(!$usuario->hasRole('Vendedor'))
+                                                            <br>
+                                                            <br>
+                                                            <a href="{{route('empresa.usuario.asignar' )}}" class="label theme-bg text-white f-12">Asignar vendedores</a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                     @empty

@@ -23,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios','empresa_id','primer_login','foto','activo','primer_login','latitud','longitud','cedula'
+        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios','empresa_id','primer_login','foto','activo','primer_login','latitud','longitud','cedula','user_id'
     ];
     
     /**
@@ -50,6 +50,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function empresa(){
         return $this->belongsTo(Empresa::class,'empresa_id');
+    }
+
+    public function misUsuarios(){
+        return $this->hasMany(User::class,'user_id');
     }
 
     public function getFullNameAttribute()
