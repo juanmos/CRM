@@ -3,6 +3,7 @@
 @section('content')
 <div class="pcoded-main-container">
     <div class="pcoded-wrapper">
+        @include('includes.mensaje')
         <div class="pcoded-content">
             <div class="pcoded-inner-content">
                 <!-- [ breadcrumb ] start -->

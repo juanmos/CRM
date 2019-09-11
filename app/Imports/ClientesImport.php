@@ -21,7 +21,7 @@ class ClientesImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        \Log::info($row);
+        
         $cliente= Cliente::create([
             'nombre'=>$row['empresa'],
             'telefono'=>$row['telefono'],
@@ -51,16 +51,18 @@ class ClientesImport implements ToModel, WithHeadingRow
             'latitud'=>0,
             'longitud'=>0
         ]);
-        Contacto::create([
-            'cliente_id'=>$cliente->id,
-            'nombre'=>$row['nombre_contacto'],
-            'apellido'=>$row['apellido_contacto'],
-            'email'=>$row['email_contacto'],
-            'telefono'=>$row['telefono_contacto'],
-            'extension'=>$row['extension'],
-            'cargo'=>$row['cargo'],
-            'ciudad_id'=>$ciudad_id,
-            'oficina_id'=>$oficina->id
-        ]);
+        if($row['nombre_contacto']!=null && $row['apellido_contacto']!=null){
+            Contacto::create([
+                'cliente_id'=>$cliente->id,
+                'nombre'=>$row['nombre_contacto'],
+                'apellido'=>$row['apellido_contacto'],
+                'email'=>$row['email_contacto'],
+                'telefono'=>$row['telefono_contacto'],
+                'extension'=>$row['extension'],
+                'cargo'=>$row['cargo'],
+                'ciudad_id'=>$ciudad_id,
+                'oficina_id'=>$oficina->id
+            ]);
+        }
     }
 }

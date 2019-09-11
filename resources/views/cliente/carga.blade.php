@@ -24,43 +24,46 @@
                     </div>
                 </div>
                 <!-- [ breadcrumb ] end -->
-                <form action="{{route('cliente.import')}}" method="POST">
+                < action="{{route('cliente.import')}}" method="POST">
+                {!! Form::open(['route'=>'cliente.import','method'=>'POST','enctype'=>"multipart/form-data"]) !!}    
                     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Carga de archivo de clientes</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-12 ">
-                                                <p>Por favor carga el archivo en el formato especificado en el siguiente archivo. El formato debe ser "csv"
-                                                    <a href="{{asset('archivos/clientes.xlsx')}}" class="btn btn-primary">Descarga el archivo de ejemplo</a>
-                                                </p>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Carga de archivo de clientes</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-12 ">
+                                                    <p>Por favor carga el archivo en el formato especificado en el siguiente archivo. El formato debe ser "xlsx"
+                                                        <a href="{{asset('archivos/clientes.xlsx')}}" class="btn btn-primary">Descarga el archivo de ejemplo</a>
+                                                    </p>
+                                                </div>
+                                                <div class="form-group col-md-12 ">
+                                                    <label for="exampleInputEmail1">Archivo de carga de clientes</label>
+                                                    <input type="file" value="" name="archivo" class="form-control" aria-describedby="emailHelp" placeholder="Archivo">
+                                                </div>
+                                                
+                                                <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
+                                                
                                             </div>
-                                            <div class="form-group col-md-12 ">
-                                                <label for="exampleInputEmail1">Archivo de carga de clientes</label>
-                                                <input type="file" value="" name="archivo" class="form-control" aria-describedby="emailHelp" placeholder="Cliente">
-                                            </div>
-                                            
-                                            <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                             
                                         </div>
-                                        
                                     </div>
+                                    
+                                    
                                 </div>
-                                
-                                
                             </div>
+                            <!-- [ Main Content ] end -->
                         </div>
-                        <!-- [ Main Content ] end -->
                     </div>
-                </div>
-                </form>
+                
+                {!! Form::close() !!}
+                
             </div>
         </div>
     </div>

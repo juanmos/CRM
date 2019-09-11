@@ -260,7 +260,7 @@ class ClienteController extends Controller
     {
         
         //Excel::import(new ClientesImport, $request->file('archivo'));
-        Excel::import(new ClientesImport, public_path('archivos/clientes.xlsx'));
-        return redirect('/cliente')->with('success', 'All good!');
+        Excel::import(new ClientesImport, $request->file('archivo'));
+        return redirect('/cliente')->with('mensaje', 'Clientes cargados con exito!');
     }
 }
