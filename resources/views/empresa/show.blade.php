@@ -154,8 +154,12 @@
                                                         </td>
                                                         <td>
                                                             <h6 class="text-muted"><i class="fas fa-circle {{($usuario->activo)?'text-c-green' :'text-c-red' }} f-10 m-r-15"></i>{{$usuario->email}}</h6>
+                                                            <p class="m-0">{{$usuario->getRoleNames()->implode(',')}}</p>
                                                         </td>
-                                                        <td><a href="{{route('empresa.usuario.edit',[$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a></td>
+                                                        <td>
+                                                            <a href="{{route('empresa.usuario.show',[$usuario->id] )}}" class="label theme-bg2 text-white f-12">Ver</a>
+                                                            <a href="{{route('empresa.usuario.edit',[$usuario->id] )}}" class="label theme-bg text-white f-12">Editar</a>
+                                                        </td>
                                                     </tr>
                                                     @empty
                                                     <p>No hay usuarios</p>
