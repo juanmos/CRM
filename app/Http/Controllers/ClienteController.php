@@ -125,7 +125,7 @@ class ClienteController extends Controller
             'oficina_id'=>$oficina->id
         ]);
         if($request->is('api/*')) return response()->json(['created'=>true]);
-        return redirect('cliente/'.$cliente->id);
+        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');;
     }
 
     public function vendedor($id){
@@ -210,7 +210,7 @@ class ClienteController extends Controller
             'email'=>$request->get('email'),
             'ruc'=>$request->get('ruc'),
         ]);
-        return redirect('cliente');
+        return redirect('cliente')->with('mensaje', 'Cliente actualizado con exito!');;
     }
 
     public function actualizaCliente(Request $request)

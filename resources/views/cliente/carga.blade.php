@@ -24,7 +24,6 @@
                     </div>
                 </div>
                 <!-- [ breadcrumb ] end -->
-                < action="{{route('cliente.import')}}" method="POST">
                 {!! Form::open(['route'=>'cliente.import','method'=>'POST','enctype'=>"multipart/form-data"]) !!}    
                     <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                     <div class="main-body">
