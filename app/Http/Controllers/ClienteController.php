@@ -45,7 +45,9 @@ class ClienteController extends Controller
     }
 
     public function buscar(Request $request){
-        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->where('usuario_id',$request->get('vendedor_id'))->where('nombre','like','%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
+        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)
+        //->where('usuario_id',$request->get('vendedor_id'))
+        ->where('nombre','like','%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
         return response()->json(compact('clientes','usuario_id'));
     }
 
