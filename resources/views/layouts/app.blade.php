@@ -176,7 +176,7 @@
             <!-- [ Main Content ] start -->
             @yield('content')
             <!-- [ Main Content ] end -->
-        
+            @include('includes.check_primer_login')
             <!-- Warning Section Starts -->
             <!-- Older IE warning message -->
             <!--[if lt IE 11]>

@@ -3,3 +3,9 @@
         {{ session('mensaje') }}
     </div>
 @endif
+
+@if (session('info'))
+    <div class="alert alert-info">
+        {{ session('info') }}
+    </div>
+@endif

@@ -241,7 +241,7 @@
             $('#buscar').blur();
             lista();
             $('#buscar').focus();
-        }else if($(this).val().length >= 3){
+        }else if($(this).val().length >= 2){
             if((event.keyCode == 8) || (event.keyCode == 32) || (event.keyCode == 35) || (event.keyCode == 36) || (event.keyCode == 37) || (event.keyCode == 39)){
                 $('#entrydata').empty();
             }else{

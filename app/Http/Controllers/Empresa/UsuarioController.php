@@ -160,6 +160,10 @@ class UsuarioController extends Controller
             $usuario->save();
         }
         if($request->has('role')) $usuario->syncRoles($request->get('role'));
+        if(Auth::user()->id==$id){
+            $usuario->primer_login=0;
+            $usuario->save();
+        }
         if($request->is('api/*')){
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores','exito'));

@@ -32,6 +32,9 @@ class HomeController extends Controller
         if($user->hasRole('SuperAdministrador')){
             return view('admin.panel');
         }else if(!$user->hasRole('SuperAdministrador')){
+            if($user->primer_login){
+                return redirect('/e/usuario/'.$user->id.'/edit')->with('info','Debes cambiar tu contraseña e ingresar tu foto');
+            }
             $empresa = Empresa::find($user->empresa_id);
             $clientes = Cliente::where('empresa_id',$user->empresa_id)->get();
             $visitas = Visita::whereHas('cliente',function($query) use($clientes){
