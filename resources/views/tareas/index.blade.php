@@ -61,6 +61,9 @@
                                         <div class="card Recent-Users">
                                             <div class="card-block px-0 py-3">
                                                 <div class="table-responsive">
+                                                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalTarea">
+                                                        <span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext"> Nueva tarea</span>
+                                                    </a>
                                                     @if($tareasHoy->count()>0)
                                                     <table class="table table-hover">
                                                         <tbody>

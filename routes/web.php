@@ -27,12 +27,13 @@ Route::resource('empresa', 'EmpresaController');
     Route::resource('plantilla','PlantillaController');
 
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
-    Route::post('contacto/store/{cliente_id}','ContactoController@store')->name('contacto.store');
+    Route::post('contacto/store/{cliente_id}/{json?}','ContactoController@store')->name('contacto.store');
     Route::get('contacto/edit/{id}','ContactoController@edit')->name('contacto.edit');
     Route::put('contacto/update/{id}','ContactoController@update')->name('contacto.update');
     Route::post('contacto/buscar/','ContactoController@buscar')->name('contacto.buscar');
     Route::delete('contacto/{id}','ContactoController@destroy')->name('contacto.destroy');
 
+    Route::get('oficina/{cliente_id}','OficinaController@index')->name('oficina.index');
     Route::get('oficina/create/{cliente_id}', 'OficinaController@create')->name('oficina.create');
     Route::post('oficina/store/{cliente_id}','OficinaController@store')->name('oficina.store');
     Route::get('oficina/edit/{id}','OficinaController@edit')->name('oficina.edit');
@@ -78,5 +79,7 @@ Route::resource('empresa', 'EmpresaController');
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
         Route::resource('visita', 'Empresa\VisitaController');
         Route::get('e/usuario/create/{id?}','Empresa\UsuarioController@create')->name('empresa.usuario.create');
+
+        Route::get('ciudades','Empresa\VariosController@ciudades')->name('varios.ciudades');
     });
 });

@@ -45,7 +45,7 @@ class ContactoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$cliente_id)
+    public function store(Request $request,$cliente_id,$json=null)
     {
         Contacto::create([
             'cliente_id'=>$cliente_id,
@@ -58,7 +58,7 @@ class ContactoController extends Controller
             'ciudad_id'=>$request->get('ciudad_id'),
             'oficina_id'=>$request->get('oficina_id')
         ]);
-        if($request->is('api/*')) {
+        if($request->is('api/*') || $json!=null) {
             $contactos=Contacto::where('cliente_id',$cliente_id)->orderBy('nombre')->get();
             return response()->json(compact('contactos'));
         }

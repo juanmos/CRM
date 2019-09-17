@@ -26,6 +26,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('usuario/registroPush', 'APIAuthController@registroPush');//Cerrar sesion del usuario actual
 
     Route::get('clientes/{usuario_id?}','ClienteController@index');
+    Route::post('clientes/buscar','ClienteController@buscar');
     Route::post('cliente','ClienteController@store');
     Route::get('cliente/visitas/{id}','ClienteController@visitas');
     Route::get('cliente/notas/{cliente_id}','NotaController@index');
@@ -54,7 +55,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::put('cliente','ClienteController@actualizaCliente');
     Route::put('cliente/facturacion','ClienteController@actualizaFacturacion');
 
-    Route::post('contacto/{cliente_id}','ContactoController@store');
+    Route::post('contacto/{cliente_id}/{json?}','ContactoController@store');
     Route::put('contacto/{id}','ContactoController@update');
 
     Route::post('oficina/{cliente_id}','OficinaController@store');

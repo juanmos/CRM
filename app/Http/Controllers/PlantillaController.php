@@ -16,7 +16,12 @@ class PlantillaController extends Controller
      */
     public function index()
     {
-        $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get();
+        if(Auth::user()->hasRole('SuperAdministrador')){
+            $plantillas = Plantilla::where('empresa_id',0)->orderBy('nombre')->get();
+        }else{
+            $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get();
+        }
+        
         return view('plantilla.index',compact('plantillas'));
     }
 

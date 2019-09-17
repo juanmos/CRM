@@ -39,7 +39,7 @@
                                                         <td>{{($plantilla->previsita==1)?'Previsita':'Visita'}}</td>
                                                         <td>
                                                             <a href="{{ route('plantilla.show',$plantilla->id) }}" class="label theme-bg text-white f-12">Ver</a>
-                                                            @if($plantilla->empresa_id!=0)
+                                                            @if($plantilla->empresa_id!=0 || Auth::user()->hasRole('SuperAdministrador'))
                                                             <a href="{{ route('plantilla.edit',$plantilla->id) }}" class="label theme-bg text-white f-12">Editar</a>
                                                             {!! Form::open(['route'=>['plantilla.destroy',$plantilla->id],'method'=>'POST','style'=>'display:inline-block']) !!}
                                                             <input type="hidden" value="DELETE" name="_method"/>

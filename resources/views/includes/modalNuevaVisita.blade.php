@@ -95,6 +95,7 @@
                                     <label class="col-md-7 control-label ">Contacto: </label>
                                     <div class="col-md-12">
                                       <select name="contacto_id" id="contacto_id" class="form-control tipoCitaId required selectpicker full-width-fix"></select>
+                                      <a href="" data-toggle="modal" data-target="#modalContacto">Nuevo contacto</a>
                                     </div>
                                 </div>
                                 <div class="form-group-select col-md-5">
@@ -202,6 +203,7 @@
         </div>
     </div>
 </div>
+@include('includes.modalContacto')
 @push('scripts')
 
 <script type="text/javascript">
@@ -263,10 +265,15 @@
         $('#entrydata').empty();
         $('#buscar').val('');
         $.post("{{route('contacto.buscar')}}",{_token:"{{csrf_token()}}",cliente_id:$(this).attr('myid')},function(json){
-          $('#contacto_id').empty();
-          json.forEach(function(contacto){
-            $('#contacto_id').append("<option value='"+contacto.id+"'>"+contacto.nombre+" "+contacto.apellido+" - "+contacto.cargo+"</option>");
-          })
+            $('#contacto_id').empty();
+            if(json.length>0){
+                json.forEach(function(contacto){
+                    $('#contacto_id').append("<option value='"+contacto.id+"'>"+contacto.nombre+" "+contacto.apellido+" - "+contacto.cargo+"</option>");
+                })
+                $('#contacto_id').show();
+            }else{
+                $('#contacto_id').hide();
+            }
         },'json');
     });
 

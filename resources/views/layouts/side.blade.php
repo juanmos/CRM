@@ -70,6 +70,7 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
+                        <li class=""><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>˜
                     </ul>
                 </li>
                 @endif
