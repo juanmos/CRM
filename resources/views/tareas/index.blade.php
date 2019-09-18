@@ -99,7 +99,7 @@
                                                                         </div>
                                                                         <div class="col-md-4"> 
                                                                             <h6 class="m-0 text-muted text-right">
-                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{Storage::url($tarea->usuarioCrea->foto)}}" alt="activity-user">
                                                                                 {{$tarea->usuarioCrea->full_name}}
                                                                             </h6>                                                                                
                                                                             <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
@@ -175,7 +175,7 @@
                                                                                     </div>
                                                                                     <div class="col-md-4"> 
                                                                                         <h6 class="m-0 text-muted text-right">
-                                                                                            <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                            <img class="rounded-circle  m-r-10" style="width:40px;" src="{{Storage::url($tarea->usuarioCrea->foto)}}" alt="activity-user">
                                                                                             {{$tarea->usuarioCrea->full_name}}
                                                                                         </h6>                                                                                
                                                                                         <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
@@ -240,7 +240,7 @@
                                                                         </div>
                                                                         <div class="col-md-4"> 
                                                                             <h6 class="m-0 text-muted text-right">
-                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{asset($tarea->usuarioCrea->foto)}}" alt="activity-user">
+                                                                                <img class="rounded-circle  m-r-10" style="width:40px;" src="{{Storage::url($tarea->usuarioCrea->foto)}}" alt="activity-user">
                                                                                 {{$tarea->usuarioCrea->full_name}}
                                                                             </h6>                                                                                
                                                                             <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
