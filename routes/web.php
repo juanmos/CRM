@@ -60,7 +60,7 @@ Route::resource('empresa', 'EmpresaController');
 
     Route::group(['prefix' => 'e'], function () {
         
-        Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.index');
+        Route::get('visitas/vendedor/{id?}','Empresa\VisitaController@index')->name('visita.usuario');
         Route::get('visitas/by/vendedor/{id}','Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
         Route::get('visitas/visita/{id}/estado/{estado_id}','Empresa\VisitaController@cambiaEstado')->name('visita.estado');
         Route::post('visitas/visita/{id}/previsita','Empresa\VisitaController@savePrevisita')->name('visita.save.previsita');
@@ -74,11 +74,13 @@ Route::resource('empresa', 'EmpresaController');
         Route::get('tarea/mias/{usuario_id?}', 'Empresa\TareasController@index')->name('tarea.index');
         Route::post('tarea/crear', 'Empresa\TareasController@store')->name('tarea.store');
         Route::post('tarea/completada', 'Empresa\TareasController@update')->name('tarea.completada');
-
+        Route::post('tarea/user/add','Empresa\TareasController@addUser')->name('tarea.user.add');
+        Route::get('tarea/user/delete/{user_id}/{tarea_id}','Empresa\TareasController@deleteUser')->name('tarea.user.delete');
 
         Route::resource('usuario', 'Empresa\UsuarioController',['as' => 'empresa']);
         Route::resource('visita', 'Empresa\VisitaController');
         Route::get('e/usuario/create/{id?}','Empresa\UsuarioController@create')->name('empresa.usuario.create');
+       // Route::get('visita/{id?}','Empresa\VisitaController@index')->name('visita.index');
 
         Route::get('ciudades','Empresa\VariosController@ciudades')->name('varios.ciudades');
     });

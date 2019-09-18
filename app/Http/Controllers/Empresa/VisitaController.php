@@ -25,9 +25,22 @@ class VisitaController extends Controller
      */
     public function index(Request $request,$usuario_id=null)
     {
-        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
-        if($usuario_id==null){
-            $usuario_id=$usuarios->first()->id;
+        // $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        // if($usuario_id==null){
+        //     $usuario_id=$usuarios->first()->id;
+        // }
+
+        // if($usuario_id==null){
+        //     $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        //     $usuario_id=$usuarios->first()->id;
+        // }else
+        //$usuario_id=Auth::user()->id;
+        if(Auth::user()->hasRole('Administrador')){
+            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        }elseif(Auth::user()->hasRole('JefeVentas')){
+            $usuarios = User::where('user_id',Auth::user()->id)->orWhere('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
+        }else{
+            $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
         $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];

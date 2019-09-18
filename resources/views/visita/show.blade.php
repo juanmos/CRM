@@ -98,18 +98,26 @@
                                     <div class="card-block">
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col">
-                                                <span class="d-block text-uppercase">datos del contacto </span>
+                                                <span class="d-block text-uppercase">Datos del contacto </span>
+                                                @if($visita->contacto!=null)
                                                 <h5 class="m-0">{{$visita->contacto->nombre}} {{$visita->contacto->apellido}}</h5>
                                                 <sub class="text-muted f-14">Teléfono: {{$visita->contacto->telefono}}</sub><br>
                                                 <sub class="text-muted f-14">Email: {{$visita->contacto->email}}</sub>
+                                                @else
+                                                <sub class="text-muted f-14">No has seleccionado un contacto</sub>
+                                                @endif
                                             </div>
                                             {{-- <div class="col-auto">
                                                 <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
                                             </div> --}}
                                         </div>
                                         <h6 class="text-muted mt-4 mb-0">
+                                            @if($visita->contacto!=null)
                                             <a href="{{route('visita.edit',$visita->id)}}" class="label theme-bg text-white f-12">Editar</a> 
-                                            <a href="{{route('cliente.show',$visita->cliente_id)}}" class="label theme-bg2 text-white f-12">Ver contacto</a>
+                                            <a href="{{route('contacto.show',$visita->cliente_id)}}" class="label theme-bg2 text-white f-12">Ver contacto</a>
+                                            @else
+                                            <a href="{{route('cliente.show',$visita->cliente_id)}}" class="label theme-bg2 text-white f-12">Seleccionar contacto</a>
+                                            @endif
                                         </h6>
                                         <i class="far fa-user text-c-purple f-50"></i>
                                     </div>

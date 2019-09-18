@@ -19,6 +19,8 @@ class TareasController extends Controller
             $usuario_id=$usuarios->first()->id;
         }elseif(Auth::user()->hasRole('Administrador')){
             $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        }elseif(Auth::user()->hasRole('JefeVentas')){
+            $usuarios = User::where('user_id',$usuario_id)->orWhere('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }else{
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
@@ -93,5 +95,18 @@ class TareasController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addUser(Request $request){
+        $tarea=Tarea::find($request->get('tarea_id'));
+        //foreach( as $user){
+            $tarea->usuarios_adicionales()->sync($request->get('usuarios'));
+        //}        
+        return back();
+    }
+    public function deleteUser(Request $request,$user_id,$tarea_id){
+        $tarea=Tarea::find($tarea_id);
+        $tarea->usuarios_adicionales()->detach($user_id);
+        return back();
     }
 }

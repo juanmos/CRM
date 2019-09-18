@@ -24,14 +24,14 @@
                                         <table class="table table-hover">
                                             <tbody>
                                                 @foreach($usuarios as $user)
-                                                <tr class="unread">
+                                                <tr class="unread" @if($user->id==Auth::user()->id)style="background-color: cornsilk;"@endif>
                                                     <td class="row">
                                                         <div class="col-md-4">
                                                             <img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">
                                                         </div>
                                                         <div class="col-md-8">
-                                                            {{$user->nombre}} {{$user->apellido}}<br>
-                                                            <a href="{{ route('visita.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
+                                                            {{$user->full_name}} <br>
+                                                            <a href="" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="label theme-bg2 text-white f-12 cambiaVendedor">Ver</a>
                                                         </div>
                                                     </td>
                                                     {{-- <td>
@@ -49,7 +49,7 @@
                             <div class="col-xl-9 col-md-9">
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Visitas</h5>
+                                        <h5>Visitas - <span id="user_selected">{{Auth::user()->full_name}}</span></h5>
                                         {{-- <a href="{{route('empresa.contacto.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a> --}}
                                     </div>
                                     <div class="card-block px-0 py-3">
@@ -145,7 +145,17 @@
 
     calendar.render();
   });
-
+  $(document).on('click','.cambiaVendedor',function(e){
+      e.preventDefault();
+      calendar.getEventSources().forEach(function(es){
+          es.remove();
+      })
+     // calendar.fullCalendar( 'removeEventSources' );
+      calendar.addEventSource( "{{url('e/visitas/by/vendedor/')}}/"+$(this).attr('myid') );
+      $("tr").css('background-color','transparent')
+      $(this).closest('tr').css('background-color','cornsilk')
+      $('#user_selected').html($(this).attr('nombre'))
+  })
 </script>
 @endpush
 @push('styles')

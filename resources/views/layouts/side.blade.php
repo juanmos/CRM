@@ -27,9 +27,14 @@
                     <a href="{{route('cliente.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Clientes</span></a>
                 </li>
                 @endif
-                @if(!Auth::user()->hasRole('SuperAdministrador'))
+                @if(Auth::user()->hasRole('Administrador'))
                 <li data-username="Table bootstrap datatable footable" class="nav-item">
                     <a href="{{route('visita.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
+                </li>
+                @endif
+                @if(Auth::user()->hasRole('Vendedor') || Auth::user()->hasRole('JefeVentas'))
+                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                    <a href="{{route('visita.usuario',Auth::user()->id)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))

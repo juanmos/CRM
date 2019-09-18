@@ -21,4 +21,8 @@ class Tarea extends Model
     public function usuarioCrea(){
         return $this->belongsTo(User::class,'usuario_crea_id');
     }
+
+    public function usuarios_adicionales(){
+        return $this->belongsToMany(User::class,'tarea_users','tarea_id','user_id')->as('adicionales');
+    }
 }
