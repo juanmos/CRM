@@ -21,48 +21,52 @@ class ClientesImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        
-        $cliente= Cliente::create([
-            'nombre'=>$row['empresa'],
-            'telefono'=>$row['telefono'],
-            'web'=>$row['web'],
-            'activo'=>1,
-            'clasificacion_id'=>1,
-            'empresa_id'=>Auth::user()->empresa_id
-        ]);
-        $fac = DatosFacturacion::create([
-            'cliente_id'=>$cliente->id,
-            'nombre'=>$row['empresa'],
-            'direccion'=>$row['direccion'],
-            'telefono_facturacion'=>$row['telefono'],
-            'ruc'=>$row['ruc'],
-            'email'=>$row['email'],
-        ]);
-        $pais=Pais::where('pais',$row['pais'])->first();
-        $pais_id=($pais==null)?1:$pais->id;
-        $ciudad = Ciudad::where('ciudad',$row['ciudad'])->where('pais_id',$pais_id)->first();
-        $ciudad_id=($ciudad==null)?1:$ciudad->id;
-        $oficina=Oficina::create([
-            'cliente_id'=>$cliente->id,
-            'matriz'=>1,
-            'direccion'=>$row['direccion'],
-            'ciudad_id'=>$ciudad_id,
-            'pais_id'=>$pais_id,
-            'latitud'=>0,
-            'longitud'=>0
-        ]);
-        if($row['nombre_contacto']!=null && $row['apellido_contacto']!=null){
-            Contacto::create([
-                'cliente_id'=>$cliente->id,
-                'nombre'=>$row['nombre_contacto'],
-                'apellido'=>$row['apellido_contacto'],
-                'email'=>$row['email_contacto'],
-                'telefono'=>$row['telefono_contacto'],
-                'extension'=>$row['extension'],
-                'cargo'=>$row['cargo'],
-                'ciudad_id'=>$ciudad_id,
-                'oficina_id'=>$oficina->id
+        $hayCliente = Cliente::whereHas('facturacion',function($query)use($row){
+            $query->where('ruc',$row['ruc']);
+        })->first();
+        if($hayCliente==null){
+            $cliente= Cliente::create([
+                'nombre'=>$row['empresa'],
+                'telefono'=>$row['telefono'],
+                'web'=>$row['web'],
+                'activo'=>1,
+                'clasificacion_id'=>1,
+                'empresa_id'=>Auth::user()->empresa_id
             ]);
+            $fac = DatosFacturacion::create([
+                'cliente_id'=>$cliente->id,
+                'nombre'=>$row['empresa'],
+                'direccion'=>$row['direccion'],
+                'telefono_facturacion'=>$row['telefono'],
+                'ruc'=>$row['ruc'],
+                'email'=>$row['email'],
+            ]);
+            $pais=Pais::where('pais',$row['pais'])->first();
+            $pais_id=($pais==null)?1:$pais->id;
+            $ciudad = Ciudad::where('ciudad',$row['ciudad'])->where('pais_id',$pais_id)->first();
+            $ciudad_id=($ciudad==null)?1:$ciudad->id;
+            $oficina=Oficina::create([
+                'cliente_id'=>$cliente->id,
+                'matriz'=>1,
+                'direccion'=>$row['direccion'],
+                'ciudad_id'=>$ciudad_id,
+                'pais_id'=>$pais_id,
+                'latitud'=>0,
+                'longitud'=>0
+            ]);
+            if($row['nombre_contacto']!=null && $row['apellido_contacto']!=null){
+                Contacto::create([
+                    'cliente_id'=>$cliente->id,
+                    'nombre'=>$row['nombre_contacto'],
+                    'apellido'=>$row['apellido_contacto'],
+                    'email'=>$row['email_contacto'],
+                    'telefono'=>$row['telefono_contacto'],
+                    'extension'=>$row['extension'],
+                    'cargo'=>$row['cargo'],
+                    'ciudad_id'=>$ciudad_id,
+                    'oficina_id'=>$oficina->id
+                ]);
+            }
         }
     }
 }

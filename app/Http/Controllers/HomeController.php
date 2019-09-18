@@ -31,7 +31,7 @@ class HomeController extends Controller
         $user= User::find(Auth::user()->id);
         if($user->hasRole('SuperAdministrador')){
             return view('admin.panel');
-        }else if(!$user->hasRole('SuperAdministrador')){
+        }else if($user->hasRole('Administrador') || $user->hasRole('JefeVentas')){
             if($user->primer_login){
                 return redirect('/e/usuario/'.$user->id.'/edit')->with('info','Debes cambiar tu contraseña e ingresar tu foto');
             }
@@ -54,6 +54,8 @@ class HomeController extends Controller
             
             return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes','usuarios'));
             
+        }else if($user->hasRole('Vendedor')){
+            return redirect('e/visitas/vendedor/'.$user->id);
         }
         dd('No rol');
     }

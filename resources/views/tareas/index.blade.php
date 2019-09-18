@@ -13,6 +13,7 @@
                         <!-- [ Main Content ] start -->
                         <div class="row">
                             <!-- [ statistics year chart ] start -->
+                            @if(!Auth::user()->hasRole('Vendedor'))
                             <div class="col-xl-3 col-md-3">
                                 <div class="card card-event">
                                     <div class="card-block">
@@ -28,7 +29,7 @@
                                                 <tr class="unread">
                                                     <td class="row">
                                                         <div class="col-md-4">
-                                                            <img class="rounded-circle" style="width:40px;" src="{{asset($user->foto)}}" alt="activity-user">
+                                                            <img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">
                                                         </div>
                                                         <div class="col-md-8">
                                                             {{$user->nombre}} {{$user->apellido}}<br>
@@ -42,9 +43,14 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <!-- [ statistics year chart ] end -->
                             <!--[ Recent Users ] start-->
+                            @if(!Auth::user()->hasRole('Vendedor'))
                             <div class="col-xl-9 col-md-9">
+                            @else
+                            <div class="col-xl-12 col-md-12">
+                            @endif
                                 <ul class="nav nav-pills" id="myTab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active show" id="previsita-tab" data-toggle="tab" href="#previsita" role="tab" aria-controls="previsita" aria-selected="false">Tareas de hoy</a>
