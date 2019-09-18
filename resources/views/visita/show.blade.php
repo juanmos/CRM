@@ -166,6 +166,26 @@
                                     <div class="card-block border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
+                                                <i class="feather icon-users f-30 text-c-blue"></i>
+                                            </div>
+                                            <div class="col">                                                
+                                                <span class="d-block text-uppercase">Agregar acompañantes </span>
+                                                <h3 class="f-w-300"></h3>
+                                                <h3 class="f-w-300"><a href="#" id="abrirCalendario" data-toggle="modal" data-target="#modal-usuarios" class="label theme-bg text-white f-12">Agregar acompañante</a></h3>
+                                                @if($visita->usuarios_adicionales()->count()>0)
+                                                <div class="">
+                                                    <h6 class="text-muted f-12">Acompañantes</h6>
+                                                    @foreach ($visita->usuarios_adicionales()->get() as $user)
+                                                        <label class="label theme-bg text-white f-14 f-w-400">{{$user->full_name}} <a href="{{route('visita.user.delete',[$visita->id,$user->id])}}"><i class="feather icon-delete text-white"></i></a></label>
+                                                    @endforeach
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-block border-bottom">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
                                                 <i class="feather icon-calendar f-30 text-c-blue"></i>
                                             </div>
                                             <div class="col">                                                
@@ -669,6 +689,56 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-md" name="modal-usuarios" id="modal-usuarios" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>["visita.user.add",$visita->id],"method"=>"POST"]) !!}
+                <div class="">
+                  <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="material-icons">clear</i>
+                    </button>
+
+                    <h4 class="card-title">Agregar acompañante</h4>
+                  </div>
+                </div>
+                <div class="modal-body" align="center">    
+                    <div class="row">                
+                        <table class="table">
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Seleccionar</th>
+                            </tr>
+                            @foreach ($usuarios as $usuario )
+                                <tr>
+                                    <td>
+                                        {{$usuario->full_name}}
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="{{$usuario->id}}" name="usuarios[]">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
+                            <i class="fa fa-save"> </i> GUARDAR
+                        </button>
+                    </div>    
+                </div>
+                <input type="hidden" name="tarea_id" id="add_usuario_id"/>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
 <script src='{{asset("assets/plugins/fullcalendar/packages/core/main.js")}}'></script>
@@ -681,7 +751,7 @@
 $(document).ready(function(){
       $(document).on('click','#aceptCreate',function(e){
         if ($('#cliente_id').val() != '') {
-          var data = {cliente_id:{{$visita->cliente_id}} ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:{{$visita->usuario_id}},tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:{{$visita->contacto_id}},_token:'{{csrf_token()}}'};
+          var data = {cliente_id:{{$visita->cliente_id}} ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:{{$visita->usuario_id}},tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:{{($visita->contacto_id)?$visita->contacto_id:'0'}},_token:'{{csrf_token()}}'};
           saveVisita(data);
           
         }else {

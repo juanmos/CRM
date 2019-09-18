@@ -155,7 +155,13 @@ class VisitaController extends Controller
     {
         $visita=Visita::find($id);
         $estados=EstadoVisita::get();
-        
+        if(Auth::user()->hasRole('Administrador')){
+            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        }elseif(Auth::user()->hasRole('JefeVentas')){
+            $usuarios = User::where('user_id',Auth::user()->id)->orWhere('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
+        }else{
+            $usuarios = User::where('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
+        }
         if($request->is('api/*')) {
             
             $previsita= $visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function($query) use($id){
@@ -173,7 +179,7 @@ class VisitaController extends Controller
         $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
         $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
         $pest=($request->has('pest'))?$request->get('pest'):'pre';
-        return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita','pest'));
+        return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita','pest','usuarios'));
     }
 
     /**
@@ -278,5 +284,16 @@ class VisitaController extends Controller
     public function tareasVisita(Request $request ,$id){
         $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
         return response()->json(compact('tareas'));
+    }
+
+    public function addUser(Request $request,$id){
+        $visita=Visita::find($id);
+        $visita->usuarios_adicionales()->sync($request->get('usuarios'));     
+        return back();
+    }
+    public function deleteUser(Request $request,$id,$user_id){
+        $visita=Visita::find($id);
+        $visita->usuarios_adicionales()->detach($user_id);
+        return back();
     }
 }

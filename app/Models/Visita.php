@@ -45,4 +45,8 @@ class Visita extends Model
     public function tareas(){
         return $this->hasMany(Tarea::class,'visita_id');
     }
+
+    public function usuarios_adicionales(){
+        return $this->belongsToMany(User::class,'user_visitas','user_id','visita_id')->as('adicionales');
+    }
 }

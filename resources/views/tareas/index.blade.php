@@ -335,7 +335,7 @@
                       <i class="material-icons">clear</i>
                     </button>
 
-                    <h4 class="card-title">Nueva tarea</h4>
+                    <h4 class="card-title">Agregar acompañante</h4>
                   </div>
                 </div>
                 <div class="modal-body" align="center">    
