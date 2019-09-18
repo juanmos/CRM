@@ -53,7 +53,12 @@ class VisitaController extends Controller
         if($usuario_id==null){
             $usuario_id=Auth::user()->id;
         }
-        $visitas = Visita::where("usuario_id",$usuario_id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
+        $visitas = Visita::where(function($query) use($usuario_id){
+            $query->orWhere('usuario_id',$usuario_id);
+            $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
+                $query2->where('user_visitas.user_id',$usuario_id);
+            });
+        })->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
         foreach($visitas as $visita){
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;

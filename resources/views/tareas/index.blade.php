@@ -87,10 +87,12 @@
                                                                             
                                                                         </div>
                                                                         <div class="col-md-1 text-right">
+                                                                            @if($tarea->usuario_id==Auth::user()->id)
                                                                             <div class="custom-control custom-checkbox custom-control-inline">
                                                                                 <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
                                                                                 <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
                                                                             </div>
+                                                                            @endif
                                                                             
                                                                         </div>
                                                                         <div class="col-md-8">
@@ -103,13 +105,13 @@
                                                                                 {{$tarea->usuarioCrea->full_name}}
                                                                             </h6>                                                                                
                                                                             <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                            <a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>
+                                                                            @if($tarea->usuario_id==Auth::user()->id)<a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>@endif
                                                                         </div>
                                                                         @if($tarea->usuarios_adicionales()->count()>0)
                                                                         <div class="col-md-12">
                                                                             <h6 class="text-muted f-12">Usuarios adicionales</h6>
                                                                             @foreach ($tarea->usuarios_adicionales()->get() as $user)
-                                                                                <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} <a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a></label>
+                                                                                <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} @if($tarea->usuario_id==Auth::user()->id)<a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a>@endif</label>
                                                                             @endforeach
                                                                         </div>
                                                                         @endif
@@ -163,11 +165,12 @@
                                                                                         
                                                                                     </div>
                                                                                     <div class="col-md-1 text-right">
+                                                                                        @if($tarea->usuario_id==Auth::user()->id)
                                                                                         <div class="custom-control custom-checkbox custom-control-inline">
                                                                                             <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
                                                                                             <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
                                                                                         </div>
-                                                                                        
+                                                                                        @endif
                                                                                     </div>
                                                                                     <div class="col-md-8">
                                                                                         <span class="text-muted f-12">Descripción:</span><br>
@@ -179,13 +182,13 @@
                                                                                             {{$tarea->usuarioCrea->full_name}}
                                                                                         </h6>                                                                                
                                                                                         <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                                        <a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>
+                                                                                        @if($tarea->usuario_id==Auth::user()->id)<a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>@endif
                                                                                     </div>
                                                                                     @if($tarea->usuarios_adicionales()->count()>0)
                                                                                     <div class="col-md-12">
                                                                                         <h6 class="text-muted f-12">Usuarios adicionales</h6>
                                                                                         @foreach ($tarea->usuarios_adicionales()->get() as $user)
-                                                                                            <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} <a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a></label>
+                                                                                            <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} @if($tarea->usuario_id==Auth::user()->id)<a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a>@endif</label>
                                                                                         @endforeach
                                                                                     </div>
                                                                                     @endif
@@ -228,10 +231,12 @@
                                                                             
                                                                         </div>
                                                                         <div class="col-md-1 text-right">
+                                                                            @if($tarea->usuario_id==Auth::user()->id)
                                                                             <div class="custom-control custom-checkbox custom-control-inline">
                                                                                 <input type="checkbox" name="tarea_{{$tarea->id}}" id="tarea_{{$tarea->id}}" class="custom-control-input form-control tareaCheckbox" value="{{$tarea->id}}" {{($tarea->realizado)?'checked="checked"':''}}>    
                                                                                 <label class="custom-control-label tareaCheckbox" for="tarea_{{$tarea->id}}"></label>
                                                                             </div>
+                                                                            @endif
                                                                             
                                                                         </div>
                                                                         <div class="col-md-8">
@@ -244,13 +249,13 @@
                                                                                 {{$tarea->usuarioCrea->full_name}}
                                                                             </h6>                                                                                
                                                                             <span class="m-0 text-muted text-right float-right f-12">{{date('d-m-Y',strtotime($tarea->fecha))}} {{date('H:i:s',strtotime($tarea->fecha))}}</span>
-                                                                            <a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>
+                                                                            @if($tarea->usuario_id==Auth::user()->id)<a class="m-0 text-right float-right f-12 col addUser" myid="{{$tarea->id}}" href="" data-toggle="modal" data-target="#modal-usuarios">Agregar personas</a>@endif
                                                                         </div>
                                                                         @if($tarea->usuarios_adicionales()->count()>0)
                                                                         <div class="col-md-12">
                                                                             <h6 class="text-muted f-12">Usuarios adicionales</h6>
                                                                             @foreach ($tarea->usuarios_adicionales()->get() as $user)
-                                                                                <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} <a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a></label>
+                                                                                <label class="label theme-bg2 text-white f-14 f-w-400">{{$user->full_name}} @if($tarea->usuario_id==Auth::user()->id)<a href="{{route('tarea.user.delete',[$user->id,$tarea->id])}}"><i class="feather icon-delete text-white"></i></a>@endif</label>
                                                                             @endforeach
                                                                         </div>
                                                                         @endif

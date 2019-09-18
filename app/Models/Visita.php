@@ -47,6 +47,6 @@ class Visita extends Model
     }
 
     public function usuarios_adicionales(){
-        return $this->belongsToMany(User::class,'user_visitas','user_id','visita_id')->as('adicionales');
+        return $this->belongsToMany(User::class,'user_visitas','visita_id','user_id')->as('adicionales');
     }
 }
