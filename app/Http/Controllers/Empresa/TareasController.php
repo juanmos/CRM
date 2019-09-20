@@ -24,19 +24,19 @@ class TareasController extends Controller
         }else{
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
-        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado'])->paginate(50);
+        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado','tareas.usuarios_adicionales'])->paginate(50);
         $tareas =  $tareas = Tarea::where(function($query) use($usuario_id){
             $query->orWhere('usuario_id',$usuario_id);
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
                 $query2->where('tarea_users.user_id',$usuario_id);
             });
-        })->where('visita_id',0)->with(['usuario','usuarioCrea'])->paginate(50);
+        })->where('visita_id',0)->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
         $tareasHoy = Tarea::where(function($query) use($usuario_id){
             $query->orWhere('usuario_id',$usuario_id);
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
                 $query2->where('tarea_users.user_id',$usuario_id);
             });
-        })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea'])->paginate(50);
+        })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
         if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
         return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
     }
@@ -88,9 +88,14 @@ class TareasController extends Controller
     public function update(Request $request)
     {
         $tarea = Tarea::find($request->get('id'));
-        $tarea->realizado=$request->get('valor');
-        if($request->get('valor')==1){
-            $tarea->fecha_completada=Carbon::now()->toDateTimeString();
+        ($request->has('nombre'))?$tarea->nombre=$request->get('nombre'):'';
+        ($request->has('detalle'))?$tarea->detalle=$request->get('detalle'):'';
+        ($request->has('fecha'))?$tarea->fecha=$request->get('fecha'):'';
+        if($request->has('valor')){
+            $tarea->realizado=$request->get('valor');
+            if($request->get('valor')==1){
+                $tarea->fecha_completada=Carbon::now()->toDateTimeString();
+            }
         }
         $tarea->save();
         return response()->json(['id'=>$tarea->id]);
@@ -102,17 +107,24 @@ class TareasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        $tarea = Tarea::find($id);
+        $tarea->delete();
+        if($request->is('api/*')){
+            return response()->json(['eliminado'=>true]);
+        }
+        return back();
     }
 
     public function addUser(Request $request){
         $tarea=Tarea::find($request->get('tarea_id'));
-        //foreach( as $user){
-            $tarea->usuarios_adicionales()->sync($request->get('usuarios'));
-        //}        
-        return back();
+        $tarea->usuarios_adicionales()->sync($request->get('usuarios'));
+        if($request->is('api/*')){
+            return response()->json(['eliminado'=>true]);
+        }else{
+            return back();
+        }
     }
     public function deleteUser(Request $request,$user_id,$tarea_id){
         $tarea=Tarea::find($tarea_id);

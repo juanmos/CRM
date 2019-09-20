@@ -51,6 +51,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('tareas/{usuario_id?}','Empresa\TareasController@index');
     Route::post('tareas','Empresa\TareasController@store');
     Route::put('tareas','Empresa\TareasController@update');
+    Route::delete('tareas/{id}','Empresa\TareasController@destroy');
+    Route::post('tarea/user/add','Empresa\TareasController@addUser');
+    Route::get('tarea/user/delete/{user_id}/{tarea_id}','Empresa\TareasController@deleteUser');
 
     Route::put('cliente','ClienteController@actualizaCliente');
     Route::put('cliente/facturacion','ClienteController@actualizaFacturacion');
