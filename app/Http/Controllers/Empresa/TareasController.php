@@ -129,6 +129,7 @@ class TareasController extends Controller
     public function deleteUser(Request $request,$user_id,$tarea_id){
         $tarea=Tarea::find($tarea_id);
         $tarea->usuarios_adicionales()->detach($user_id);
+        if($request->is('api/*')) return response()->json(['eliminado'=>true]);
         return back();
     }
 }
