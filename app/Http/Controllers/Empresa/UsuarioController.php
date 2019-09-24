@@ -22,15 +22,15 @@ class UsuarioController extends Controller
     {
         $user= User::find(Auth::user()->id);
         if(Auth::user()->hasRole('Administrador')){
-            $usuarios=User::where('empresa_id',$user->empresa_id)->paginate(50);
+            $usuarios=User::where('empresa_id',$user->empresa_id)->with('roles')->paginate(50);
         }elseif(Auth::user()->hasRole('JefeVentas')){
             $usuarios=User::where('empresa_id',$user->empresa_id)->where(function($query) use($user){
                 $query->orWhere('user_id',$user->id);
                 $query->orWhere('id',$user->id);
-            })->paginate(50);
+            })->with('roles')->paginate(50);
            // $usuarios->push($user);
         }else{
-            $usuarios=User::where('id',$user->id)->get();
+            $usuarios=User::where('id',$user->id)->with('roles')->get();
         }
         //$usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         if($request->is('api/*')) return response()->json(compact('usuarios'));
