@@ -119,10 +119,11 @@ class TareasController extends Controller
 
     public function addUser(Request $request){
         $tarea=Tarea::find($request->get('tarea_id'));
-        $tarea->usuarios_adicionales()->sync($request->get('usuarios'));
         if($request->is('api/*')){
+            $tarea->usuarios_adicionales()->attach($request->get('usuarios'));
             return response()->json(['eliminado'=>true]);
         }else{
+            $tarea->usuarios_adicionales()->sync($request->get('usuarios'));
             return back();
         }
     }

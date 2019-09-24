@@ -24,7 +24,10 @@ class UsuarioController extends Controller
         if(Auth::user()->hasRole('Administrador')){
             $usuarios=User::where('empresa_id',$user->empresa_id)->paginate(50);
         }elseif(Auth::user()->hasRole('JefeVentas')){
-            $usuarios=User::where('empresa_id',$user->empresa_id)->where('user_id',$user->id)->paginate(50);
+            $usuarios=User::where('empresa_id',$user->empresa_id)->where(function($query) use($user){
+                $query->orWhere('user_id',$user->id);
+                $query->orWhere('id',$user->id);
+            })->paginate(50);
            // $usuarios->push($user);
         }else{
             $usuarios=User::where('id',$user->id)->get();
