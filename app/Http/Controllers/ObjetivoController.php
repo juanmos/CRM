@@ -19,6 +19,12 @@ class ObjetivoController extends Controller
         if($request->is('api/*')) return response()->json($objetivos);
     }
 
+    public function lista(Request $request)
+    {
+        $objetivos=Objetivo::orderBy('fecha','desc')->paginate(50);
+        if($request->is('api/*')) return response()->json($objetivos);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
