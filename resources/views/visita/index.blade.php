@@ -161,6 +161,7 @@
       $("tr").css('background-color','transparent')
       $(this).closest('tr').css('background-color','cornsilk')
       $('#user_selected').html($(this).attr('nombre'))
+      $('#usuario_id').val($(this).attr('myid'));
   })
 </script>
 @endpush

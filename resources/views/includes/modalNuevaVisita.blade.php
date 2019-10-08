@@ -25,10 +25,10 @@
                                 <table id="table" class="table table-striped table-hover tabbable-wrap-content table-condensed" cellspacing="0" width="100%">
                                     <thead class="text-primary">
                                         <tr>
-                                            <th>Cliente</th>
-                                            <th>Teléfono</th>
-                                            <th>Web</th>
-                                            <th>Clasificación</th>
+                                            <th style="width:30%">Cliente</th>
+                                            <th style="width:20%">Teléfono</th>
+                                            <th style="width:20%">Web</th>
+                                            <th style="width:20%">Clasificación</th>
                                             <th class="qr_action">Acción</th>
                                         </tr>
                                     </thead>
@@ -183,6 +183,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12 color1" id="horariosDiv"></div>
+                            <input type="hidden" id="usuario_id" name="usuario_id" value="{{$usuario_id}}">
                         </div>
                     </div>
                 </div>
@@ -208,9 +209,10 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    var usuario_id={{($usuario_id!=null)?$usuario_id:Auth::user()->id}};
     $(document).on('click','#aceptCreate',function(e){
       if ($('#cliente_id').val() != '') {
-        var data = {cliente_id:$('#cliente_id').val() ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:{{$usuario_id}},tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:$('select[name=contacto_id]').val(),_token:'{{csrf_token()}}'};
+        var data = {cliente_id:$('#cliente_id').val() ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:$('#usuario_id').val(),tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:$('select[name=contacto_id]').val(),_token:'{{csrf_token()}}'};
         saveVisita(data);
         
       }else {
@@ -287,14 +289,17 @@
     });
     
     function lista (){
-        var data = {buscar:$('#buscar').val(),vendedor_id:{{$usuario_id}}, _token:$('input[name="_token"]').val()};
+        var data = {buscar:$('#buscar').val(), _token:$('input[name="_token"]').val()};
+        {{-- @if($usuario_id!=null) --}}
+        data.usuario_id=$('#usuario_id').val();
+        {{-- @endif --}}
         $.post("{{route('cliente.buscar')}}",data, function(json){
             $('#entrydata').empty();
             json.clientes.data.forEach(function(cliente){
                 var web=(cliente.web!=null)?cliente.web:'';
                 var telefono=(cliente.telefono!=null)?cliente.telefono:'';
                 var cedula=(cliente.cedula!=null)?cliente.cedula:'';
-                $('#entrydata').append('<tr class="seleccionarCliente" myid="'+cliente.id+'" nombre="'+cliente.nombre+'" telefono="'+telefono+'" web="'+web+'"><td>'+cliente.nombre+'</td><td>'+telefono+'</td><td>'+web+'</td><td>'+cliente.clasificacion.clasificacion+'</td><td><a id="selectCliente" class="btn btn-primary btn-sm" href="#">Seleccionar</a></td></tr>');    
+                $('#entrydata').append('<tr class="seleccionarCliente" myid="'+cliente.id+'" nombre="'+cliente.nombre+'" telefono="'+telefono+'" web="'+web+'"><td style="max-width:30%;word-wrap: break-word;">'+cliente.nombre+'</td><td>'+telefono+'</td><td>'+web+'</td><td>'+cliente.clasificacion.clasificacion+'</td><td><a id="selectCliente" class="btn btn-primary btn-sm" href="#">Seleccionar</a></td></tr>');    
             })
         } ,'json');            
     }

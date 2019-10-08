@@ -135,7 +135,9 @@ class UsuarioController extends Controller
     {
         $empresa =Empresa::find(Auth::user()->empresa_id);;
         $usuario = User::find($id);
-        if(Auth::user()->hasRole('Administrador')){
+        if(Auth::user()->hasRole('SuperAdministrador')){
+            $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador'])->get()->pluck('name','name');
+        }elseif(Auth::user()->hasRole('Administrador')){
             $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador'])->get()->pluck('name','name');
         }else{
             $roles = Role::orderBy('name')->whereNotIn('name',['SuperAdministrador','Administrador'])->get()->pluck('name','name');
@@ -152,13 +154,14 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $usuario = User::find($id);
         $usuario->update($request->except(['foto','password']));
         if($request->has('foto')){
             $usuario->foto=$request->file('foto')->store('public/usuarios');
             $usuario->save();
         }
-        if($request->has('password')){
+        if($request->has('password') && $request->get('password')!=null){
             $usuario->password=bcrypt($request->get('password'));
             $usuario->save();
         }

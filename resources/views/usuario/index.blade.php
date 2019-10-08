@@ -60,8 +60,11 @@
                                                         <td>{{$user->getRoleNames()->implode(',')}}</td>
                                                         <td>
                                                         @if(Request::is('e/usuario/asignar'))  
-                                                        
+                                                            @if($user->user_id == Auth::user()->id)
+                                                            <a href="{{ route('empresa.usuario.desasignarme',[$user->id]) }}" class="label theme-danger text-white f-12">Quitar asignación</a>
+                                                            @else
                                                             <a href="{{ route('empresa.usuario.asignarme',[$user->id]) }}" class="label theme-bg2 text-white f-12">Asignarme</a>
+                                                            @endif
                                                         @else
                                                             @if(Auth::user()->hasRole('SuperAdmin'))
                                                             <a href="{{ route('usuario.show',$user->id) }}" class="label theme-bg2 text-white f-12">Ver</a>
