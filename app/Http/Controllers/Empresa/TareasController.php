@@ -39,7 +39,7 @@ class TareasController extends Controller
             });
         })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
         
-        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
+        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
         return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
     }
 
