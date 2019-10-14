@@ -13,10 +13,11 @@ use Auth;
 class TareasController extends Controller
 {
     public function index(Request $request,$usuario_id=null){
-        
+        $elUser=User::find($usuario_id);
         if($usuario_id==null){
             $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
             $usuario_id=$usuarios->first()->id;
+            $elUser=Auth::user();
         }elseif(Auth::user()->hasRole('Administrador')){
             $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         }elseif(Auth::user()->hasRole('JefeVentas')){
@@ -37,8 +38,9 @@ class TareasController extends Controller
                 $query2->where('tarea_users.user_id',$usuario_id);
             });
         })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
+        
         if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
-        return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy'));
+        return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
     }
 
     /**
