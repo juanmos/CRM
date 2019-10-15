@@ -36,7 +36,9 @@ class Helpers{
     }
     public static function sendPush(){
         $user=User::find(4);
-        PushNotification::setMessage([
+        echo $user->token_and;
+        $push= new PushNotification('gcm');
+        $push->setMessage([
             'notification' => [
                     'title'=>'This is the title',
                     'body'=>'This is the message',
@@ -47,6 +49,8 @@ class Helpers{
                     'extraPayLoad2' => 'value2'
                     ]
             ])
-            ->setDevicesToken([$user->token_and])->send();;
+            ->setService('gcm')
+            ->setDevicesToken([$user->token_and])->send()->getFeedback();;
+        return $push;
     }
 }

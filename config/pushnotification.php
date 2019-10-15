@@ -5,12 +5,12 @@
 
 return [
     'gcm' => [
-        'priority' => 'normal',
+        'priority' => 'high',
         'dry_run' => false,
         'apiKey' => env('GCM_KEY','AIzaSyBBUcbe1imTPCkj-fx1XjGvLa2Ki0Pfi5U')
     ],
     'fcm' => [
-        'priority' => 'normal',
+        'priority' => 'high',
         'dry_run' => false,
         'apiKey' => 'My_ApiKey',
     ],
