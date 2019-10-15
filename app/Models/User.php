@@ -84,4 +84,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->token_and;
+    }
+
+    public function routeNotificationForApn()
+{
+    return $this->token_ios;
+}
 }
