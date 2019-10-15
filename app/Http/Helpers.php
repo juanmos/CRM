@@ -4,6 +4,7 @@ namespace App\Http;
 
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Models\User;
 use Carbon\Carbon;
 use PushNotification;
 use Redirect;
@@ -32,5 +33,20 @@ class Helpers{
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+    public static function sendPush(){
+        $user=User::find(4);
+        PushNotification::setMessage([
+            'notification' => [
+                    'title'=>'This is the title',
+                    'body'=>'This is the message',
+                    'sound' => 'default'
+                    ],
+            'data' => [
+                    'extraPayLoad1' => 'value1',
+                    'extraPayLoad2' => 'value2'
+                    ]
+            ])
+            ->setDevicesToken([$user->token_and])->send();;
     }
 }
