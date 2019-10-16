@@ -57,9 +57,12 @@ return [
             'key' => env('FCM_KEY')
         ],
         'apn' => [
-            'environment' => 1, // Or ApnChannel::SANDBOX
-            'certificate' => __DIR__ . '/iosCertificates/certificado.pem',
-            'pass_phrase' => 'soltecnologica', // Optional passPhrase
+            // 'environment' => 1, // Or ApnChannel::SANDBOX
+            // 'certificate' => __DIR__ . '/iosCertificates/certificado.pem',
+            // 'pass_phrase' => 'soltecnologica', // Optional passPhrase
+            'environment' => 0, // Or ApnChannel::SANDBOX
+            'certificate' => __DIR__ . '/iosCertificates/development.pem',
+            'pass_phrase' => '', // Optional passPhrase
         ],
 
     ],
