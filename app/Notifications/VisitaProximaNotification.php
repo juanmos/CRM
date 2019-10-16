@@ -12,20 +12,19 @@ use NotificationChannels\Fcm\FcmNotification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 
-
-class TareaProximaNotification extends Notification
+class VisitaProximaNotification extends Notification
 {
     use Queueable;
-    private $tarea=null;
+    private $visita=null;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($tarea)
+    public function __construct($visita)
     {
-        $this->tarea=$tarea;
+        $this->visita=$visita;
     }
 
     /**
@@ -43,8 +42,8 @@ class TareaProximaNotification extends Notification
     {
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
-            ->setTitle('Tienes una tarea por realizar')
-            ->setBody('Ingresa a la aplicacioón para ver la tarea.');
+            ->setTitle('Tienes una visita por comenzar')
+            ->setBody('Ingresa a la aplicacioón para ver la visita.');
             
             
         // The FcmMessage contains other options for the notification
@@ -52,17 +51,17 @@ class TareaProximaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["tarea_id"=>$this->tarea,"tipo"=>"tarea"]);;
+            ->setData(["visita_id"=>$this->visita,"tipo"=>"visita"]);;
     }
 
     public function toApn($notifiable)
     {
         return ApnMessage::create()
             ->badge(1)
-            ->title('Tienes una tarea por realizar')
-            ->body('Ingresa a la aplicacioón para ver la tarea.')
-            ->custom("tarea_id",$this->tarea)
-            ->custom("tipo",'tarea');;
+            ->title('Tienes una visita por comenzar')
+            ->body('Ingresa a la aplicacioón para ver la visita.')
+            ->custom("visita_id",$this->visita)
+            ->custom("tipo",'visita');;
     }
 
     /**

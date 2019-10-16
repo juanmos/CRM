@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 // use Edujugon\PushNotification\PushNotification;
 use App\Models\User;
 use App\Notifications\TareaProximaNotification;
+use App\Notifications\VisitaProximaNotification;
 use Carbon\Carbon;
 use PushNotification;
 use Redirect;
@@ -38,46 +39,10 @@ class Helpers{
     }
     public static function sendPush($id){
         $user=User::find($id);
-        $user->notify(new TareaProximaNotification);
-        // if($user->token_and !=null){
-        //     $push= PushNotification::setService('fcm')
-        //         ->setMessage([
-        //                 'notification' => [
-        //                         'title'=>'This is the title',
-        //                         'body'=>'This is the message',
-        //                         'sound' => 'default'
-        //                         ],
-        //                 'data' => [
-        //                         'extraPayLoad1' => 'value1',
-        //                         'extraPayLoad2' => 'value2'
-        //                         ]
-        //                 ])        
-        //         ->setDevicesToken($user->token_and)
-        //         ->send()
-        //         ->getFeedback();
-        // }
-        // if($user->token_ios!=null){
-        //     $push= PushNotification::setService('apn')
-        //         ->setMessage([
-        //             'aps' => [
-        //                 'alert' => [
-        //                     'title' => 'This is the title',
-        //                     'body' => 'This is the body'
-        //                 ],
-        //                 'sound' => 'default',
-        //                 'badge' => 1
-
-        //             ],
-        //             'extraPayLoad' => [
-        //                 'custom' => 'My custom data',
-        //             ]
-        //         ])
-        //         ->setDevicesToken($user->token_ios)
-        //         ->send()
-        //         ->getFeedback();
-        // }
-        
-        
-        // var_dump( $push);
+        $user->notify(new TareaProximaNotification(1));
+    }
+    public static function sendVisita($id){
+        $user=User::find($id);
+        $user->notify(new VisitaProximaNotification(1));
     }
 }
