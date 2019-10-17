@@ -56,7 +56,7 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
                 </li>
-                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='tipoVisita.index' || Route::currentRouteName()=='clasificacion.index' || Route::currentRouteName()=='plantilla.index' || Route::currentRouteName()=='configuracion.edit)?'active pcoded-trigger':''}}">
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='tipoVisita.index' || Route::currentRouteName()=='clasificacion.index' || Route::currentRouteName()=='plantilla.index' || Route::currentRouteName()=='configuracion.edit')?'active pcoded-trigger':''}}">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         
