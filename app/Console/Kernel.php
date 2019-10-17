@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        
+        \App\Console\Commands\TareasProximasCommand::class,
+        \App\Console\Commands\VisitasProximasCommand::class
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('tareas:proximas')
                  ->everyTenMinutes();
+        $schedule->command('visitas:proximas')
+                ->everyFifteenMinutes();
     }
 
     /**
