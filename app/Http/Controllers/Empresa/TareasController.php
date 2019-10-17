@@ -58,7 +58,7 @@ class TareasController extends Controller
             $data['usuario_id']=$visita->usuario_id;            
             $visita->tareas()->create($data);
             if($request->is('api/*')) return response()->json(['created'=>true]);
-            return redirect('e/visita/'.$visita->id.'?pest=T');
+            return redirect('e/visita/'.$visita->id.'?pest=T')->with('mensaje','Datos de tarea guardados');
         }else{
             $data['usuario_id']=$data['usuario_id'];
             $data['visita_id']=0;
@@ -116,7 +116,7 @@ class TareasController extends Controller
         if($request->is('api/*')){
             return response()->json(['eliminado'=>true]);
         }
-        return back();
+        return back()->with('mensaje','Tarea eliminada');
     }
 
     public function addUser(Request $request){

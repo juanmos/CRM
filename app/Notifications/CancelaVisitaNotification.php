@@ -14,19 +14,21 @@ use NotificationChannels\Apn\ApnMessage;
 use App\Models\Visita;
 use Carbon\Carbon;
 
-class VisitaProximaNotification extends Notification
+class CancelaVisitaNotification extends Notification
 {
     use Queueable;
     private $visita=null;
+    private $fecha=null;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($visita)
+    public function __construct($visita,$fecha)
     {
         $this->visita=$visita;
+        $this->fecha=$fecha;
     }
 
     /**
@@ -44,8 +46,8 @@ class VisitaProximaNotification extends Notification
     {
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
-            ->setTitle('Tienes una visita por comenzar')
-            ->setBody('Ingresa a la aplicación para ver la visita.');
+            ->setTitle('Visita cancelada')
+            ->setBody('La visita al cliente '.$this->visita->cliente->nombre.' ha sido cancelada');
             
             
         // The FcmMessage contains other options for the notification
@@ -53,17 +55,18 @@ class VisitaProximaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["visita_id"=>$this->visita,"tipo"=>"visita"]);;
+            ->setData(["visita_id"=>$this->visita->id,"tipo"=>"visita","fecha"=>$this->fecha]);;
     }
 
     public function toApn($notifiable)
     {
         return ApnMessage::create()
             ->badge(1)
-            ->title('Tienes una visita por comenzar')
-            ->body('Ingresa a la aplicación para ver la visita.')
-            ->custom("visita_id",$this->visita)
-            ->custom("tipo",'visita');;
+            ->title('Visita cancelada')
+            ->body('La visita al cliente '.$this->visita->cliente->nombre.' ha sido cancelada')
+            ->custom("visita_id",$this->visita->id)
+            ->custom("tipo",'visita')
+            ->custom("fecha",$this->fecha);;
     }
 
     /**
@@ -74,14 +77,15 @@ class VisitaProximaNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $visita = Visita::find($this->visita);
+        $visita = $this->visita;
         $url = route('visita.show',$this->visita);
 
         return (new MailMessage)
                     ->greeting('Estimad@ '.$visita->vendedor->full_name)
-                    ->line('La visita con el cliente: ')
+                    ->line('Se ha cancelado la visita agendada con el cliente: ')
                     ->line($visita->cliente->nombre)
-                    ->line('Agendada para el '.Carbon::parse($visita->fecha_inicio)->format('d-m-Y H:i').' esta proxima a comenzar')
+                    ->line('La fecha de la visita era para el '.Carbon::parse($visita->fecha_inicio)->format('d-m-Y H:i'))
+                    ->line('Por la siguiente razon '.$visita->razon_cancelacion)
                     ->action('Ir a la visita', $url)
                     ->line('Muchas gracias por usuar nuestra aplicación!');
     }

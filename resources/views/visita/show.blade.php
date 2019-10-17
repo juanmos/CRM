@@ -3,6 +3,7 @@
 @section('content')
 <div class="pcoded-main-container">
     <div class="pcoded-wrapper">
+        @include('includes.mensaje')
         <div class="pcoded-content">
             <div class="pcoded-inner-content">
                 <!-- [ breadcrumb ] start -->
@@ -150,8 +151,23 @@
                                                 </li> 
                                                 @endif
                                             </ul>
+                                            
                                         </div>
                                     </div>
+                                    @if($visita->estado_visita_id==5)
+                                    <div class="card-block border-bottom">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
+                                                <i class="feather icon-mail f-30 text-c-blue"></i>
+                                            </div>
+                                            <div class="col">                                                
+                                                <span class="d-block text-uppercase">Enviar copia de la visita a cliente </span>
+                                                <h3 class="f-w-300"></h3>
+                                                <h3 class="f-w-300"><a href="{{route('visita.enviar',$visita->id)}}" class="label theme-bg2 text-white f-12">Enviar copia</a></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="card-block  border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">

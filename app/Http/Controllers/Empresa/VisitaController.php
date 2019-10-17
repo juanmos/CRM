@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
+use App\Notifications\CancelaVisitaNotification;
 use App\Notifications\CambiosVisitaNotification;
+use App\Notifications\EnviaClienteNotification;
 use App\Notifications\NuevaVisitaNotification;
 use App\Http\Controllers\Controller;
+use App\Jobs\HacePDFVisitaJob;
 use App\Models\PlantillaDetalle;
 use App\Models\Configuracion;
 use App\Models\TipoVisita;
@@ -16,6 +19,7 @@ use App\Models\EstadoVisita;
 use App\Models\User;
 use Carbon\Carbon;
 use Auth;
+use App;
 use DB;
 
 class VisitaController extends Controller
@@ -213,7 +217,11 @@ class VisitaController extends Controller
         $data=$request->all();
         $visita = Visita::find($id);
         $visita->update($data);
-        $visita->vendedor->notify(new CambiosVisitaNotification($visita->id,$visita->fecha_inicio));
+        if(array_key_exists('estado_visita_id',$data) && $data['estado_visita_id']==6){
+            $visita->vendedor->notify(new CancelaVisitaNotification($visita,$visita->fecha_inicio));
+        }else{
+            $visita->vendedor->notify(new CambiosVisitaNotification($visita->id,$visita->fecha_inicio));
+        }
         if(!$request->is('api/*') && $visita->estado_visita_id==6) return back();
         return $visita;
     }
@@ -227,6 +235,12 @@ class VisitaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function enviar(Request $request,$id)
+    {
+        HacePDFVisitaJob::dispatch($id);
+        return back()->with('info','Correo enviado al cliente');
     }
 
     public function cambiaEstado($id,$estado_id){
@@ -268,7 +282,7 @@ class VisitaController extends Controller
                     }                    
                 }                
             }
-            return redirect('e/visita/'.$id.'?pest=pre');
+            return redirect('e/visita/'.$id.'?pest=pre')->with('mensaje','Datos de previsita guardados');;
         }
     }
 
@@ -287,7 +301,7 @@ class VisitaController extends Controller
                 }
             }                
         }
-        return redirect('e/visita/'.$id.'?pest=post');
+        return redirect('e/visita/'.$id.'?pest=post')->with('mensaje','Datos de visita guardados');
     }
 
     public function tareasVisita(Request $request ,$id){
