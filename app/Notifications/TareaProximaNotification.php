@@ -44,7 +44,7 @@ class TareaProximaNotification extends Notification
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
             ->setTitle('Tienes una tarea por realizar')
-            ->setBody('Ingresa a la aplicacioón para ver la tarea.');
+            ->setBody('Ingresa a la aplicación para ver la tarea.');
             
             
         // The FcmMessage contains other options for the notification
@@ -60,7 +60,7 @@ class TareaProximaNotification extends Notification
         return ApnMessage::create()
             ->badge(1)
             ->title('Tienes una tarea por realizar')
-            ->body('Ingresa a la aplicacioón para ver la tarea.')
+            ->body('Ingresa a la aplicación para ver la tarea.')
             ->custom("tarea_id",$this->tarea)
             ->custom("tipo",'tarea');;
     }

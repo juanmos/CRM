@@ -44,7 +44,7 @@ class NuevaVisitaNotification extends Notification
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
             ->setTitle('Nueva visita creada')
-            ->setBody('Ingresa a la aplicacioón para ver tu agenda de visitas.');
+            ->setBody('Ingresa a la aplicación para ver tu agenda de visitas.');
             
             
         // The FcmMessage contains other options for the notification
@@ -60,7 +60,7 @@ class NuevaVisitaNotification extends Notification
         return ApnMessage::create()
             ->badge(1)
             ->title('Nueva visita creada')
-            ->body('Ingresa a la aplicacioón para ver tu agenda de visitas.')
+            ->body('Ingresa a la aplicación para ver tu agenda de visitas.')
             ->custom("visita_id",$this->visita)
             ->custom("tipo",'nuevaVisita');;
     }

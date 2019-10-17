@@ -46,7 +46,7 @@ class CambiosVisitaNotification extends Notification
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
             ->setTitle('Hay cambios en tu visita')
-            ->setBody('Ingresa a la aplicacioón para ver la visita.');
+            ->setBody('Ingresa a la aplicación para ver la visita.');
             
             
         // The FcmMessage contains other options for the notification
@@ -62,7 +62,7 @@ class CambiosVisitaNotification extends Notification
         return ApnMessage::create()
             ->badge(1)
             ->title('Hay cambios en tu visita')
-            ->body('Ingresa a la aplicacioón para ver la visita.')
+            ->body('Ingresa a la aplicación para ver la visita.')
             ->custom("visita_id",$this->visita)
             ->custom("tipo",'visita')
             ->custom("fecha",$this->fecha);;
