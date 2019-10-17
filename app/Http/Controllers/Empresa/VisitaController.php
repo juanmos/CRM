@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
+use App\Notifications\CambiosVisitaNotification;
+use App\Notifications\NuevaVisitaNotification;
 use App\Http\Controllers\Controller;
 use App\Models\PlantillaDetalle;
 use App\Models\Configuracion;
@@ -147,6 +149,7 @@ class VisitaController extends Controller
         }
         $visita=Visita::create($data);
         $validate=true;
+        $visita->vendedor->notify(new NuevaVisitaNotification($visita->id));
         return response()->json(compact('visita','validate'));
     }
 
@@ -210,6 +213,7 @@ class VisitaController extends Controller
         $data=$request->all();
         $visita = Visita::find($id);
         $visita->update($data);
+        $visita->vendedor->notify(new CambiosVisitaNotification($visita->id,$visita->fecha_inicio));
         if(!$request->is('api/*') && $visita->estado_visita_id==6) return back();
         return $visita;
     }
