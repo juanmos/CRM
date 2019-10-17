@@ -38,7 +38,7 @@ class CambiosVisitaNotification extends Notification
      */
     public function via($notifiable)
     {
-        return [FcmChannel::class, ApnChannel::class];
+        return [FcmChannel::class, ApnChannel::class,'mail'];
     }
 
     public function toFcm($notifiable)
@@ -76,10 +76,16 @@ class CambiosVisitaNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $visita = Visita::find($this->visita);
+        $url = route('visita.show',$this->visita);
+
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->greeting('Estimad@ '.$visita->vendedor->full_name)
+                    ->line('Existen cambios en la visita agendada con el cliente: ')
+                    ->line($visita->cliente->nombre)
+                    ->line('La fecha de la nueva visita es para el '.Carbon::parse($visita->fecha_inicio)->format('d-m-Y H:i'))
+                    ->action('Ir a la visita', $url)
+                    ->line('Muchas gracias por usuar nuestra aplicación!');
     }
 
     /**
