@@ -14,41 +14,41 @@
                 {{-- <li class="nav-item pcoded-menu-caption">
                     <label>Navigation</label>
                 </li> --}}
-                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item active">
+                <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item {{(Route::currentRouteName()=='home')?'active':''}}">
                     <a href="{{route('home')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Panel de control</span></a>
                 </li>
                 @if(Auth::user()->hasRole('SuperAdministrador'))
-                <li data-username="form elements advance componant validation masking wizard picker select" class="nav-item">
+                <li data-username="form elements advance componant validation masking wizard picker select" class="nav-item {{(Route::currentRouteName()=='empresa.index')?'active':''}}">
                     <a href="{{route('empresa.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-file-text"></i></span><span class="pcoded-mtext">Empresas</span></a>
                 </li>
                 @endif
                 @if(!Auth::user()->hasRole('SuperAdministrador'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='cliente.index')?'active':''}}">
                     <a href="{{route('cliente.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Clientes</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='visita.index')?'active':''}}">
                     <a href="{{route('visita.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Vendedor') || Auth::user()->hasRole('JefeVentas'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='visita.usuario')?'active':''}}">
                     <a href="{{route('visita.usuario',Auth::user()->id)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='tarea.index')?'active':''}}">
                     <a href="{{route('tarea.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-check-square"></i></span><span class="pcoded-mtext">Tareas vendedores</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Vendedor') || Auth::user()->hasRole('JefeVentas'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='tarea.index')?'active':''}}">
                     <a href="{{route('tarea.index',Auth::user()->id)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-check-square"></i></span><span class="pcoded-mtext">Mis tareas</span></a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('JefeVentas'))
-                <li data-username="Table bootstrap datatable footable" class="nav-item">
+                <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='empresa.usuario.index')?'active':''}}">
                     <a href="{{route('empresa.usuario.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext">Vendedores</span></a>
                 </li>
                 @endif
@@ -56,14 +56,14 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
                 </li>
-                <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='tipoVisita.index' || Route::currentRouteName()=='clasificacion.index' || Route::currentRouteName()=='plantilla.index' || Route::currentRouteName()=='configuracion.edit)?'active pcoded-trigger':''}}">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         
-                        <li class=""><a href="{{route('tipoVisita.index')}}" class="">Tipos de visita</a></li>
-                        <li class=""><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
-                        <li class=""><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>
-                        <li class=""><a href="{{route('configuracion.edit',Auth::user()->empresa_id)}}" class="">Configuraciones</a></li>
+                        <li class="{{(Route::currentRouteName()=='tipoVisita.index')?'active':''}}"><a href="{{route('tipoVisita.index')}}" class="">Tipos de visita</a></li>
+                        <li class="{{(Route::currentRouteName()=='clasificacion.index')?'active':''}}"><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
+                        <li class="{{(Route::currentRouteName()=='plantilla.index')?'active':''}}"><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>
+                        <li class="{{(Route::currentRouteName()=='configuracion.edit')?'active':''}}"><a href="{{route('configuracion.edit',Auth::user()->empresa_id)}}" class="">Configuraciones</a></li>
                     </ul>
                 </li>
                 @endif
@@ -71,11 +71,11 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración general</label>
                 </li>
-                <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='usuario.index' || Route::currentRouteName()=='plantilla.index')?'active pcoded-trigger':''}}">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
-                        <li class=""><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
-                        <li class=""><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>˜
+                        <li class="{{(Route::currentRouteName()=='usuario.index')?'active':''}}"><a href="{{route('usuario.index')}}" class="">Usuarios</a></li>
+                        <li class="{{(Route::currentRouteName()=='plantilla.index')?'active':''}}"><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>˜
                     </ul>
                 </li>
                 @endif
