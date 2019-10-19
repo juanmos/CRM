@@ -316,6 +316,12 @@
                                 <input type="text" id="fecha" value="" name="fecha" class="form-control datetime" aria-describedby="emailHelp" placeholder="Fecha">
                             </div>
                         </div> 
+                        <div class="form-group-select col-md-12">
+                            <div class="form-group col-md-12 ">
+                                <label for="exampleInputEmail1">Recordatorio</label>
+                                {!!Form::select('recordatorio',[0=>'En el momento',10=>'10 minutos antes',15=>'15 minutos antes',30=>'30 minutos antes',null=>'No recordar'],0,["class"=>"form-control"])!!}
+                            </div>
+                        </div> 
                     </div>
                 </div>
                 <div class="modal-footer">    

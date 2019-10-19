@@ -15,6 +15,7 @@ class TareaHoraNotificacion extends Migration
     {
         Schema::table('tareas', function (Blueprint $table) {
             $table->dateTime('fecha_notificacion')->nullable()->after('realizado');
+            $table->integer('recordatorio')->nullable()->after('fecha_notificacion');
         });
     }
 
@@ -27,6 +28,7 @@ class TareaHoraNotificacion extends Migration
     {
         Schema::table('tareas', function (Blueprint $table) {
             $table->dropColumn('fecha_notificacion');
+            $table->dropColumn('recordatorio');
         });
     }
 }

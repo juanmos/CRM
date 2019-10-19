@@ -52,6 +52,9 @@ class TareasController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        if($data['recordatorio']!=null){
+            $data['fecha_notificacion']=Carbon::parse($data['fecha'])->subMinutes($data['recordatorio'])->toDateTimeString();
+        }
         $data['usuario_crea_id']=Auth::user()->id;
         if($request->has('visita_id') && $data['visita_id']!=null){
             $visita = Visita::find($request->get('visita_id'));

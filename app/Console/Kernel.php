@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tareas:proximas')
-                 ->everyTenMinutes();
+                 ->everyMinute();
         $schedule->command('visitas:proximas')
                 ->everyFifteenMinutes();
         $schedule->command('metas:siguiente')
