@@ -257,15 +257,5 @@ class ClienteController extends Controller
         //
     }
 
-    public function cargar(){
-        return view('cliente.carga');
-    }
-
-    public function import(Request $request) 
-    {
-        
-        //Excel::import(new ClientesImport, $request->file('archivo'));
-        Excel::import(new ClientesImport, $request->file('archivo'));
-        return redirect('/cliente')->with('mensaje', 'Clientes cargados con exito!');
-    }
+    
 }

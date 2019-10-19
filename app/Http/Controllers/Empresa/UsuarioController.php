@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Notifications\NuevoUsuarioNotification;
 use App\Http\Controllers\Controller;
 use App\Models\TipoVisita;
 use App\Models\Empresa;
@@ -98,6 +99,7 @@ class UsuarioController extends Controller
             $usuario->empresa_id=Auth::user()->empresa_id;
             $usuario->save();
         }
+        $usuario->notify(new NuevoUsuarioNotification($usuario,$request->get('password')));
         if($request->is('api/*')){
             $vendedores=User::where('empresa_id',auth('api')->user()->empresa_id)->get();
             return response()->json(compact('vendedores'));

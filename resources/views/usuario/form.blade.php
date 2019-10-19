@@ -106,6 +106,10 @@
                                                 <label for="exampleInputPassword1">Teléfono</label>
                                                 <input type="text" value="@if($usuario!=null){{$usuario->telefono}} @else {{old('telefono')}} @endif" name="telefono" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
                                             </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleInputPassword1">Cedula</label>
+                                                <input type="text" value="@if($usuario!=null){{$usuario->cedula}} @else {{old('cedula')}} @endif" name="cedula" class="form-control" id="exampleInputPassword1" placeholder="Cedula">
+                                            </div>
                                             @if($usuario!=null)
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Estado</label>
@@ -118,7 +122,9 @@
                                                 {!! Form::select('role', $roles, ($usuario!=null)?$usuario->getRoleNames()[0] : 1 ,["class"=>"form-control"]) !!}
                                             </div> 
                                             @endif
-                                            <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
+                                            <div class="form-group col-md-12">
+                                                <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
+                                            </div>
                                         </div>
                                         
                                     </div>

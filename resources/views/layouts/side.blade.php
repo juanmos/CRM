@@ -56,7 +56,7 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
                 </li>
-                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='tipoVisita.index' || Route::currentRouteName()=='clasificacion.index' || Route::currentRouteName()=='plantilla.index' || Route::currentRouteName()=='configuracion.edit')?'active pcoded-trigger':''}}">
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='tipoVisita.index' || Route::currentRouteName()=='clasificacion.index' || Route::currentRouteName()=='plantilla.index' || Route::currentRouteName()=='configuracion.edit' || Route::currentRouteName()=='importaciones.index')?'active pcoded-trigger':''}}">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Administración</span></a>
                     <ul class="pcoded-submenu">
                         
@@ -64,6 +64,7 @@
                         <li class="{{(Route::currentRouteName()=='clasificacion.index')?'active':''}}"><a href="{{route('clasificacion.index')}}" class="">Clasificaciones</a></li>
                         <li class="{{(Route::currentRouteName()=='plantilla.index')?'active':''}}"><a href="{{route('plantilla.index')}}" class="">Plantillas</a></li>
                         <li class="{{(Route::currentRouteName()=='configuracion.edit')?'active':''}}"><a href="{{route('configuracion.edit',Auth::user()->empresa_id)}}" class="">Configuraciones</a></li>
+                        <li class="{{(Route::currentRouteName()=='importaciones.index')?'active':''}}"><a href="{{route('importaciones.index')}}" class="">Importaciones</a></li>
                     </ul>
                 </li>
                 @endif

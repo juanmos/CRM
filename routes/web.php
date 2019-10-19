@@ -47,8 +47,9 @@ Route::resource('empresa', 'EmpresaController');
     Route::get('cliente/desasignar/{user_id}/{cliente_id}','ClienteController@desasignar')->name('cliente.desasignar');
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/visitas/{id}','ClienteController@visitas')->name('cliente.visitas');
-    Route::get('cliente/upload/csv','ClienteController@cargar')->name('cliente.upload');
-    Route::post('cliente/import/csv','ClienteController@import')->name('cliente.import');
+
+
+    
 
     Route::post('plantilla/campo/crear/{id}','PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::post('plantilla/campo/opciones/','PlantillaController@opcionesCampo')->name('plantilla.campo.opciones');
@@ -87,5 +88,9 @@ Route::resource('empresa', 'EmpresaController');
        // Route::get('visita/{id?}','Empresa\VisitaController@index')->name('visita.index');
 
         Route::get('ciudades','Empresa\VariosController@ciudades')->name('varios.ciudades');
+        
+        Route::get('importaciones/','Empresa\ImportacionesController@index')->name('importaciones.index');
+        Route::get('importaciones/upload/excel/{tipo}','Empresa\ImportacionesController@cargar')->name('importaciones.upload');
+        Route::post('importaciones/import/excel/{tipo}','Empresa\ImportacionesController@import')->name('importaciones.import');
     });
 });

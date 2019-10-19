@@ -10,15 +10,17 @@ use Illuminate\Notifications\Messages\MailMessage;
 class NuevoUsuarioNotification extends Notification
 {
     use Queueable;
-
+    private $user;
+    private $password;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user,$password)
     {
-        //
+        $this->user=$user;
+        $this->password=$password;
     }
 
     /**
@@ -40,10 +42,16 @@ class NuevoUsuarioNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $url=route('login');
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                ->greeting('Estimad@ '.$this->user->full_name)
+                ->line('Te damos la bienvenida al CRM de '.$this->user->empresa->nombre)
+                ->line('Ahora puedes iniciar sesión en el siguiente link, a continuación detallamos tus credenciales de ingreso')
+                ->line('Email: '.$this->user->email)
+                ->line('Contraseña: '.$this->password)
+                ->action('Iniciar sesión', $url)
+                ->line('Podrás completar tu perfil una vez dentro de la plataforma y cambiar tu contraseña')
+                ->line('Muchas gracias por usuar nuestra aplicación!');
     }
 
     /**

@@ -2,12 +2,14 @@
 
 namespace App\Imports;
 
+use App\Notifications\NuevoUsuarioNotification;
 use App\Models\DatosFacturacion;
 use App\Models\Oficina;
 use App\Models\Contacto;
 use App\Models\Cliente;
 use App\Models\Ciudad;
 use App\Models\Pais;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Auth;
@@ -66,6 +68,29 @@ class ClientesImport implements ToModel, WithHeadingRow
                     'ciudad_id'=>$ciudad_id,
                     'oficina_id'=>$oficina->id
                 ]);
+            }
+            if($row['vendedor_cedula']!=null){
+                $usuario = User::where('cedula',$row['vendedor_cedula'])->first();
+                if($usuario== null){
+                    if($row['vendedor_email']!=null){
+                        $usuario = User::where('email',$row['vendedor_email'])->first();
+                    }
+                }
+                if($usuario== null){
+                    $usuario=User::create([
+                        'nombre'=>$row['vendedor_nombre'],
+                        'apellido'=>$row['vendedor_apellido'],
+                        'email'=>$row['vendedor_email'],
+                        'password'=>bcrypt('123456'),
+                        'cedula'=>$row['vendedor_cedula'],
+                        'empresa_id'=>Auth::user()->empresa_id
+                    ]);
+                    $usuario->syncRoles('Vendedor');
+                    $usuario->notify(new NuevoUsuarioNotification($usuario,'123456'));
+                }
+                
+                $cliente->usuario_id=$usuario->id;
+                $cliente->save();
             }
         }
     }

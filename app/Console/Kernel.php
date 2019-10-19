@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\TareasProximasCommand::class,
-        \App\Console\Commands\VisitasProximasCommand::class
+        \App\Console\Commands\VisitasProximasCommand::class,
+        \App\Console\Commands\MetasDiaSiguienteCommand::class
     ];
 
     /**
@@ -29,6 +30,8 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes();
         $schedule->command('visitas:proximas')
                 ->everyFifteenMinutes();
+        $schedule->command('metas:siguiente')
+                ->dailyAt('1:00');;
     }
 
     /**

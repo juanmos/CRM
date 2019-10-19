@@ -8,7 +8,7 @@ use App\Models\User;
 
 class Tarea extends Model
 {
-    protected $fillable=['visita_id','usuario_id','usuario_crea_id','nombre','detalle','fecha','fecha_completada','realizado'];
+    protected $fillable=['visita_id','usuario_id','usuario_crea_id','nombre','detalle','fecha','fecha_completada','realizado','fecha_notificacion'];
 
     public function visita(){
         return $this->belongsTo(Visita::class,'visita_id');
