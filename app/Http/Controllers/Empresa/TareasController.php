@@ -96,6 +96,9 @@ class TareasController extends Controller
         ($request->has('nombre'))?$tarea->nombre=$request->get('nombre'):'';
         ($request->has('detalle'))?$tarea->detalle=$request->get('detalle'):'';
         ($request->has('fecha'))?$tarea->fecha=$request->get('fecha'):'';
+        if($request->has('recordatorio')){
+            $tarea->fecha_notificacion=Carbon::parse($tarea->fecha)->subMinutes($request->get('recordatorio'))->toDateTimeString();
+        }
         if($request->has('valor')){
             $tarea->realizado=$request->get('valor');
             if($request->get('valor')==1){
