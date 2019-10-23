@@ -70,10 +70,10 @@ class ClientesImport implements ToModel, WithHeadingRow
                 ]);
             }
             if($row['vendedor_cedula']!=null){
-                $usuario = User::where('cedula',$row['vendedor_cedula'])->first();
+                $usuario = User::where('cedula',trim($row['vendedor_cedula']))->first();
                 if($usuario== null){
                     if($row['vendedor_email']!=null){
-                        $usuario = User::where('email',$row['vendedor_email'])->first();
+                        $usuario = User::where('email',trim($row['vendedor_email']))->first();
                     }
                 }
                 if($usuario== null){
