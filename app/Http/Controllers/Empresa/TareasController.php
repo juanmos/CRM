@@ -31,7 +31,7 @@ class TareasController extends Controller
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
                 $query2->where('tarea_users.user_id',$usuario_id);
             });
-        })->where('visita_id',0)->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
+        })->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
         $tareasHoy = Tarea::where(function($query) use($usuario_id){
             $query->orWhere('usuario_id',$usuario_id);
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
