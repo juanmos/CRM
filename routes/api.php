@@ -48,7 +48,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
     
 
-    Route::get('tareas/{usuario_id?}','Empresa\TareasController@index');
+    Route::get('tareas/{usuario_id?}/{tipo?}','Empresa\TareasController@index');
     Route::post('tareas','Empresa\TareasController@store');
     Route::put('tareas','Empresa\TareasController@update');
     Route::delete('tareas/{id}','Empresa\TareasController@destroy');

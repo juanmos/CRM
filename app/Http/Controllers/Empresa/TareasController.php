@@ -12,7 +12,7 @@ use Auth;
 
 class TareasController extends Controller
 {
-    public function index(Request $request,$usuario_id=null){
+    public function index(Request $request,$usuario_id=null,$tipo=null){
         $elUser=User::find($usuario_id);
         if($usuario_id==null){
             $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
@@ -25,23 +25,31 @@ class TareasController extends Controller
         }else{
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
-        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado','tareas.usuarios_adicionales'])->paginate(50);
-        $tareas = Tarea::where(function($query) use($usuario_id){
-            $query->orWhere('usuario_id',$usuario_id);
-            $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
-                $query2->where('tarea_users.user_id',$usuario_id);
-            });
-        })
-        //->where('visita_id',0)
-        ->with(['usuario','usuarioCrea','usuarios_adicionales','visita'])->paginate(50);
-        $tareasHoy = Tarea::where(function($query) use($usuario_id){
-            $query->orWhere('usuario_id',$usuario_id);
-            $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
-                $query2->where('tarea_users.user_id',$usuario_id);
-            });
-        })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
+        if($request->is('api/*') && $tipo !=null && $tipo=='visitas') {
+            $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado','tareas.usuarios_adicionales'])->paginate(50);
+            return response()->json(compact('usuarios','usuario_id','visitas','elUser'));
+        }
+        if($request->is('api/*') && $tipo !=null && $tipo=='todas') {
+            $tareas = Tarea::where(function($query) use($usuario_id){
+                $query->orWhere('usuario_id',$usuario_id);
+                $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
+                    $query2->where('tarea_users.user_id',$usuario_id);
+                });
+            })
+            //->where('visita_id',0)
+            ->with(['usuario','usuarioCrea','usuarios_adicionales','visita'])->paginate(50);
+            return response()->json(compact('usuarios','usuario_id','tareas','elUser'));
+        }
+        if($request->is('api/*') && $tipo !=null && $tipo=='hoy') {
+            $tareasHoy = Tarea::where(function($query) use($usuario_id){
+                $query->orWhere('usuario_id',$usuario_id);
+                $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
+                    $query2->where('tarea_users.user_id',$usuario_id);
+                });
+            })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
+            return response()->json(compact('usuarios','usuario_id','tareasHoy','elUser'));
+        }
         
-        if($request->is('api/*')) return response()->json(compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
         return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
     }
 
