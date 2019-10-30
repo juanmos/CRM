@@ -26,12 +26,14 @@ class TareasController extends Controller
             $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
         }
         $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado','tareas.usuarios_adicionales'])->paginate(50);
-        $tareas =  $tareas = Tarea::where(function($query) use($usuario_id){
+        $tareas = Tarea::where(function($query) use($usuario_id){
             $query->orWhere('usuario_id',$usuario_id);
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
                 $query2->where('tarea_users.user_id',$usuario_id);
             });
-        })->where('visita_id',0)->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
+        })
+        //->where('visita_id',0)
+        ->with(['usuario','usuarioCrea','usuarios_adicionales','visita'])->paginate(50);
         $tareasHoy = Tarea::where(function($query) use($usuario_id){
             $query->orWhere('usuario_id',$usuario_id);
             $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
@@ -66,6 +68,9 @@ class TareasController extends Controller
             $data['usuario_id']=$data['usuario_id'];
             $data['visita_id']=0;
             Tarea::create($data);
+        }
+        if($request->has('compartir') && $request->get('compartir')>0){
+            $tarea->usuarios_adicionales()->attach($request->get('compartir'));
         }
         
         if($request->is('api/*')) return response()->json(['created'=>true]);
