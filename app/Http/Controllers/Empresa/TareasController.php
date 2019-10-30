@@ -61,13 +61,16 @@ class TareasController extends Controller
         if($request->has('visita_id') && $data['visita_id']!=null){
             $visita = Visita::find($request->get('visita_id'));
             $data['usuario_id']=$visita->usuario_id;            
-            $visita->tareas()->create($data);
+            $tarea=$visita->tareas()->create($data);
+            if($request->has('compartir') && $request->get('compartir')>0){
+                $tarea->usuarios_adicionales()->attach($request->get('compartir'));
+            }
             if($request->is('api/*')) return response()->json(['created'=>true]);
             return redirect('e/visita/'.$visita->id.'?pest=T')->with('mensaje','Datos de tarea guardados');
         }else{
             $data['usuario_id']=$data['usuario_id'];
             $data['visita_id']=0;
-            Tarea::create($data);
+            $tarea=Tarea::create($data);
         }
         if($request->has('compartir') && $request->get('compartir')>0){
             $tarea->usuarios_adicionales()->attach($request->get('compartir'));
