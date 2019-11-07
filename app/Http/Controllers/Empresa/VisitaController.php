@@ -109,6 +109,24 @@ class VisitaController extends Controller
         return $horas;
     }
 
+    public function visitasTodos(Request $request){
+        $fechaIni = new Carbon($request->get('start'));
+        $fechaFin = new Carbon($request->get('end'));
+        
+        $visitas = Visita::whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
+        foreach($visitas as $visita){
+            $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
+            $visita->description='Visita: '.$visita->tipoVisita->tipo;
+            $visita->start=$visita->fecha_inicio;
+            $visita->end=$visita->fecha_fin;
+            $visita->color=$visita->estado->color;
+            $visita->textColor=$visita->estado->textColor;
+            $visita->url=route('visita.show',$visita->id);
+            $visita->template='userTemplate';
+        }
+        return $visitas;
+    }
+
     public function visitasByUsuarioHistorial(Request $request,$usuario_id=null){
         if($usuario_id==null){
             $usuario_id=Auth::user()->id;

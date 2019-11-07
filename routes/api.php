@@ -34,6 +34,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::delete('cliente/nota/{id}','NotaController@destroy');
 
     Route::post('visitas/{id?}','Empresa\VisitaController@visitasByUsuario');
+    Route::post('visitas/usuarios/todos','Empresa\VisitaController@visitasTodos');
     Route::get('visita/{id}','Empresa\VisitaController@show');
     Route::post('visita','Empresa\VisitaController@store');
     Route::put('visita/{id}','Empresa\VisitaController@update');
