@@ -28,6 +28,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('clientes/{usuario_id?}','ClienteController@index');
     Route::post('clientes/buscar/{usuario_id?}','ClienteController@buscar');
     Route::post('cliente','ClienteController@store');
+    Route::post('cliente/rapido','ClienteController@clienteRapido');
     Route::get('cliente/visitas/{id}','ClienteController@visitas');
     Route::get('cliente/notas/{cliente_id}','NotaController@index');
     Route::post('cliente/nota','NotaController@store');

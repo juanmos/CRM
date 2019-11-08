@@ -133,6 +133,38 @@ class ClienteController extends Controller
         return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');;
     }
 
+    public function clienteRapido(Request $request)
+    {  
+        $cliente = Cliente::create([
+            'nombre'=>$request->get('nombre'),
+            'telefono'=>$request->get('telefono'),
+            'clasificacion_id'=>1,
+            'usuario_id'=>Auth::user()->id,
+            'empresa_id'=>Auth::user()->empresa_id
+        ]);
+        $cliente->facturacion()->create([
+            'nombre'=>$request->get('nombre'),
+            'direccion'=>$request->get('direccion'),
+        ]);
+        $oficina=$cliente->oficinas()->create([
+            'pais_id'=>1,
+            'ciudad_id'=>1,
+            'direccion'=>$request->get('direccion'),
+            'matriz'=>1
+        ]);
+        if($request->has('nombre_contacto')){
+            $cliente->contactos()->create([
+                'nombre'=>$request->get('nombre_contacto'),
+                'apellido'=>$request->get('nombre_contacto'),
+                'ciudad_id'=>1,
+                'oficina_id'=>$oficina->id
+            ]);
+        }
+        
+        if($request->is('api/*')) return response()->json(['created'=>true,'cliente'=>$cliente]);
+        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');;
+    }
+
     public function vendedor($id){
         $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->where('activo',1)->orderBy('nombre')->paginate(50);
         return view('usuario.index',compact('usuarios','id'));
