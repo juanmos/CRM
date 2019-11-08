@@ -152,7 +152,7 @@ class ClienteController extends Controller
             'direccion'=>$request->get('direccion'),
             'matriz'=>1
         ]);
-        if($request->has('nombre_contacto')){
+        if($request->has('nombre_contacto') && $request->get('nombre_contacto') != ''){
             $cliente->contactos()->create([
                 'nombre'=>$request->get('nombre_contacto'),
                 'apellido'=>$request->get('nombre_contacto'),
