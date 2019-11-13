@@ -14,9 +14,20 @@
                         <div class="row">
                             <!-- [ statistics year chart ] start -->
                             @if(!Auth::user()->hasRole('Vendedor'))
-                            <div class="col-xl-3 col-md-3">
-                                <div class="card card-event">
-                                    <div class="card-block">
+                            <div class="col-xl-12 col-md-12">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Vendedores
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @foreach($usuarios as $user)
+                                    <a href="" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="dropdown-item f-12 cambiaVendedor">
+                                        <h6>{{$user->full_name}}</h6>
+                                    </a>                                             
+                                    @endforeach
+                                </div>
+                                <a href="" class="btn btn-secondary pull-right visitaTodos">Ver todos</a>
+                                {{-- <div class="card card-event">
+                                    <div class="card-block" style="padding:30px 5px;">
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col">
                                                 <h5 class="m-0">Vendedores</h5>
@@ -27,32 +38,27 @@
                                                 @foreach($usuarios as $user)
                                                 <tr class="unread" @if($user->id==Auth::user()->id)style="background-color: cornsilk;"@endif>
                                                     <td class="row">
+                                                        <div class="col-md-12"><h6>{{$user->full_name}}</h6></div>
                                                         <div class="col-md-4">
                                                             <img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">
                                                         </div>
                                                         <div class="col-md-8">
-                                                            {{$user->full_name}} <br>
                                                             <a href="" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="label theme-bg2 text-white f-12 cambiaVendedor">Ver</a>
                                                         </div>
                                                     </td>
-                                                    {{-- <td>
-                                                        
-                                                    </td> --}}
                                                 </tr>                                              
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             @endif
                             <!-- [ statistics year chart ] end -->
                             <!--[ Recent Users ] start-->
-                            @if(!Auth::user()->hasRole('Vendedor'))
-                            <div class="col-xl-9 col-md-9">
-                            @else
+                            
                             <div class="col-xl-12 col-md-12">
-                            @endif
+                            
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Visitas - <span id="user_selected">{{Auth::user()->full_name}}</span></h5>
@@ -106,13 +112,18 @@
       scrollTime:'08:00:00',
       slotDuration:'00:15:00',
       dateClick: function(info) {
-        var fecha=moment(info.dateStr);
-        $('#modalBuscaCliente').modal('show');
-        $('#mesModal').val(fecha.format('MM'))
-        $('#diaModal').val(fecha.format('DD'));
-        $('#anioModal').val(fecha.format('YYYY'));
-        $('#horaModal').val(fecha.format('HH'));
-        $('#minModal').val(fecha.format('mm'));
+          if($('#usuario_id').val()!=''){
+            var fecha=moment(info.dateStr);
+            $('#modalBuscaCliente').modal('show');
+            $('#mesModal').val(fecha.format('MM'))
+            $('#diaModal').val(fecha.format('DD'));
+            $('#anioModal').val(fecha.format('YYYY'));
+            $('#horaModal').val(fecha.format('HH'));
+            $('#minModal').val(fecha.format('mm'));
+          }else{
+              alert('Debes seleccionar un vendedor para crear la visita')
+          }
+        
       },
       eventDrop: function(event) {
             if (!confirm("La visita a "+event.event.title + " se reagendara para el: " + moment(event.event.start).format('dddd, DD-MM-YYYY HH:mm')+". Es esto correcto?")) {
@@ -158,10 +169,22 @@
       })
      // calendar.fullCalendar( 'removeEventSources' );
       calendar.addEventSource( "{{url('e/visitas/by/vendedor/')}}/"+$(this).attr('myid') );
-      $("tr").css('background-color','transparent')
-      $(this).closest('tr').css('background-color','cornsilk')
+      {{-- $("tr").css('background-color','transparent')
+      $(this).closest('tr').css('background-color','cornsilk') --}}
+      $('#dropdownMenuButton').html($(this).attr('nombre'))
       $('#user_selected').html($(this).attr('nombre'))
       $('#usuario_id').val($(this).attr('myid'));
+  })
+  $(document).on('click','.visitaTodos',function(e){
+    e.preventDefault();
+     calendar.getEventSources().forEach(function(es){
+          es.remove();
+      })
+     // calendar.fullCalendar( 'removeEventSources' );
+      calendar.addEventSource( "{{route('visita.todos')}}" );
+      $('#dropdownMenuButton').html('Todos los vendedores')
+      $('#user_selected').html('Todos los vendedores')
+      $('#usuario_id').val(null);
   })
 </script>
 @endpush

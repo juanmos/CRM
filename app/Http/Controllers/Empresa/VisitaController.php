@@ -40,7 +40,7 @@ class VisitaController extends Controller
         //     $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         //     $usuario_id=$usuarios->first()->id;
         // }else
-        //$usuario_id=Auth::user()->id;
+        if($usuario_id==null) $usuario_id=Auth::user()->id;
         if(Auth::user()->hasRole('Administrador')){
             $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         }elseif(Auth::user()->hasRole('JefeVentas')){
