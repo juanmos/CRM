@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\EmpresaRegistradaNotification;
 use Illuminate\Http\Request;
 use App\Models\Configuracion;
 use App\Models\Empresa;
 use App\Models\Visita;
 use App\Models\Ciudad;
 use App\Models\Cliente;
+use Carbon\Carbon;
+use Auth;
 
 class EmpresaController extends Controller
 {
@@ -42,8 +45,32 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        $empresa = Empresa::create($request->all());
-        $empresa->configuracion()->create();
+        
+        if($request->is('api/*')){
+            $dataEmp=[];
+            $dataEmp['nombre']=$request->get('empresa');
+            $dataEmp['costo']=0;
+            $dataEmp['fecha_inicio']=Carbon::now()->toDateString();
+            $dataEmp['fecha_fin_pruebas']=Carbon::now()->addDays(60)->toDateString();
+            $dataEmp['ciudad_id']=1;
+            $dataEmp['pruebas']=1;
+            $dataEmp['usuarios_permitidos']=3;
+            $empresa = Empresa::create($dataEmp);
+            $empresa->configuracion()->create();
+            $data=$request->only(['email','nombre','apellido','telefono']);
+            $data['password']=bcrypt($request->get('password'));
+            $usuario=$empresa->usuarios()->create($data);
+            $usuario->syncRoles('Administrador');
+            if($request->has('foto') && $request->get('foto')!=null){
+                $usuario->foto=$request->file('foto')->store('public/usuarios');
+                $usuario->save();
+            }
+            $usuario->notify(new EmpresaRegistradaNotification($usuario,$request->get('password')));
+            return response()->json(['creado'=>true]);
+        }else{
+            $empresa = Empresa::create($request->all());
+            $empresa->configuracion()->create();
+        }
         return redirect('empresa');
     }
 

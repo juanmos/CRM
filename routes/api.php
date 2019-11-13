@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::post('login',['as'=>'login','uses'=>'APIAuthController@login']);
 Route::post('usuario','APIAuthController@nuevoUsuario')->name('usuario.nuevo');
-
+Route::post('empresa/nueva','EmpresaController@store');
 
 Route::middleware('jwt.auth')->post('geoposicion', 'APIAuthController@geoposicion');//Establecer la ubicacion del usuario actual
 
@@ -79,4 +79,7 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('meta/list/','ObjetivoController@lista');
     Route::post('meta','ObjetivoController@store');
     Route::put('meta/{id}','ObjetivoController@update');
+
+
+    
 });
