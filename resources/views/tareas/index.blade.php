@@ -14,7 +14,20 @@
                         <div class="row">
                             <!-- [ statistics year chart ] start -->
                             @if(!Auth::user()->hasRole('Vendedor'))
-                            <div class="col-xl-3 col-md-3">
+                            <div class="col-xl-12 col-md-12">
+                                <span>Tareas de {{$elUser->full_name}}</span>
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Cambiar vendedor
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @foreach($usuarios as $user)
+                                    <a href="{{ route('tarea.index',[$user->id]) }}" class="dropdown-item f-12 cambiaVendedor">
+                                        <h6>{{$user->full_name}}</h6>
+                                    </a>                                             
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- <div class="col-xl-3 col-md-3">
                                 <div class="card card-event">
                                     <div class="card-block">
                                         <div class="row align-items-center justify-content-center">
@@ -42,15 +55,13 @@
                                       </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             @endif
                             <!-- [ statistics year chart ] end -->
                             <!--[ Recent Users ] start-->
-                            @if(!Auth::user()->hasRole('Vendedor'))
-                            <div class="col-xl-9 col-md-9">
-                            @else
+                           
                             <div class="col-xl-12 col-md-12">
-                            @endif
+                            
                                 <ul class="nav nav-pills" id="myTab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active show" id="previsita-tab" data-toggle="tab" href="#previsita" role="tab" aria-controls="previsita" aria-selected="false">Tareas de hoy</a>

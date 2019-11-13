@@ -49,7 +49,21 @@ class TareasController extends Controller
             })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
             return response()->json(compact('usuarios','usuario_id','tareasHoy','elUser'));
         }
-        
+        $visitas = Visita::where('usuario_id',$usuario_id)->has('tareas')->with(['cliente','tareas.usuario','tareas.usuarioCrea','tipoVisita','estado','tareas.usuarios_adicionales'])->paginate(50);
+        $tareas = Tarea::where(function($query) use($usuario_id){
+                $query->orWhere('usuario_id',$usuario_id);
+                $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
+                    $query2->where('tarea_users.user_id',$usuario_id);
+                });
+            })
+            //->where('visita_id',0)
+            ->with(['usuario','usuarioCrea','usuarios_adicionales','visita'])->paginate(50);
+        $tareasHoy = Tarea::where(function($query) use($usuario_id){
+                $query->orWhere('usuario_id',$usuario_id);
+                $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
+                    $query2->where('tarea_users.user_id',$usuario_id);
+                });
+            })->whereBetween('fecha',[Carbon::now()->toDateString().' 00:00:00',Carbon::now()->toDateString().' 23:59:59'])->with(['usuario','usuarioCrea','usuarios_adicionales'])->paginate(50);
         return view('tareas.index',compact('usuarios','usuario_id','visitas','tareas','tareasHoy','elUser'));
     }
 
