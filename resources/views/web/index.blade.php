@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Lupp | Viajes compartidos</title>
+		<title>CRM | SOLTECNOLOGICA</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{asset('assets/css/main.css')}}" />
@@ -14,20 +14,22 @@
 
 				<!-- Header -->
 					<header id="header" class="alt">
-						<span class="logo"><img src="{{asset('assets/images/Lupp.png')}}" alt="" /></span>
-						<p>Viajes compartidos desde el Aeropuerto de Quito hasta cualquier lugar en Quito<br/>
-						Descarga la app </p><p><a href="https://twitter.com/ajlkn"><img src="{{asset('images/appstore.png')}}"/></a>  <a href="https://html5up.net"><img src="{{asset('images/google.png')}}"/></a>.</p>
+						<span class="logo"><img src="{{asset('assets/images/logo.png')}}" alt="" /></span>
+						<p>CRM para gestión de equipos de trabajo<br/>
+						Descarga la app </p><p>
+							<a href="https://apps.apple.com/us/app/crm-soltecnologica/id1477497228?l=es&ls=1"><img src="{{asset('images/appstore.png')}}"/></a>  
+							<a href="https://html5up.net"><img src="{{asset('images/google.png')}}"/></a>.</p>
 					</header>
 
 				<!-- Nav -->
-					<nav id="nav">
+					{{-- <nav id="nav">
 						<ul>
 							<li><a href="#intro" class="active">Conoce más</a></li>
 							<li><a href="#first">Crea/busca un viaje</a></li>
 							<li><a href="#second">Second Section</a></li>
 							<li><a href="#cta">Get Started</a></li>
 						</ul>
-					</nav>
+					</nav> --}}
 
 				<!-- Main -->
 					<div id="main">
@@ -37,50 +39,51 @@
 								<div class="spotlight">
 									<div class="content">
 										<header class="major">
-											<h2>Ipsum sed adipiscing</h2>
+											<h2>Gestiona como tu equipo se comunica con tus clientes</h2>
 										</header>
-										<p>Sed lorem ipsum dolor sit amet nullam consequat feugiat consequat magna
-										adipiscing magna etiam amet veroeros. Lorem ipsum dolor tempus sit cursus.
-										Tempus nisl et nullam lorem ipsum dolor sit amet aliquam.</p>
+										<p>No pierdas nada de lo que tu equipo de trabaja realiza. Siempre ten toda la información de las visitas, reuniones con tus clientes, asi impides que al cambiar de vendedores se pierdan las relaciones con los clientes.</p>
 										<ul class="actions">
-											<li><a href="generic.html" class="button">Learn More</a></li>
+											<li><a href="{{route('login')}}" class="button">Prueba como funciona</a></li>
 										</ul>
 									</div>
-									<span class="image"><img src="images/pic01.jpg" alt="" /></span>
+									<span class="image"><img src="{{asset('images/logo.png')}}" alt="" /></span>
 								</div>
 							</section>
 
 						<!-- First Section -->
 							<section id="first" class="main special">
 								<header class="major">
-									<h2>Magna veroeros</h2>
+									<h2>Funcionalidades principales</h2>
 								</header>
 								<ul class="features">
 									<li>
-										<span class="icon major style1 fa-code"></span>
-										<h3>Ipsum consequat</h3>
-										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+										<span class="icon style1 f-34" style="font-size:30pt">
+											<i class="far fa-calendar-alt"></i>
+										</span>										
+										<h3>Gestiona las visitas con un calendario único</h3>
 									</li>
 									<li>
-										<span class="icon major style3 fa-copy"></span>
-										<h3>Amed sed feugiat</h3>
-										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+										<span class="icon style3" style="font-size:30pt">
+											<i class="fas fa-edit"></i>
+										</span>
+										<h3>Formularios de visitas personalizados</h3>										
 									</li>
 									<li>
-										<span class="icon major style5 fa-diamond"></span>
-										<h3>Dolor nullam</h3>
-										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+										<span class="icon style5" style="font-size:30pt">
+											<i class="fas fa-tasks"></i>
+										</span>
+										<h3>Gestión de las tareas de los vendedores </h3>										
 									</li>
 								</ul>
 								<footer class="major">
 									<ul class="actions special">
-										<li><a href="generic.html" class="button">Learn More</a></li>
+										<li><a href="{{route('login')}}" class="button">Prueba como funciona</a></li>
 									</ul>
 								</footer>
 							</section>
 
 						<!-- Second Section -->
-							<section id="second" class="main special">
+							{{-- <section id="second" class="main special">
 								<header class="major">
 									<h2>Ipsum consequat</h2>
 									<p>Donec imperdiet consequat consequat. Suspendisse feugiat congue<br />
@@ -114,10 +117,10 @@
 										<li><a href="generic.html" class="button">Learn More</a></li>
 									</ul>
 								</footer>
-							</section>
+							</section> --}}
 
 						<!-- Get Started -->
-							<section id="cta" class="main special">
+							{{-- <section id="cta" class="main special">
 								<header class="major">
 									<h2>Congue imperdiet</h2>
 									<p>Donec imperdiet consequat consequat. Suspendisse feugiat congue<br />
@@ -129,38 +132,34 @@
 										<li><a href="generic.html" class="button">Learn More</a></li>
 									</ul>
 								</footer>
-							</section>
+							</section> --}}
 
 					</div>
 
 				<!-- Footer -->
 					<footer id="footer">
 						<section>
-							<h2>Aliquam sed mauris</h2>
-							<p>Sed lorem ipsum dolor sit amet et nullam consequat feugiat consequat magna adipiscing tempus etiam dolore veroeros. eget dapibus mauris. Cras aliquet, nisl ut viverra sollicitudin, ligula erat egestas velit, vitae tincidunt odio.</p>
-							<ul class="actions">
-								<li><a href="generic.html" class="button">Learn More</a></li>
-							</ul>
+							<h2>SOLTECNOLOGICA</h2>
+							<p>Somos una compañia con mucha experiencia en la gestión de equipos de trabajo, y hemos creado el CRM que necesitas para la gestión de tus equipos de trabja, ofreciendo facilidad, flexibilidad y sobre todo gestionando todo en un solo lugar.</p>
+							
 						</section>
 						<section>
-							<h2>Etiam feugiat</h2>
+							<h2>Contactanos</h2>
 							<dl class="alt">
-								<dt>Address</dt>
-								<dd>1234 Somewhere Road &bull; Nashville, TN 00000 &bull; USA</dd>
-								<dt>Phone</dt>
-								<dd>(000) 000-0000 x 0000</dd>
+								<dt>Teléfono</dt>
+								<dd>(+593) 099 737 4900</dd>
 								<dt>Email</dt>
-								<dd><a href="#">information@untitled.tld</a></dd>
+								<dd><a href="#">info@soltecnologica.com</a></dd>
 							</dl>
-							<ul class="icons">
+							{{-- <ul class="icons">
 								<li><a href="#" class="icon fa-twitter alt"><span class="label">Twitter</span></a></li>
 								<li><a href="#" class="icon fa-facebook alt"><span class="label">Facebook</span></a></li>
 								<li><a href="#" class="icon fa-instagram alt"><span class="label">Instagram</span></a></li>
 								<li><a href="#" class="icon fa-github alt"><span class="label">GitHub</span></a></li>
 								<li><a href="#" class="icon fa-dribbble alt"><span class="label">Dribbble</span></a></li>
-							</ul>
+							</ul> --}}
 						</section>
-						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						<p class="copyright">&copy; Soltecnologica 2019.</p>
 					</footer>
 
 			</div>

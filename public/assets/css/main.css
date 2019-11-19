@@ -1,4 +1,4 @@
-@import url(font-awesome.min.css);
+@import url(../fonts/fontawesome/css/fontawesome-all.min.css);
 @import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400";
 
 /*
@@ -100,12 +100,12 @@ input, select, textarea {
 
 	body {
 		background-color: #935d8c;
-		background-image: url("images/overlay.png"), -moz-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-		background-image: url("images/overlay.png"), -webkit-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-		background-image: url("images/overlay.png"), -ms-linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
-		background-image: url("images/overlay.png"), linear-gradient(45deg, #e37682 15%, #5f4d93 85%);
+		background-image: url("images/overlay.png"), -moz-linear-gradient(45deg, #1de9b6 15%, #1dc4e9 85%);
+		background-image: url("images/overlay.png"), -webkit-linear-gradient(45deg, #1de9b6 15%, #1dc4e9 85%);
+		background-image: url("images/overlay.png"), -ms-linear-gradient(45deg, #1de9b6 15%, #1dc4e9 85%);
+		background-image: url("images/overlay.png"), linear-gradient(45deg, #1de9b6 15%, #1dc4e9 85%);
 	}
-
+/* linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%) */
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
 			-moz-animation: none !important;
 			-webkit-animation: none !important;
