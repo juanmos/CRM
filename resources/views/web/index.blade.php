@@ -18,7 +18,9 @@
 						<p>CRM para gestión de equipos de trabajo<br/>
 						Descarga la app </p><p>
 							<a href="https://apps.apple.com/us/app/crm-soltecnologica/id1477497228?l=es&ls=1"><img src="{{asset('images/appstore.png')}}"/></a>  
-							<a href="https://html5up.net"><img src="{{asset('images/google.png')}}"/></a>.</p>
+							<a href="https://html5up.net"><img src="{{asset('images/google.png')}}"/></a>.
+						</p>
+						<a href="{{route('login')}}" class="button">Iniciar sesión</a>
 					</header>
 
 				<!-- Nav -->
