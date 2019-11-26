@@ -52,9 +52,12 @@ class APIAuthController extends Controller
         }
         
         try {
-            // attempt to verify the credentials and create a token for the user
+            $user = User::where('email',$request->get('email'))->first();
+            if($user==null){
+                return response()->json(['success' => false, 'error' => 'No existe un usuario con ese email, por favor verifique y vuelva a intentarlo'], 404);
+            }
             if (! $token = auth('api')->attempt($credentials)) {
-                return response()->json(['success' => false, 'error' => 'No hemos encontrado tus credenciales de usuario. Por favor contacte al administrador.'], 404);
+                return response()->json(['success' => false, 'error' => 'No hemos encontrado tu usuario. Por favor revisa que el email y la contraseña esten correctos.'], 404);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
