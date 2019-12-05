@@ -65,7 +65,7 @@ class VisitaController extends Controller
                 $query2->where('user_visitas.user_id',$usuario_id);
             });
         })->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))
-        ->whereNotIn('estado_visita_id',[6])
+        // ->whereNotIn('estado_visita_id',[6])
         ->with('vendedor')->get();
         foreach($visitas as $visita){
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
