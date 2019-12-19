@@ -25,6 +25,7 @@ Route::resource('empresa', 'EmpresaController');
     Route::resource('usuario', 'UsuarioController');
     Route::resource('configuracion', 'ConfiguracionController');
     Route::resource('plantilla','PlantillaController');
+    
 
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
     Route::post('contacto/store/{cliente_id}/{json?}','ContactoController@store')->name('contacto.store');
@@ -93,5 +94,9 @@ Route::resource('empresa', 'EmpresaController');
         Route::get('importaciones/','Empresa\ImportacionesController@index')->name('importaciones.index');
         Route::get('importaciones/upload/excel/{tipo}','Empresa\ImportacionesController@cargar')->name('importaciones.upload');
         Route::post('importaciones/import/excel/{tipo}','Empresa\ImportacionesController@import')->name('importaciones.import');
+
+        Route::get('reporte/visitas','Empresa\ReporteController@visitas')->name('reporte.visitas');
+        Route::post('reporte/visitas','Empresa\ReporteController@filtrar')->name('reporte.visitas.filtrar');
+        Route::post('reporte/exportar','Empresa\ReporteController@exportar')->name('reporte.visitas.exportar');
     });
 });

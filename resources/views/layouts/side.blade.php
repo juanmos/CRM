@@ -51,8 +51,16 @@
                 <li data-username="Table bootstrap datatable footable" class="nav-item {{(Route::currentRouteName()=='empresa.usuario.index')?'active':''}}">
                     <a href="{{route('empresa.usuario.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext">Vendedores</span></a>
                 </li>
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='reporte.visitas' )?'active pcoded-trigger':''}}">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-bar-chart"></i></span><span class="pcoded-mtext">Reportes</span></a>
+                    <ul class="pcoded-submenu">
+                        
+                        <li class="{{(Route::currentRouteName()=='reporte.visitas')?'active':''}}"><a href="{{route('reporte.visitas')}}" class="">Visitas</a></li>
+                    </ul>
+                </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
+                
                 <li class="nav-item pcoded-menu-caption">
                     <label>Administración</label>
                 </li>
