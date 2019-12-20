@@ -87,7 +87,7 @@
                                                 </tbody>
                                             </table>
                                             
-                                            {{ $visitas->appends(['fecha_inicio' => $fecha_inicio,'fecha_fin'=>$fecha_fin,'estado_id'=>$estado_id,'cliente'=>$cliente])->links() }}
+                                            {{ $visitas->appends(['fecha_inicio' => $fecha_inicio,'fecha_fin'=>$fecha_fin,'estado_id'=>$estado_id,'cliente'=>$cliente,'usuario_id'=>$usuario_id])->links() }}
                                         @else
                                             <h4>No hay visitas encontradas</h4>
                                             

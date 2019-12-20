@@ -41,7 +41,7 @@ class ReporteController extends Controller
         }
 
         $estados = ['0'=>'Todos'] + EstadoVisita::get()->pluck('estado','id')->toArray();
-        $visitas = $this->_filtrarData($fecha_inicio,$fecha_fin,$estado_id,$cliente);
+        $visitas = $this->_filtrarData($fecha_inicio,$fecha_fin,$estado_id,$cliente,$usuario_id);
         
         return view('reporte.visitas',compact('visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente','usuarios','usuario_id'));
     }
