@@ -43,6 +43,9 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::post('visitas/visita/{id}/visita','Empresa\VisitaController@saveVisita');
     Route::get('visita/tareas/{id}','Empresa\VisitaController@tareasVisita');
     Route::get('visitas/historial/{id?}','Empresa\VisitaController@visitasByUsuarioHistorial');
+    Route::get('visitas/usuarios/adicionales/{visita}','Empresa\VisitaController@adicionales');
+    Route::post('visitas/asignar/usuarios/{id}','Empresa\VisitaController@addUser');
+    Route::get('visitas/desasignar/usuarios/{id}/{user_id}','Empresa\VisitaController@deleteUser');
 
     Route::get('clasificaciones','ClasificacionController@index');
     Route::get('vendedores','Empresa\UsuarioController@index');

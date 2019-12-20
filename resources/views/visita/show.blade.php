@@ -187,7 +187,15 @@
                                             <div class="col">                                                
                                                 <span class="d-block text-uppercase">Agregar acompañantes </span>
                                                 <h3 class="f-w-300"></h3>
-                                                <h3 class="f-w-300"><a href="#" id="abrirCalendario" data-toggle="modal" data-target="#modal-usuarios" class="label theme-bg text-white f-12">Agregar acompañante</a></h3>
+                                                <h3 class="f-w-300">
+                                                    <a href="#" id="abrirCalendario" data-toggle="modal" data-target="#modal-usuarios" class="label theme-bg text-white f-12">Agregar acompañante</a>
+                                                    @if(Auth::user()->hasRole('JefeVentas') || Auth::user()->hasRole('Administrador'))
+                                                    {!! Form::open(["route"=>["visita.user.add",$visita->id],"method"=>"POST"]) !!}
+                                                    {!! Form::hidden("usuarios[]", Auth::user()->id) !!}
+                                                    <button type="submit" class="label theme-bg2 text-white f-12">Asignarme</button>
+                                                    {!! Form::close() !!}
+                                                    @endif
+                                                </h3>
                                                 @if($visita->usuarios_adicionales()->count()>0)
                                                 <div class="">
                                                     <h6 class="text-muted f-12">Acompañantes</h6>

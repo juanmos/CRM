@@ -331,12 +331,20 @@ class VisitaController extends Controller
 
     public function addUser(Request $request,$id){
         $visita=Visita::find($id);
-        $visita->usuarios_adicionales()->sync($request->get('usuarios'));     
-        return back();
+        if(($request->is('api/*'))){
+            $visita->usuarios_adicionales()->attach(explode(',',$request->get('usuarios')) );    
+        }else{
+            $visita->usuarios_adicionales()->sync($request->get('usuarios'));    
+        }
+         
+        return ($request->is('api/*'))? response()->json(["guardado"=>true]): back();
     }
     public function deleteUser(Request $request,$id,$user_id){
         $visita=Visita::find($id);
         $visita->usuarios_adicionales()->detach($user_id);
-        return back();
+        return ($request->is('api/*'))? response()->json(["eliminado"=>true]): back();
+    }
+    public function adicionales(Visita $visita){
+        return $visita->usuarios_adicionales->pluck('id');
     }
 }
