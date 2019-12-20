@@ -37,7 +37,7 @@ class ReporteVisitasExport implements FromView
                 $query->where('nombre','like','%'.$this->cliente.'%');
             });
         }         
-        if($usuario_id > 0){
+        if($this->usuario_id > 0){
             $visitas = $visitas->where('usuario_id',$this->usuario_id);
         }  
         $visitas= $visitas->with(['vendedor','cliente','tipoVisita','contacto'])
