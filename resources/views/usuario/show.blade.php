@@ -62,7 +62,7 @@
                                         <div class="table-responsive">
                                             <table class="table table-hover">
                                                 <tbody>
-                                                    @forelse ($usuario->clientes as $cliente )
+                                                    @forelse ($clientes as $cliente )
                                                     <tr class="unread">
                                                         
                                                         <td>
@@ -80,6 +80,7 @@
                                                     @endforelse
                                                 </tbody>
                                             </table>
+                                            {{$clientes->links()}}
                                         </div>
                                     </div>
                                 </div>
@@ -123,6 +124,7 @@
                                                     <tr>
                                                         <td>
                                                             <h6 class="m-0">{{$visita->cliente->nombre}}</h6>
+                                                            {{$visita->vendedor->full_name}}
                                                         </td>
                                                         <td>
                                                             <h6 class="m-0">{{$visita->tipoVisita->tipo}}</h6>
@@ -160,6 +162,7 @@
                                                     <tr>
                                                         <td>
                                                             <h6 class="m-0">{{($visita->cliente!=null)?$visita->cliente->nombre:'Cliente no encontrado o eliminado'}}</h6>
+                                                            {{$visita->vendedor->full_name}}
                                                         </td>
                                                         <td>
                                                             <h6 class="m-0">{{$visita->tipoVisita->tipo}}</h6>
