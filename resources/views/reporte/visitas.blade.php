@@ -25,23 +25,27 @@
                                         <div class="">
                                             {!! Form::open(['method'=>'POST','route'=>'reporte.visitas.filtrar']) !!}
                                                 <div class="row overflow-y-auto">                            
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4 form-group">
                                                         <label>Fecha inicio:</label>
                                                         <input type="text" name="fecha_inicio" id="fecha_inicio" class="form-control borderColorElement datepicker" value="{{$fecha_inicio}}" placeholder="Escriba el nombre de la empresa o el RUC">
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4 form-group">
                                                         <label>Fecha fin:</label>
                                                         <input type="text" name="fecha_fin" id="fecha_fin" class="form-control borderColorElement datepicker" value="{{$fecha_fin}}" placeholder="Escriba el nombre de la empresa o el RUC">
                                                     </div>
-                                                     <div class="col-md-3">
+                                                     <div class="col-md-4 form-group">
                                                         <label>Estado:</label>
                                                         {!! Form::select('estado_id', $estados, $estado_id, ['class'=>'form-control']) !!}
                                                     </div>
-                                                    <div class="col-md-3">    
+                                                    <div class="col-md-4 form-group">
                                                         <label>Cliente:</label>                            
                                                         <input type="text" name="cliente" id="cliente" class="form-control borderColorElement" value="{{$cliente}}" placeholder="Escriba el nombre del cliente">
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4 form-group">
+                                                        <label>Vendedor:</label>                            
+                                                        {!! Form::select('usuario_id', $usuarios, $usuario_id, ['class'=>'form-control']) !!}
+                                                    </div>
+                                                    <div class="col-md-4 m-t-30">
                                                         <button type="submit" class="btn btn-primary">Filtrar</button>
                                                         <button type="submit" formaction="{{route('reporte.visitas.exportar')}}" class="btn btn-secondary">Exportar</button>
                                                     </div>

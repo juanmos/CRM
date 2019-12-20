@@ -12,13 +12,15 @@ class ReporteVisitasExport implements FromView
     private $fecha_fin=null;
     private $estado_id=null;
     private $cliente=null;
+    private $usuario_id=null;
 
-    public function __construct($fecha_inicio,$fecha_fin,$estado_id,$cliente)
+    public function __construct($fecha_inicio,$fecha_fin,$estado_id,$cliente,$usuario_id)
     {
         $this->fecha_inicio=$fecha_inicio;
         $this->fecha_fin=$fecha_fin;
         $this->estado_id=$estado_id;
         $this->cliente=$cliente;
+        $this->usuario_id=$usuario_id;
     }
     /**
     * @return \Illuminate\Support\Collection
@@ -34,7 +36,10 @@ class ReporteVisitasExport implements FromView
             $visitas = $visitas->whereHas('cliente',function($query) {
                 $query->where('nombre','like','%'.$this->cliente.'%');
             });
-        }          
+        }         
+        if($usuario_id > 0){
+            $visitas = $visitas->where('usuario_id',$this->usuario_id);
+        }  
         $visitas= $visitas->with(['vendedor','cliente','tipoVisita','contacto'])
                 ->orderBy('fecha_inicio','desc')->get();   
         return view('exports.visita',compact('visitas'));

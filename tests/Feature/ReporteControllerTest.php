@@ -31,7 +31,7 @@ class ReporteControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('reporte.visitas');
-        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente']);
+        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente','usuarios','usuario_id']);
         $response->assertViewHas('fecha_inicio', now()->startOfMonth()->format('Y-m-d'));
         $response->assertViewHas('fecha_fin', now()->format('Y-m-d'));
         $response->assertViewHas('estado_id', 0);
@@ -48,7 +48,7 @@ class ReporteControllerTest extends TestCase
         ]);
         $response->assertOk();
         $response->assertViewIs('reporte.visitas');
-        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente']);
+        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente','usuarios','usuario_id']);
         $response->assertViewHas('fecha_inicio', now()->subDays(5)->format('Y-m-d'));
         $response->assertViewHas('fecha_fin', now()->addDays(5)->format('Y-m-d'));
         $response->assertViewHas('estado_id', 0);
@@ -66,7 +66,7 @@ class ReporteControllerTest extends TestCase
         ]);
         $response->assertOk();
         $response->assertViewIs('reporte.visitas');
-        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente']);
+        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente','usuarios','usuario_id']);
         $response->assertViewHas('fecha_inicio', now()->subDays(5)->format('Y-m-d'));
         $response->assertViewHas('fecha_fin', now()->addDays(5)->format('Y-m-d'));
         $response->assertViewHas('estado_id', 1);
@@ -85,7 +85,7 @@ class ReporteControllerTest extends TestCase
         ]);
         $response->assertOk();
         $response->assertViewIs('reporte.visitas');
-        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente']);
+        $response->assertViewHasAll(['visitas','fecha_inicio','fecha_fin','estados','estado_id','cliente','usuarios','usuario_id']);
         $response->assertViewHas('fecha_inicio', now()->subDays(5)->format('Y-m-d'));
         $response->assertViewHas('fecha_fin', now()->addDays(5)->format('Y-m-d'));
     }
