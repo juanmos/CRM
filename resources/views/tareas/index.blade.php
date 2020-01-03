@@ -70,7 +70,7 @@
                                         <a class="nav-link" id="visita-tab" data-toggle="tab" href="#visita" role="tab" aria-controls="visita" aria-selected="true">Tareas de visitas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Tareas sin visita</a>
+                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Todas las tareas</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
