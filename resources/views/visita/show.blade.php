@@ -171,6 +171,17 @@
                                     <div class="card-block  border-bottom">
                                         <div class="row d-flex align-items-center">
                                             <div class="col-auto">
+                                                <i class="feather icon-map f-30 text-c-blue"></i>
+                                            </div>
+                                            <div class="col">                                                
+                                                <span class="d-block text-uppercase">Lugar de visita </span>
+                                                <h3 class="f-w-300">{{$visita->lugar_visita}}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-block  border-bottom">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
                                                 <i class="feather icon-map-pin f-30 text-c-blue"></i>
                                             </div>
                                             <div class="col">                                                

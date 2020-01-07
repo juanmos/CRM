@@ -185,6 +185,14 @@
                             <div class="col-md-12 color1" id="horariosDiv"></div>
                             <input type="hidden" id="usuario_id" name="usuario_id" value="{{$usuario_id}}">
                         </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-7 control-label ">Lugar de visita: </label>
+                                <div class="col-md-12">
+                                    <input type="text" required name="lugar_visita" class="form-control" >
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">                

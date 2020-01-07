@@ -29,7 +29,7 @@ class VisitaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$usuario_id=null)
+    public function index(Request $request, $usuario_id=null)
     {
         // $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         // if($usuario_id==null){
@@ -40,50 +40,55 @@ class VisitaController extends Controller
         //     $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
         //     $usuario_id=$usuarios->first()->id;
         // }else
-        if($usuario_id==null) $usuario_id=Auth::user()->id;
-        if(Auth::user()->hasRole('Administrador')){
-            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
-        }elseif(Auth::user()->hasRole('JefeVentas')){
-            $usuarios = User::where('user_id',Auth::user()->id)->orWhere('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
-        }else{
-            $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
-        }
-        $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
-        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
-        return view('visita.index',compact('usuarios','usuario_id','tiposVisita','tiempoVisita'));
-    }
-
-    public function visitasByUsuario(Request $request,$usuario_id=null){
-        $fechaIni = new Carbon($request->get('start'));
-        $fechaFin = new Carbon($request->get('end'));
-        if($usuario_id==null){
+        if ($usuario_id==null) {
             $usuario_id=Auth::user()->id;
         }
-        $visitas = Visita::where(function($query) use($usuario_id){
-            $query->orWhere('usuario_id',$usuario_id);
-            $query->orWhereHas('usuarios_adicionales',function($query2) use($usuario_id){
-                $query2->where('user_visitas.user_id',$usuario_id);
+        if (Auth::user()->hasRole('Administrador')) {
+            $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        } elseif (Auth::user()->hasRole('JefeVentas')) {
+            $usuarios = User::where('user_id', Auth::user()->id)->orWhere('id', Auth::user()->id)->orderBy('nombre')->paginate(50);
+        } else {
+            $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
+        }
+        $tiposVisita = TipoVisita::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo', 'id');
+        $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
+        return view('visita.index', compact('usuarios', 'usuario_id', 'tiposVisita', 'tiempoVisita'));
+    }
+
+    public function visitasByUsuario(Request $request, $usuario_id=null)
+    {
+        $fechaIni = new Carbon($request->get('start'));
+        $fechaFin = new Carbon($request->get('end'));
+        if ($usuario_id==null) {
+            $usuario_id=Auth::user()->id;
+        }
+        $visitas = Visita::where(function ($query) use ($usuario_id) {
+            $query->orWhere('usuario_id', $usuario_id);
+            $query->orWhereHas('usuarios_adicionales', function ($query2) use ($usuario_id) {
+                $query2->where('user_visitas.user_id', $usuario_id);
             });
-        })->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))
-        ->whereNotIn('estado_visita_id',[6])
+        })->whereBetween('fecha_inicio', array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))
+        ->whereNotIn('estado_visita_id', [6])
         ->with('vendedor')->get();
-        foreach($visitas as $visita){
+        foreach ($visitas as $visita) {
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
             $visita->start=$visita->fecha_inicio;
             $visita->end=$visita->fecha_fin;
             $visita->color=$visita->estado->color;
             $visita->textColor=$visita->estado->textColor;
-            $visita->url=route('visita.show',$visita->id);
+            $visita->url=route('visita.show', $visita->id);
             $visita->template='userTemplate';
         }
-        if(!$request->is('api/*') || $request->get('libres')==0)return $visitas;
+        if (!$request->is('api/*') || $request->get('libres')==0) {
+            return $visitas;
+        }
 
-        $config = Configuracion::where('empresa_id',Auth::user()->empresa_id)->first();
+        $config = Configuracion::where('empresa_id', Auth::user()->empresa_id)->first();
         $start = Carbon::parse($request->get('start').' '.$config->min_time);
         $end = Carbon::parse($request->get('start').' '.$config->max_time);
         $horas = array();
-        do {            
+        do {
             $horas[]=array(
                 'title'=>'Horario disponible',
                 'start'=>$start->toDateTimeString(),
@@ -91,19 +96,19 @@ class VisitaController extends Controller
                 'color'=>'#A389D4',
                 'textColor'=>'#fff',
                 'template'=>'libreTemplate'
-            );            
+            );
         } while ($start->lessThanOrEqualTo($end));
-        if($visitas->count()>0){
-            foreach($horas as $index => $hora){
-                foreach($visitas as $visita){
-                    $hora['in']=Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),false );
-                    $hora['out']=Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) );
-                    if(Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),true ) && Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']),true ) ) {
+        if ($visitas->count()>0) {
+            foreach ($horas as $index => $hora) {
+                foreach ($visitas as $visita) {
+                    $hora['in']=Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']), Carbon::parse($hora['end']), false);
+                    $hora['out']=Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']), Carbon::parse($hora['end']));
+                    if (Carbon::parse($visita->fecha_inicio)->between(Carbon::parse($hora['start']), Carbon::parse($hora['end']), true) && Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']), Carbon::parse($hora['end']), true)) {
                         //if(Carbon::parse($visita->fecha_fin)->between(Carbon::parse($hora['start']),Carbon::parse($hora['end']) )){
-                            //unset($horas[$index]);
-                            $horas[$index]=$visita;
-                            break;
-                       // }
+                        //unset($horas[$index]);
+                        $horas[$index]=$visita;
+                        break;
+                        // }
                     }
                 }
             }
@@ -111,37 +116,39 @@ class VisitaController extends Controller
         return $horas;
     }
 
-    public function visitasTodos(Request $request){
+    public function visitasTodos(Request $request)
+    {
         $fechaIni = new Carbon($request->get('start'));
         $fechaFin = new Carbon($request->get('end'));
         
-        $visitas = Visita::whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
-        foreach($visitas as $visita){
+        $visitas = Visita::whereBetween('fecha_inicio', array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
+        foreach ($visitas as $visita) {
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
             $visita->start=$visita->fecha_inicio;
             $visita->end=$visita->fecha_fin;
             $visita->color=$visita->estado->color;
             $visita->textColor=$visita->estado->textColor;
-            $visita->url=route('visita.show',$visita->id);
+            $visita->url=route('visita.show', $visita->id);
             $visita->template='userTemplate';
         }
         return $visitas;
     }
 
-    public function visitasByUsuarioHistorial(Request $request,$usuario_id=null){
-        if($usuario_id==null){
+    public function visitasByUsuarioHistorial(Request $request, $usuario_id=null)
+    {
+        if ($usuario_id==null) {
             $usuario_id=Auth::user()->id;
         }
-        $visitas = Visita::where("usuario_id",$usuario_id)->with('vendedor')->orderBy('fecha_inicio','desc')->paginate(20);
-        foreach($visitas as $visita){
+        $visitas = Visita::where("usuario_id", $usuario_id)->with('vendedor')->orderBy('fecha_inicio', 'desc')->paginate(20);
+        foreach ($visitas as $visita) {
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
             $visita->start=$visita->fecha_inicio;
             $visita->end=$visita->fecha_fin;
             $visita->color=$visita->estado->color;
             $visita->textColor=$visita->estado->textColor;
-            $visita->url=route('visita.show',$visita->id);
+            $visita->url=route('visita.show', $visita->id);
             $visita->template='userTemplate';
         }
         return $visitas;
@@ -167,14 +174,14 @@ class VisitaController extends Controller
     {
         $data=$request->all();
         $data['estado_visita_id']=1;
-        if(!$request->is('api/*')){
+        if (!$request->is('api/*')) {
             $data['fecha_inicio']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->toDateTimeString();
             $data['fecha_fin']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
         }
         $visita=Visita::create($data);
         $validate=true;
         $visita->vendedor->notify(new NuevaVisitaNotification($visita->id));
-        return response()->json(compact('visita','validate'));
+        return response()->json(compact('visita', 'validate'));
     }
 
     /**
@@ -183,35 +190,34 @@ class VisitaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,$id)
+    public function show(Request $request, $id)
     {
         $visita=Visita::find($id);
         $estados=EstadoVisita::get();
-        if(Auth::user()->hasRole('Administrador')){
-            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
-        }elseif(Auth::user()->hasRole('JefeVentas')){
-            $usuarios = User::where('user_id',Auth::user()->id)->orWhere('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
-        }else{
-            $usuarios = User::where('id',Auth::user()->id)->orderBy('nombre')->paginate(50);
+        if (Auth::user()->hasRole('Administrador')) {
+            $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+        } elseif (Auth::user()->hasRole('JefeVentas')) {
+            $usuarios = User::where('user_id', Auth::user()->id)->orWhere('id', Auth::user()->id)->orderBy('nombre')->paginate(50);
+        } else {
+            $usuarios = User::where('id', Auth::user()->id)->orderBy('nombre')->paginate(50);
         }
-        if($request->is('api/*')) {
-            
-            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function($query) use($id){
-                $query->where('id',$id);
+        if ($request->is('api/*')) {
+            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function ($query) use ($id) {
+                $query->where('id', $id);
             }])->orderBy('orden')->get();
-            $postvisita= $visita->tipoVisita->plantillaVisita->detalles()->with(['visita'=>function($query) use($id){
-                $query->where('id',$id);
+            $postvisita= $visita->tipoVisita->plantillaVisita->detalles()->with(['visita'=>function ($query) use ($id) {
+                $query->where('id', $id);
             }])->orderBy('orden')->get();
-            $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
-            $visita=Visita::where('id',$id)->with(['cliente.clasificacion','vendedor','tipoVisita','estado','contacto.oficina.ciudad'])->first();
-            return response()->json(compact('previsita','postvisita','visita','tareas','estados'));
+            $tareas=Tarea::where('visita_id', $id)->with(['usuario','usuarioCrea'])->get();
+            $visita=Visita::where('id', $id)->with(['cliente.clasificacion','vendedor','tipoVisita','estado','contacto.oficina.ciudad'])->first();
+            return response()->json(compact('previsita', 'postvisita', 'visita', 'tareas', 'estados'));
         };
-        $tiposVisita=TipoVisita::get()->pluck('tipo','id');
+        $tiposVisita=TipoVisita::get()->pluck('tipo', 'id');
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
-        $visitasAnteriores = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','<=',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio','desc')->paginate(20);
-        $proximaVisita = Visita::where('cliente_id',$visita->cliente_id)->where('fecha_inicio','>',Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
+        $visitasAnteriores = Visita::where('cliente_id', $visita->cliente_id)->where('fecha_inicio', '<=', Carbon::now()->toDateString())->with(['estado','tipoVisita'])->orderBy('fecha_inicio', 'desc')->paginate(20);
+        $proximaVisita = Visita::where('cliente_id', $visita->cliente_id)->where('fecha_inicio', '>', Carbon::now()->toDateString())->with(['estado','tipoVisita'])->first();
         $pest=($request->has('pest'))?$request->get('pest'):'pre';
-        return view('visita.show',compact('visita','estados','tiposVisita','tiempoVisita','visitasAnteriores','proximaVisita','pest','usuarios'));
+        return view('visita.show', compact('visita', 'estados', 'tiposVisita', 'tiempoVisita', 'visitasAnteriores', 'proximaVisita', 'pest', 'usuarios'));
     }
 
     /**
@@ -237,12 +243,14 @@ class VisitaController extends Controller
         $data=$request->all();
         $visita = Visita::find($id);
         $visita->update($data);
-        if(array_key_exists('estado_visita_id',$data) && $data['estado_visita_id']==6){
-            $visita->vendedor->notify(new CancelaVisitaNotification($visita,$visita->fecha_inicio));
-        }else{
-            $visita->vendedor->notify(new CambiosVisitaNotification($visita->id,$visita->fecha_inicio));
+        if (array_key_exists('estado_visita_id', $data) && $data['estado_visita_id']==6) {
+            $visita->vendedor->notify(new CancelaVisitaNotification($visita, $visita->fecha_inicio));
+        } else {
+            $visita->vendedor->notify(new CambiosVisitaNotification($visita->id, $visita->fecha_inicio));
         }
-        if(!$request->is('api/*') && $visita->estado_visita_id==6) return back();
+        if (!$request->is('api/*') && $visita->estado_visita_id==6) {
+            return back();
+        }
         return $visita;
     }
 
@@ -257,94 +265,102 @@ class VisitaController extends Controller
         //
     }
 
-    public function enviar(Request $request,$id)
+    public function enviar(Request $request, $id)
     {
         HacePDFVisitaJob::dispatch($id);
-        return back()->with('info','Correo enviado al cliente');
+        return back()->with('info', 'Correo enviado al cliente');
     }
 
-    public function cambiaEstado($id,$estado_id){
+    public function cambiaEstado($id, $estado_id)
+    {
         $visita = Visita::find($id);
         $visita->estado_visita_id=$estado_id;
         $visita->save();
         return back();
     }
 
-    public function savePrevisita(Request $request,$id){
-        if($request->is('api/*')){
+    public function savePrevisita(Request $request, $id)
+    {
+        if ($request->is('api/*')) {
             $visita = Visita::find($id)->detalles();
-            if( PlantillaDetalle::find($request->get('id'))->tipo_campo!=6){
+            if (PlantillaDetalle::find($request->get('id'))->tipo_campo!=6) {
                 $visita->detach($request->get('id'));
-                $visita->attach($request->get('id'),['valor'=>$request->get('valor')]);
-            }else{
-                if($request->get('value')=='0'){
-                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ? and valor = ? ', [$request->get('id'),$id,$request->get('valor')]);    
-                }else{
-                    if($visita->wherePivot('valor',$request->get('valor'))->get()->count()>0){
+                $visita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
+            } else {
+                if ($request->get('value')=='0') {
+                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ? and valor = ? ', [$request->get('id'),$id,$request->get('valor')]);
+                } else {
+                    if ($visita->wherePivot('valor', $request->get('valor'))->get()->count()>0) {
                         DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id=? and valor=?', [$request->get('id'),$id,$request->get('valor')]);
                     }
-                    $visita->attach($request->get('id'),['valor'=>$request->get('valor')]);
-                }                
-            }            
+                    $visita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
+                }
+            }
             return response()->json(['guardado'=>true]);
-        }else{
+        } else {
             $inputs = $request->except(['_token','pest']);
             $visita = Visita::find($id)->detalles();
-            foreach($inputs as $key => $input){
-                $val=explode('_',$key);
-                if( PlantillaDetalle::find($val[1])->tipo_campo!=6){
+            foreach ($inputs as $key => $input) {
+                $val=explode('_', $key);
+                if (PlantillaDetalle::find($val[1])->tipo_campo!=6) {
                     $visita->detach($val[1]);
-                    $visita->attach($val[1],['valor'=>$input]);
-                }else{
-                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);    
-                    foreach($input as $value){
-                        $visita->attach($val[1],['valor'=>$value]);
-                    }                    
-                }                
+                    $visita->attach($val[1], ['valor'=>$input]);
+                } else {
+                    DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);
+                    foreach ($input as $value) {
+                        $visita->attach($val[1], ['valor'=>$value]);
+                    }
+                }
             }
-            return redirect('e/visita/'.$id.'?pest=pre')->with('mensaje','Datos de previsita guardados');;
+            return redirect('e/visita/'.$id.'?pest=pre')->with('mensaje', 'Datos de previsita guardados');
+            ;
         }
     }
 
-    public function saveVisita(Request $request,$id){
+    public function saveVisita(Request $request, $id)
+    {
         $inputs = $request->except(['_token','pest']);
         $visita = Visita::find($id)->detalles();
-        foreach($inputs as $key => $input){
-            $val=explode('_',$key)[1];
-            if( PlantillaDetalle::find($val)->tipo_campo!=6){
+        foreach ($inputs as $key => $input) {
+            $val=explode('_', $key)[1];
+            if (PlantillaDetalle::find($val)->tipo_campo!=6) {
                 $visita->detach($val);
-                $visita->attach($val,['valor'=>$input]);
-            }else{
-                DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);    
-                foreach($input as $value){
-                    $visita->attach($val[1],['valor'=>$value]);
+                $visita->attach($val, ['valor'=>$input]);
+            } else {
+                DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);
+                foreach ($input as $value) {
+                    $visita->attach($val[1], ['valor'=>$value]);
                 }
-            }                
+            }
         }
-        return redirect('e/visita/'.$id.'?pest=post')->with('mensaje','Datos de visita guardados');
+        return redirect('e/visita/'.$id.'?pest=post')->with('mensaje', 'Datos de visita guardados');
     }
 
-    public function tareasVisita(Request $request ,$id){
-        $tareas=Tarea::where('visita_id',$id)->with(['usuario','usuarioCrea'])->get();
+    public function tareasVisita(Request $request, $id)
+    {
+        $tareas=Tarea::where('visita_id', $id)->with(['usuario','usuarioCrea'])->get();
         return response()->json(compact('tareas'));
     }
 
-    public function addUser(Request $request,$id){
+    public function addUser(Request $request, $id)
+    {
         $visita=Visita::find($id);
-        if(($request->is('api/*'))){
-            $visita->usuarios_adicionales()->attach(explode(',',$request->get('usuarios')) );    
-        }else{
-            $visita->usuarios_adicionales()->sync($request->get('usuarios'));    
+        if (($request->is('api/*'))) {
+            $visita->usuarios_adicionales()->attach(explode(',', $request->get('usuarios')));
+        } else {
+            $visita->usuarios_adicionales()->sync($request->get('usuarios'));
         }
          
         return ($request->is('api/*'))? response()->json(["guardado"=>true]): back();
     }
-    public function deleteUser(Request $request,$id,$user_id){
+    public function deleteUser(Request $request, $id, $user_id)
+    {
         $visita=Visita::find($id);
         $visita->usuarios_adicionales()->detach($user_id);
         return ($request->is('api/*'))? response()->json(["eliminado"=>true]): back();
     }
-    public function adicionales(Visita $visita){
+    public function adicionales(Visita $visita)
+    {
         return $visita->usuarios_adicionales->pluck('id');
     }
 }

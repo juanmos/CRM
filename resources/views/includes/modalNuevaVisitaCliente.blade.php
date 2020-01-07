@@ -67,6 +67,14 @@
                                       </div>
                                   </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-md-7 control-label ">Lugar de visita: </label>
+                                        <div class="col-md-12">
+                                            <input type="text" required name="lugar_visita" class="form-control" >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
                                 
