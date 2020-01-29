@@ -25,7 +25,7 @@ class CambiosVisitaNotification extends Notification
      *
      * @return void
      */
-    public function __construct($visita,$fecha)
+    public function __construct($visita, $fecha)
     {
         $this->visita=$visita;
         $this->fecha=$fecha;
@@ -55,7 +55,8 @@ class CambiosVisitaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["visita_id"=>$this->visita,"tipo"=>"visita","fecha"=>$this->fecha]);;
+            ->setData(["visita_id"=>$this->visita,"tipo"=>"visita","fecha"=>$this->fecha]);
+        ;
     }
 
     public function toApn($notifiable)
@@ -64,9 +65,10 @@ class CambiosVisitaNotification extends Notification
             ->badge(1)
             ->title('Hay cambios en tu visita')
             ->body('Ingresa a la aplicación para ver la visita.')
-            ->custom("visita_id",$this->visita)
-            ->custom("tipo",'visita')
-            ->custom("fecha",$this->fecha);;
+            ->custom("visita_id", $this->visita)
+            ->custom("tipo", 'visita')
+            ->custom("fecha", $this->fecha);
+        ;
     }
 
     /**
@@ -78,9 +80,10 @@ class CambiosVisitaNotification extends Notification
     public function toMail($notifiable)
     {
         $visita = Visita::find($this->visita);
-        $url = route('visita.show',$this->visita);
+        $url = route('visita.show', $this->visita);
 
         return (new MailMessage)
+                    ->subject('Notificación de cambios en visita')
                     ->greeting('Estimad@ '.$visita->vendedor->full_name)
                     ->line('Existen cambios en la visita agendada con el cliente: ')
                     ->line($visita->cliente->nombre)

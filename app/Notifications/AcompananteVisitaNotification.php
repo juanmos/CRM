@@ -11,21 +11,21 @@ use NotificationChannels\Fcm\FcmMessage;
 use NotificationChannels\Fcm\FcmNotification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
-use App\Models\Visita;
 use Carbon\Carbon;
 
-class NuevaVisitaNotification extends Notification
+class AcompananteVisitaNotification extends Notification
 {
     use Queueable;
-    private $visita=null;
-
+    private $tipo;
+    private $visita;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($visita)
+    public function __construct($tipo, $visita)
     {
+        $this->tipo=$tipo;
         $this->visita=$visita;
     }
 
@@ -44,8 +44,8 @@ class NuevaVisitaNotification extends Notification
     {
         // The FcmNotification holds the notification parameters
         $fcmNotification = FcmNotification::create()
-            ->setTitle('Nueva visita creada')
-            ->setBody('Ingresa a la aplicación para ver tu agenda de visitas.');
+            ->setTitle('Has sido '.$this->tipo.' como acompañante en una visita')
+            ->setBody('Ingresa a la aplicación para ver la visita.');
             
             
         // The FcmMessage contains other options for the notification
@@ -53,7 +53,7 @@ class NuevaVisitaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["visita_id"=>$this->visita,"tipo"=>"nuevaVisita"]);
+            ->setData(["visita_id"=>$this->visita->id,"tipo"=>"acompanante"]);
         ;
     }
 
@@ -61,10 +61,10 @@ class NuevaVisitaNotification extends Notification
     {
         return ApnMessage::create()
             ->badge(1)
-            ->title('Nueva visita creada')
-            ->body('Ingresa a la aplicación para ver tu agenda de visitas.')
-            ->custom("visita_id", $this->visita)
-            ->custom("tipo", 'nuevaVisita');
+            ->title('Has sido '.$this->tipo.' como acompañante en una visita')
+            ->body('Ingresa a la aplicación para ver la visita.')
+            ->custom("visita_id", $this->visita->id)
+            ->custom("tipo", 'acompanante');
         ;
     }
 
@@ -76,15 +76,15 @@ class NuevaVisitaNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $visita = Visita::find($this->visita);
-        $url = route('visita.show', $this->visita);
+        $url = route('visita.show', $this->visita->id);
 
         return (new MailMessage)
-                    ->subject('Nueva visita creada')
-                    ->greeting('Estimad@ '.$visita->vendedor->full_name)
-                    ->line('Tienes una visita agendada con el cliente: ')
-                    ->line($visita->cliente->nombre)
-                    ->line('La fecha de la nueva visita es para el '.Carbon::parse($visita->fecha_inicio)->format('d-m-Y H:i'))
+                    ->subject('Has sido '.$this->tipo.' como acompañante en una visita')
+                    ->greeting('Estimad@ '.$notifiable->full_name)
+                    ->line('Has sido '.$this->tipo.' como acompañante a visita con los siguientes datos: ')
+                    ->line('Cliente: '.$this->visita->cliente->nombre)
+                    ->line('Vendedor: '.$this->visita->vendedor->full_name)
+                    ->line('La fecha de la visita es para el '.Carbon::parse($this->visita->fecha_inicio)->format('d-m-Y H:i'))
                     ->action('Ir a la visita', $url)
                     ->line('Muchas gracias por usuar nuestra aplicación!');
     }

@@ -10,13 +10,14 @@ use Illuminate\Notifications\Messages\MailMessage;
 class EmpresaRegistradaNotification extends Notification
 {
     use Queueable;
-    private $user,$password;
+    private $user;
+    private $password;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($usuario,$password)
+    public function __construct($usuario, $password)
     {
         $this->user=$usuario;
         $this->password=$password;
@@ -43,6 +44,7 @@ class EmpresaRegistradaNotification extends Notification
     {
         $url=route('login');
         return (new MailMessage)
+                ->subject('Nueva empresa registrada')
                 ->greeting('Estimad@ '.$this->user->full_name)
                 ->line('Te damos la bienvenida al CRM de '.$this->user->empresa->nombre)
                 ->line('Ahora puedes iniciar sesión en el siguiente link, a continuación detallamos tus credenciales de ingreso')

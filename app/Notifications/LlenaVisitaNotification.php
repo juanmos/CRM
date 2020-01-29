@@ -53,7 +53,8 @@ class LlenaVisitaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["visita_id"=>$this->visita,"tipo"=>"llenaVisita"]);;
+            ->setData(["visita_id"=>$this->visita,"tipo"=>"llenaVisita"]);
+        ;
     }
 
     public function toApn($notifiable)
@@ -62,8 +63,9 @@ class LlenaVisitaNotification extends Notification
             ->badge(1)
             ->title('Llena los datos de la visita')
             ->body('Ingresa a la aplicación para llenar los datos de la visita.')
-            ->custom("visita_id",$this->visita)
-            ->custom("tipo",'llenaVisita');;
+            ->custom("visita_id", $this->visita)
+            ->custom("tipo", 'llenaVisita');
+        ;
     }
 
     /**
@@ -75,9 +77,10 @@ class LlenaVisitaNotification extends Notification
     public function toMail($notifiable)
     {
         $visita = Visita::find($this->visita);
-        $url = route('visita.show',$this->visita);
+        $url = route('visita.show', $this->visita);
 
         return (new MailMessage)
+                    ->subject('Llene los datos de la visita')
                     ->greeting('Estimad@ '.$visita->vendedor->full_name)
                     ->line('La visita con el cliente: ')
                     ->line($visita->cliente->nombre)

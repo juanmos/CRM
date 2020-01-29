@@ -25,7 +25,7 @@ class CancelaVisitaNotification extends Notification
      *
      * @return void
      */
-    public function __construct($visita,$fecha)
+    public function __construct($visita, $fecha)
     {
         $this->visita=$visita;
         $this->fecha=$fecha;
@@ -55,7 +55,8 @@ class CancelaVisitaNotification extends Notification
             ->setPriority(FcmMessage::PRIORITY_HIGH)
             ->setTimeToLive(86400)
             ->setNotification($fcmNotification)
-            ->setData(["visita_id"=>$this->visita->id,"tipo"=>"visita","fecha"=>$this->fecha]);;
+            ->setData(["visita_id"=>$this->visita->id,"tipo"=>"visita","fecha"=>$this->fecha]);
+        ;
     }
 
     public function toApn($notifiable)
@@ -64,9 +65,10 @@ class CancelaVisitaNotification extends Notification
             ->badge(1)
             ->title('Visita cancelada')
             ->body('La visita al cliente '.$this->visita->cliente->nombre.' ha sido cancelada')
-            ->custom("visita_id",$this->visita->id)
-            ->custom("tipo",'visita')
-            ->custom("fecha",$this->fecha);;
+            ->custom("visita_id", $this->visita->id)
+            ->custom("tipo", 'visita')
+            ->custom("fecha", $this->fecha);
+        ;
     }
 
     /**
@@ -78,9 +80,10 @@ class CancelaVisitaNotification extends Notification
     public function toMail($notifiable)
     {
         $visita = $this->visita;
-        $url = route('visita.show',$this->visita);
+        $url = route('visita.show', $this->visita);
 
         return (new MailMessage)
+                    ->subject('Visita cancelada')
                     ->greeting('Estimad@ '.$visita->vendedor->full_name)
                     ->line('Se ha cancelado la visita agendada con el cliente: ')
                     ->line($visita->cliente->nombre)

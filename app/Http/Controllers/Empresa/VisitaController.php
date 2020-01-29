@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Empresa;
 
 use Illuminate\Http\Request;
+use App\Notifications\AcompananteVisitaNotification;
 use App\Notifications\CancelaVisitaNotification;
 use App\Notifications\CambiosVisitaNotification;
 use App\Notifications\EnviaClienteNotification;
@@ -347,16 +348,21 @@ class VisitaController extends Controller
         $visita=Visita::find($id);
         if (($request->is('api/*'))) {
             $visita->usuarios_adicionales()->attach(explode(',', $request->get('usuarios')));
+            User::find($request->get('usuarios'))->notify(new AcompananteVisitaNotification('agregado', $visita));
         } else {
             $visita->usuarios_adicionales()->sync($request->get('usuarios'));
+            foreach ($request->get('usuarios') as $id) {
+                User::find($id)->notify(new AcompananteVisitaNotification('agregado', $visita));
+            }
         }
-         
+        
         return ($request->is('api/*'))? response()->json(["guardado"=>true]): back();
     }
     public function deleteUser(Request $request, $id, $user_id)
     {
         $visita=Visita::find($id);
         $visita->usuarios_adicionales()->detach($user_id);
+        User::find($user_id)->notify(new AcompananteVisitaNotification('eliminado', $visita));
         return ($request->is('api/*'))? response()->json(["eliminado"=>true]): back();
     }
     public function adicionales(Visita $visita)
