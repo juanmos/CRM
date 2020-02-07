@@ -245,7 +245,7 @@
 
     $(document).on('click','.btnEliminar',function(e){
         e.preventDefault();
-        var r = confirm("Está seguro que desea eliminar el campo, ya no estará visible en sus fichas médicas");
+        var r = confirm("Está seguro que desea eliminar el campo, ya no estará visible en sus formularios");
         if (r == true) {
             $.post("{{route('plantilla.campo.eliminar')}}",{_token:"{{csrf_token()}}",id:$(this).attr('myid')},function(json){
                 llenaCampos(json);;
