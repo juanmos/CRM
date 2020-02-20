@@ -16,13 +16,13 @@ class PlantillaController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->hasRole('SuperAdministrador')){
-            $plantillas = Plantilla::where('empresa_id',0)->orderBy('nombre')->get();
-        }else{
-            $plantillas = Plantilla::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get();
+        if (Auth::user()->hasRole('SuperAdministrador')) {
+            $plantillas = Plantilla::where('empresa_id', 0)->orderBy('nombre')->get();
+        } else {
+            $plantillas = Plantilla::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->get();
         }
         
-        return view('plantilla.index',compact('plantillas'));
+        return view('plantilla.index', compact('plantillas'));
     }
 
     /**
@@ -33,7 +33,7 @@ class PlantillaController extends Controller
     public function create()
     {
         $plantilla = null;
-        return view('plantilla.form',compact('plantilla'));
+        return view('plantilla.form', compact('plantilla'));
     }
 
     /**
@@ -59,7 +59,7 @@ class PlantillaController extends Controller
     public function show($id)
     {
         $plantilla = Plantilla::find($id);
-        return view('plantilla.show',compact('plantilla'));
+        return view('plantilla.show', compact('plantilla'));
     }
 
     /**
@@ -71,7 +71,7 @@ class PlantillaController extends Controller
     public function edit($id)
     {
         $plantilla = Plantilla::find($id);
-        return view('plantilla.form',compact('plantilla'));
+        return view('plantilla.form', compact('plantilla'));
     }
 
     /**
@@ -98,12 +98,13 @@ class PlantillaController extends Controller
         //
     }
 
-    public function creaCampo(Request $request,$id){
+    public function creaCampo(Request $request, $id)
+    {
         $plantilla = Plantilla::find($id);
         $data=$request->all();
-        if($data['id']>0){
-            $plantilla->detalles()->where('id',$data['id'])->first()->update($data);
-        }else{
+        if ($data['id']>0) {
+            $plantilla->detalles()->where('id', $data['id'])->first()->update($data);
+        } else {
             $data['orden']=$plantilla->detalles()->count();
             $plantilla->detalles()->create($data);
         }
@@ -111,28 +112,37 @@ class PlantillaController extends Controller
         return response()->json(['campos'=>$plantilla->detalles()->orderBy('orden')->get()]);
     }
 
-    public function opcionesCampo(Request $request){
+    public function opcionesCampo(Request $request)
+    {
         $detalle = PlantillaDetalle::find($request->get('id'));
-        $detalle->opciones=implode('|',$request->get('opciones'));
+        $detalle->opciones=implode('|', $request->get('opciones'));
         $detalle->save();
         return response()->json(['campos'=>Plantilla::find($detalle->plantilla_id)->detalles()->orderBy('orden')->get()]);
     }
 
-    public function eliminarCampo(Request $request){
+    public function eliminarCampo(Request $request)
+    {
         $detalle = PlantillaDetalle::find($request->get('id'));
         $plantilla = Plantilla::find($detalle->plantilla_id);
         $detalle->delete();
         return response()->json(['campos'=>$plantilla->detalles()->orderBy('orden')->get()]);
     }
 
-    public function ordenCampo(Request $request,$id){
+    public function ordenCampo(Request $request, $id)
+    {
         $plantilla = Plantilla::find($id);
-        $ids = explode(',',$request->get('ids'));
-        foreach($ids as $index => $id){
+        $ids = explode(',', $request->get('ids'));
+        foreach ($ids as $index => $id) {
             $detalle = PlantillaDetalle::find($id);
             $detalle->orden=$index+1;
             $detalle->save();
         }
         return response()->json(['ordenado'=>true]);
+    }
+
+    public function editarCampo(Request $request, $id)
+    {
+        $campo = PlantillaDetalle::find($id);
+        return response()->json(compact('campo'));
     }
 }
