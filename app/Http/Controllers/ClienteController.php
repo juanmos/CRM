@@ -22,55 +22,58 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$usuario_id=null)
+    public function index(Request $request, $usuario_id = null)
     {
-        if(Auth::user()->hasRole('Administrador')){
-            $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
-            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad']);
-            if($usuario_id!=null && $usuario_id!=0){
-                $clientes=$clientes->where('usuario_id',$usuario_id)->paginate(50);
-            }else{
+        if (Auth::user()->hasRole('Administrador')) {
+            $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad']);
+            if ($usuario_id!=null && $usuario_id!=0) {
+                $clientes=$clientes->where('usuario_id', $usuario_id)->paginate(50);
+            } else {
                 $clientes=$clientes->paginate(50);
             }
-            
-        }else{
-            $usuarios = User::where('id',$usuario_id)->orderBy('nombre')->paginate(50);
-            $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id)
+        } else {
+            $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
                 //->where('usuario_id',$usuario_id)
                 ->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
         }
         
-        if($request->is('api/*')) return response()->json(compact('clientes','usuario_id'));
-        return view('cliente.index',compact('clientes','usuario_id'));
-    }
-
-    public function buscar(Request $request,$usuario_id=null){
-        $clientes = Cliente::where('empresa_id',Auth::user()->empresa_id);
-        if($usuario_id!=null){
-            $clientes=$clientes->where('usuario_id',$usuario_id);
+        if ($request->is('api/*')) {
+            return response()->json(compact('clientes', 'usuario_id'));
         }
-        //
-        $clientes=$clientes->where('nombre','like','%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
-        return response()->json(compact('clientes','usuario_id'));
+        return view('cliente.index', compact('clientes', 'usuario_id'));
     }
 
-    public function visitas(Request $request,$id){
-        if($request->is('api/*')){
-            $visitas = Visita::where("cliente_id",$id)->with('cliente')->orderBy('fecha_inicio','desc')->paginate(20);
-        }else{
+    public function buscar(Request $request, $usuario_id = null)
+    {
+        $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id);
+        if ($usuario_id!=null) {
+            $clientes=$clientes->where('usuario_id', $usuario_id);
+        }
+        $clientes=$clientes->where('nombre', 'like', '%'.$request->get('buscar').'%')->orderBy('nombre')->with(['clasificacion'])->paginate(50);
+        return response()->json(compact('clientes', 'usuario_id'));
+    }
+
+    public function visitas(Request $request, $id)
+    {
+        if ($request->is('api/*')) {
+            $visitas = Visita::where("cliente_id", $id)->with('cliente')->orderBy('fecha_inicio', 'desc')->paginate(20);
+        } else {
             $fechaIni = new Carbon($request->get('start'));
             $fechaFin = new Carbon($request->get('end'));
-            $visitas = Visita::where("cliente_id",$id)->whereBetween('fecha_inicio',array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
+            $visitas = Visita::where("cliente_id", $id)->whereBetween('fecha_inicio', array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
         }
         
-        foreach($visitas as $visita){
-            $visita->title=$visita->vendedor->full_name.' Visita: '.$visita->tipoVisita->tipo;;
+        foreach ($visitas as $visita) {
+            $visita->title=$visita->vendedor->full_name.' Visita: '.$visita->tipoVisita->tipo;
+            ;
             $visita->description='Visita: '.$visita->tipoVisita->tipo;
             $visita->start=$visita->fecha_inicio;
             $visita->end=$visita->fecha_fin;
             $visita->color=$visita->estado->color;
             $visita->textColor=$visita->estado->textColor;
-            $visita->url=route('visita.show',$visita->id);
+            $visita->url=route('visita.show', $visita->id);
         }
         return $visitas;
     }
@@ -83,11 +86,11 @@ class ClienteController extends Controller
     public function create()
     {
         $cliente=null;
-        $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
-        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
-        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
-        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores','paises'));
+        $clasificacion=Clasificacion::get()->pluck('clasificacion', 'id');
+        $paises = Pais::orderBy('pais')->get()->pluck('pais', 'id');
+        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad', 'id');
+        $vendedores = User::where('empresa_id', Auth::user()->empresa_id)->get()->pluck('full_name', 'id');
+        return view('cliente.form', compact('cliente', 'clasificacion', 'ciudades', 'vendedores', 'paises'));
     }
 
     /**
@@ -97,7 +100,7 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  
+    {
         $cliente = Cliente::create([
             'nombre'=>$request->get('nombre'),
             'telefono'=>$request->get('telefono'),
@@ -129,12 +132,15 @@ class ClienteController extends Controller
             'ciudad_id'=>$request->get('ciudad_id'),
             'oficina_id'=>$oficina->id
         ]);
-        if($request->is('api/*')) return response()->json(['created'=>true]);
-        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');;
+        if ($request->is('api/*')) {
+            return response()->json(['created'=>true]);
+        }
+        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');
+        ;
     }
 
     public function clienteRapido(Request $request)
-    {  
+    {
         $cliente = Cliente::create([
             'nombre'=>$request->get('nombre'),
             'telefono'=>$request->get('telefono'),
@@ -152,7 +158,7 @@ class ClienteController extends Controller
             'direccion'=>$request->get('direccion'),
             'matriz'=>1
         ]);
-        if($request->has('nombre_contacto') && $request->get('nombre_contacto') != ''){
+        if ($request->has('nombre_contacto') && $request->get('nombre_contacto') != '') {
             $cliente->contactos()->create([
                 'nombre'=>$request->get('nombre_contacto'),
                 'apellido'=>$request->get('nombre_contacto'),
@@ -161,30 +167,37 @@ class ClienteController extends Controller
             ]);
         }
         
-        if($request->is('api/*')) return response()->json(['created'=>true,'cliente'=>$cliente]);
-        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');;
+        if ($request->is('api/*')) {
+            return response()->json(['created'=>true,'cliente'=>$cliente]);
+        }
+        return redirect('cliente/'.$cliente->id)->with('mensaje', 'Cliente creado con exito!');
+        ;
     }
 
-    public function vendedor($id){
-        $usuarios = User::where('empresa_id',Auth::user()->empresa_id)->where('activo',1)->orderBy('nombre')->paginate(50);
-        return view('usuario.index',compact('usuarios','id'));
+    public function vendedor($id)
+    {
+        $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->where('activo', 1)->orderBy('nombre')->paginate(50);
+        return view('usuario.index', compact('usuarios', 'id'));
     }
 
-    public function asignar($id,$cliente_id){
+    public function asignar($id, $cliente_id)
+    {
         $cliente = Cliente::find($cliente_id);
         $cliente->usuario_id=$id;
         $cliente->save();
         return redirect('cliente/'.$cliente_id);
     }
-    public function asignarMultiple(Request $request,$id){
-        $clientes = Cliente::whereIn('id',$request->get('clientes'))->get();
-        foreach($clientes as $cliente){
+    public function asignarMultiple(Request $request, $id)
+    {
+        $clientes = Cliente::whereIn('id', $request->get('clientes'))->get();
+        foreach ($clientes as $cliente) {
             $cliente->usuario_id=$id;
             $cliente->save();
         }
         return redirect('e/usuario/'.$id);
     }
-    public function desasignar($id,$cliente_id){
+    public function desasignar($id, $cliente_id)
+    {
         $cliente = Cliente::find($cliente_id);
         $cliente->usuario_id=0;
         $cliente->save();
@@ -197,12 +210,12 @@ class ClienteController extends Controller
      * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function show( $id)
+    public function show($id)
     {
         $cliente=Cliente::find($id);
-        $tiposVisita = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo','id');
+        $tiposVisita = TipoVisita::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo', 'id');
         $tiempoVisita=['10'=>'10 minutos','20'=>'20 minutos','30'=>'30 minutos','45'=>'45 minutos','60'=>'1 hora','90'=>'1 hora y 30 minutos','120'=>'2 horas','180'=>'3 horas','240'=>'4 horas'];
-        return view('cliente.show',compact('cliente','tiposVisita','tiempoVisita'));
+        return view('cliente.show', compact('cliente', 'tiposVisita', 'tiempoVisita'));
     }
 
     /**
@@ -211,14 +224,14 @@ class ClienteController extends Controller
      * @param  \App\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function edit( $id)
+    public function edit($id)
     {
         $cliente=Cliente::find($id);
-        $clasificacion=Clasificacion::get()->pluck('clasificacion','id');
-        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id'); 
-        $paises = Pais::orderBy('pais')->get()->pluck('pais','id');
-        $vendedores = User::where('empresa_id',Auth::user()->empresa_id)->get()->pluck('full_name','id');
-        return view('cliente.form',compact('cliente','clasificacion','ciudades','vendedores','paises'));
+        $clasificacion=Clasificacion::get()->pluck('clasificacion', 'id');
+        $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad', 'id');
+        $paises = Pais::orderBy('pais')->get()->pluck('pais', 'id');
+        $vendedores = User::where('empresa_id', Auth::user()->empresa_id)->get()->pluck('full_name', 'id');
+        return view('cliente.form', compact('cliente', 'clasificacion', 'ciudades', 'vendedores', 'paises'));
     }
 
     /**
@@ -247,7 +260,8 @@ class ClienteController extends Controller
             'email'=>$request->get('email'),
             'ruc'=>$request->get('ruc'),
         ]);
-        return redirect('cliente')->with('mensaje', 'Cliente actualizado con exito!');;
+        return redirect('cliente')->with('mensaje', 'Cliente actualizado con exito!');
+        ;
     }
 
     public function actualizaCliente(Request $request)
@@ -288,6 +302,4 @@ class ClienteController extends Controller
     {
         //
     }
-
-    
 }
