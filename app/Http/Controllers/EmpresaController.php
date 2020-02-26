@@ -22,7 +22,7 @@ class EmpresaController extends Controller
     public function index()
     {
         $empresas = Empresa::orderBy('nombre')->paginate(50);
-        return view('empresa.index',compact('empresas'));
+        return view('empresa.index', compact('empresas'));
     }
 
     /**
@@ -33,8 +33,8 @@ class EmpresaController extends Controller
     public function create()
     {
         $empresa = null;
-        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('empresa.form',compact('empresa','ciudad'));
+        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad', 'id');
+        return view('empresa.form', compact('empresa', 'ciudad'));
     }
 
     /**
@@ -45,8 +45,7 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        
-        if($request->is('api/*')){
+        if ($request->is('api/*')) {
             $dataEmp=[];
             $dataEmp['nombre']=$request->get('empresa');
             $dataEmp['costo']=0;
@@ -61,13 +60,13 @@ class EmpresaController extends Controller
             $data['password']=bcrypt($request->get('password'));
             $usuario=$empresa->usuarios()->create($data);
             $usuario->syncRoles('Administrador');
-            if($request->has('foto') && $request->get('foto')!=null){
+            if ($request->has('foto') && $request->get('foto')!=null) {
                 $usuario->foto=$request->file('foto')->store('public/usuarios');
                 $usuario->save();
             }
-            $usuario->notify(new EmpresaRegistradaNotification($usuario,$request->get('password')));
+            $usuario->notify(new EmpresaRegistradaNotification($usuario, $request->get('password')));
             return response()->json(['creado'=>true]);
-        }else{
+        } else {
             $empresa = Empresa::create($request->all());
             $empresa->configuracion()->create();
         }
@@ -83,15 +82,15 @@ class EmpresaController extends Controller
     public function show($id)
     {
         $empresa = Empresa::find($id);
-        $clientes = Cliente::where('empresa_id',$id)->get();
-        $visitas = Visita::whereHas('cliente',function($query) use($clientes){
-            $query->whereIn('cliente_id',$clientes->pluck('id'));
+        $clientes = Cliente::where('empresa_id', $id)->get();
+        $visitas = Visita::whereHas('cliente', function ($query) use ($clientes) {
+            $query->whereIn('cliente_id', $clientes->pluck('id'));
         })->get()->count();
-        $visitasTerminadas = Visita::whereHas('cliente',function($query) use($clientes){
-            $query->whereIn('cliente_id',$clientes->pluck('id'));
-        })->where('estado_visita_id',5)->get()->count();
+        $visitasTerminadas = Visita::whereHas('cliente', function ($query) use ($clientes) {
+            $query->whereIn('cliente_id', $clientes->pluck('id'));
+        })->where('estado_visita_id', 5)->get()->count();
         $usuarios=$empresa->usuarios;
-        return view('empresa.show',compact('empresa','visitas','visitasTerminadas','clientes','usuarios'));
+        return view('empresa.show', compact('empresa', 'visitas', 'visitasTerminadas', 'clientes', 'usuarios'));
     }
 
     /**
@@ -103,8 +102,8 @@ class EmpresaController extends Controller
     public function edit($id)
     {
         $empresa = Empresa::find($id);
-        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
-        return view('empresa.form',compact('empresa','ciudad'));
+        $ciudad = Ciudad::orderBy('ciudad')->get()->pluck('ciudad', 'id');
+        return view('empresa.form', compact('empresa', 'ciudad'));
     }
 
     /**
