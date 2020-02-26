@@ -40,11 +40,16 @@ class LlenaVisitaTerminadaCommand extends Command
      */
     public function handle()
     {
-        $visitas = Visita::whereBetween('fecha_fin',[Carbon::now()->subMinutes(180)->toDateTimeString(),Carbon::now()->subMinutes(120)->toDateTimeString()])->whereIn('estado_visita_id',[1,2,3,4,5])->get();
+        $visitas = Visita::whereBetween('fecha_fin', [
+                            Carbon::now()->subMinutes(180)->toDateTimeString(),
+                            Carbon::now()->subMinutes(120)->toDateTimeString()
+                        ])
+                        ->whereIn('estado_visita_id', [1,2,3,4,5])->get();
         
-        foreach($visitas as $visita){
-            if($visita->detalles->count()==0)
+        foreach ($visitas as $visita) {
+            if ($visita->detalles->count()==0) {
                 $visita->vendedor->notify(new LlenaVisitaNotification($visita->id));
+            }
         }
     }
 }

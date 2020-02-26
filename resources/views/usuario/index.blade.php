@@ -44,7 +44,7 @@
                                                         <th>Nombre</th>
                                                         <th>Email</th>
                                                         <th>Telefono</th>
-                                                        <th>Rol</th>
+                                                        <th>Rol - Versión</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -57,7 +57,7 @@
                                                         </td>
                                                         <td>{{$user->email}}</td>
                                                         <td>{{$user->telefono}}</td>
-                                                        <td>{{$user->getRoleNames()->implode(',')}}</td>
+                                                        <td>{{$user->getRoleNames()->implode(',')}}<br>{{$user->version}}</td>
                                                         <td>
                                                         @if(Request::is('e/usuario/asignar'))  
                                                             @if($user->user_id == Auth::user()->id)

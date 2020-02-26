@@ -75,14 +75,19 @@ class APIAuthController extends Controller
       *
       * @return \Illuminate\Http\JsonResponse
       */
-    public function me()
+    public function me($version_app = null)
     {
         try {
             $user = User::where('id', auth('api')->user()->id)->with(['empresa.configuracion'])->first();
+            if ($version_app!=null) {
+                $user->version=$version_app;
+                $user->save();
+            }
             $roles = $user->getRoleNames();
             $ciudades = Ciudad::orderBy('ciudad')->get();
             $vendedores = User::where('empresa_id', auth('api')->user()->empresa_id)->with(['roles'])->orderBy('nombre')->get();
-            return response()->json(compact('user', 'roles', 'ciudades', 'vendedores'));
+            $version = Config::get('app.version_app');
+            return response()->json(compact('user', 'roles', 'ciudades', 'vendedores', 'version'));
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json(['token_absent'], $e->getStatusCode());
         }

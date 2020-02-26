@@ -40,8 +40,8 @@ class TareasProximasCommand extends Command
      */
     public function handle()
     {
-        $tareas = Tarea::whereBetween('fecha_notificacion',[Carbon::now()->toDateTimeString(),Carbon::now()->addMinutes(1)->toDateTimeString()])->where('realizado',0)->get();
-        foreach($tareas as $tarea){
+        $tareas = Tarea::whereBetween('fecha_notificacion', [Carbon::now()->toDateTimeString(),Carbon::now()->addMinutes(1)->toDateTimeString()])->where('realizado', 0)->get();
+        foreach ($tareas as $tarea) {
             $tarea->usuario->notify(new TareaProximaNotification($tarea->id));
         }
     }

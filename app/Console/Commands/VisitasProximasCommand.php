@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 use App\Models\Visita;
 use Carbon\Carbon;
 
-
 class VisitasProximasCommand extends Command
 {
     /**
@@ -41,8 +40,8 @@ class VisitasProximasCommand extends Command
      */
     public function handle()
     {
-        $visitas = Visita::whereBetween('fecha_inicio',[Carbon::now()->toDateTimeString(),Carbon::now()->addMinutes(15)->toDateTimeString()])->whereIn('estado_visita_id',[1,2,3,4])->get();
-        foreach($visitas as $visita){
+        $visitas = Visita::whereBetween('fecha_inicio', [Carbon::now()->toDateTimeString(),Carbon::now()->addMinutes(15)->toDateTimeString()])->whereIn('estado_visita_id', [1,2,3,4])->get();
+        foreach ($visitas as $visita) {
             $visita->vendedor->notify(new VisitaProximaNotification($visita->id));
         }
     }

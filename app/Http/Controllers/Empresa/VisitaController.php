@@ -180,9 +180,15 @@ class VisitaController extends Controller
             $data['fecha_fin']=Carbon::parse($data['fecha'].' '.$data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
         }
         $visita=Visita::create($data);
+        $previsita=null;
+        if ($request->is('api/*')) {
+            $previsita= $visita->tipoVisita->plantillaPre->detalles()->with(['visita'=>function ($query) use ($visita) {
+                $query->where('id', $visita->id);
+            }])->orderBy('orden')->get();
+        }
         $validate=true;
         $visita->vendedor->notify(new NuevaVisitaNotification($visita->id));
-        return response()->json(compact('visita', 'validate'));
+        return response()->json(compact('visita', 'validate', 'previsita'));
     }
 
     /**
@@ -368,5 +374,25 @@ class VisitaController extends Controller
     public function adicionales(Visita $visita)
     {
         return $visita->usuarios_adicionales->pluck('id');
+    }
+
+    public function buscarNoLlenada()
+    {
+        $visitas = Visita::where(
+            'fecha_fin',
+            '<=',
+            now()->subMinutes(180)->toDateTimeString()
+        )
+        ->whereIn('estado_visita_id', [1,2,3,4,5])
+        ->where('usuario_id', auth()->user()->id)
+        ->orderBy('fecha_inicio')
+        ->with(['vendedor','cliente','estado'])
+        ->get()
+        ->filter(function ($visita, $key) {
+            if ($visita->tipoVisita->plantillaVisita->detalles->count()>0) {
+                return $visita;
+            }
+        });
+        return response()->json(compact('visitas'));
     }
 }

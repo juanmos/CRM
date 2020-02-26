@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Cliente;
 use App\Models\Empresa;
 
-
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -23,7 +22,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios','empresa_id','primer_login','foto','activo','latitud','longitud','cedula','user_id'
+        'nombre','apellido', 'email', 'password','telefono','facebook_id','token_and','token_ios',
+        'empresa_id','primer_login','foto','activo','latitud','longitud','cedula','user_id','version'
     ];
     
     /**
@@ -44,20 +44,24 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function clientes(){
-        return $this->hasMany(Cliente::class,'usuario_id');
+    public function clientes()
+    {
+        return $this->hasMany(Cliente::class, 'usuario_id');
     }
 
-    public function empresa(){
-        return $this->belongsTo(Empresa::class,'empresa_id');
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 
-    public function misUsuarios(){
-        return $this->hasMany(User::class,'user_id');
+    public function misUsuarios()
+    {
+        return $this->hasMany(User::class, 'user_id');
     }
 
-    public function usuarios_adicionales(){
-        return $this->belongsToMany(User::class,'tarea_users','tarea_id','user_id')->as('adicionales');
+    public function usuarios_adicionales()
+    {
+        return $this->belongsToMany(User::class, 'tarea_users', 'tarea_id', 'user_id')->as('adicionales');
     }
 
     public function getFullNameAttribute()
@@ -65,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
         return "{$this->nombre} {$this->apellido}";
     }
 
-      /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -91,7 +95,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function routeNotificationForApn()
-{
-    return $this->token_ios;
-}
+    {
+        return $this->token_ios;
+    }
 }

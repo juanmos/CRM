@@ -26,7 +26,7 @@ class ReporteControllerTest extends TestCase
     public function test_visitas_usuarios()
     {
         $this->actingAs(User::first());
-        factory(Visita::class,15)->create();
+        factory(Visita::class, 15)->create();
         $response = $this->get('/e/reporte/visitas');
 
         $response->assertStatus(200);
@@ -41,8 +41,8 @@ class ReporteControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(User::first());
-        factory(Visita::class,15)->create();
-        $response = $this->post('/e/reporte/visitas',[
+        factory(Visita::class, 15)->create();
+        $response = $this->post('/e/reporte/visitas', [
             'fecha_inicio'=>now()->subDays(5)->format('Y-m-d'),
             'fecha_fin'=>now()->addDays(5)->format('Y-m-d'),
         ]);
@@ -58,8 +58,8 @@ class ReporteControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(User::first());
-        factory(Visita::class,15)->create();
-        $response = $this->post('/e/reporte/visitas',[
+        factory(Visita::class, 15)->create();
+        $response = $this->post('/e/reporte/visitas', [
             'fecha_inicio'=>now()->subDays(5)->format('Y-m-d'),
             'fecha_fin'=>now()->addDays(5)->format('Y-m-d'),
             'estado_id'=>1
@@ -76,8 +76,8 @@ class ReporteControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(User::first());
-        factory(Visita::class,15)->create();
-        $response = $this->post('/e/reporte/visitas',[
+        factory(Visita::class, 15)->create();
+        $response = $this->post('/e/reporte/visitas', [
             'fecha_inicio'=>now()->subDays(5)->format('Y-m-d'),
             'fecha_fin'=>now()->addDays(5)->format('Y-m-d'),
             'estadoIid'=>1,

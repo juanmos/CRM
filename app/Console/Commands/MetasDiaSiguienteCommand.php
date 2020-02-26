@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Objetivo;
 use Carbon\Carbon;
+
 class MetasDiaSiguienteCommand extends Command
 {
     /**
@@ -39,8 +40,8 @@ class MetasDiaSiguienteCommand extends Command
     public function handle()
     {
         $fecha=Carbon::now()->toDateString();
-        $metas = Objetivo::where('porcentaje','<',100)->where('fecha',Carbon::now()->subDays(1)->toDateString())->get();
-        foreach($metas as $meta){
+        $metas = Objetivo::where('porcentaje', '<', 100)->where('fecha', Carbon::now()->subDays(1)->toDateString())->get();
+        foreach ($metas as $meta) {
             $newMeta = $meta->replicate();
             $newMeta->fecha=$fecha;
             $newMeta->save();
