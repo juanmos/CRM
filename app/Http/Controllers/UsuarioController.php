@@ -17,7 +17,7 @@ class UsuarioController extends Controller
     public function index()
     {
         $usuarios = User::orderBy('nombre')->paginate(50);
-        return view('usuario.index',compact('usuarios'));
+        return view('usuario.index', compact('usuarios'));
     }
 
     /**
@@ -29,8 +29,8 @@ class UsuarioController extends Controller
     {
         $empresa =null;
         $usuario = null;
-        $roles = Role::orderBy('name')->get()->pluck('name','name');
-        return view('usuario.form',compact('empresa','id','usuario','roles'));
+        $roles = Role::orderBy('name')->get()->pluck('name', 'name');
+        return view('usuario.form', compact('empresa', 'usuario', 'roles'));
     }
 
     /**
@@ -42,7 +42,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $usuario = User::create($request->except(['foto']));
-        if($request->has('foto')){
+        if ($request->has('foto')) {
             $usuario->foto=$request->file('foto')->store('public/usuarios');
             $usuario->save();
         }
@@ -71,8 +71,8 @@ class UsuarioController extends Controller
     {
         $empresa =null;
         $usuario = User::find($id);
-        $roles = Role::orderBy('name')->get()->pluck('name','name');
-        return view('usuario.form',compact('empresa','id','usuario','roles'));
+        $roles = Role::orderBy('name')->get()->pluck('name', 'name');
+        return view('usuario.form', compact('empresa', 'id', 'usuario', 'roles'));
     }
 
     /**
@@ -86,16 +86,20 @@ class UsuarioController extends Controller
     {
         $usuario = User::find($id);
         $usuario->update($request->except(['foto','password']));
-        if($request->has('foto')){
+        if ($request->has('foto')) {
             $usuario->foto=$request->file('foto')->store('public/usuarios');
             $usuario->save();
         }
-        if($request->has('password')){
+        if ($request->has('password')) {
             $usuario->password=bcrypt($request->get('password'));
             $usuario->save();
         }
-        if($request->has('role')) $usuario->syncRoles($request->get('role'));
-        if(Auth::user()->hasRole('SuperAdministrador')) return redirect('empresa/'.$usuario->empresa_id);
+        if ($request->has('role')) {
+            $usuario->syncRoles($request->get('role'));
+        }
+        if (Auth::user()->hasRole('SuperAdministrador')) {
+            return redirect('empresa/'.$usuario->empresa_id);
+        }
         return redirect('usuario');
     }
 
