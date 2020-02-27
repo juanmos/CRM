@@ -99,5 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('reporte/visitas', 'Empresa\ReporteController@visitas')->name('reporte.visitas');
         Route::post('reporte/visitas', 'Empresa\ReporteController@filtrar')->name('reporte.visitas.filtrar');
         Route::post('reporte/exportar', 'Empresa\ReporteController@exportar')->name('reporte.visitas.exportar');
+
+        Route::get('objetivos','ObjetivoController@lista')->name('objetivos.index');
     });
 });

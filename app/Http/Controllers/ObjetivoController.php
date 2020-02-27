@@ -23,6 +23,7 @@ class ObjetivoController extends Controller
     {
         $objetivos=Objetivo::orderBy('fecha','desc')->paginate(50);
         if($request->is('api/*')) return response()->json($objetivos);
+        return view('objetivo.index',compact('objetivos'));
     }
 
     /**
@@ -82,7 +83,7 @@ class ObjetivoController extends Controller
     public function update(Request $request, $id)
     {
         $data=$request->all();
-        
+
         $objetivo = Objetivo::find($id);
         $objetivo->update($data);
         if($request->is('api/*')) return $objetivo;
