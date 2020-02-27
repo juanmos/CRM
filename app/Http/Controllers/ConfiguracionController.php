@@ -16,7 +16,7 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        
+        abort(401);
     }
 
     /**
@@ -26,7 +26,7 @@ class ConfiguracionController extends Controller
      */
     public function create()
     {
-        //
+        abort(401);
     }
 
     /**
@@ -37,7 +37,7 @@ class ConfiguracionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort(401);
     }
 
     /**
@@ -48,7 +48,7 @@ class ConfiguracionController extends Controller
      */
     public function show($id)
     {
-        //
+        abort(401);
     }
 
     /**
