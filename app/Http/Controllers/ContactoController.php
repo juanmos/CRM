@@ -18,7 +18,7 @@ class ContactoController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     public function buscar(Request $request){
@@ -87,7 +87,7 @@ class ContactoController extends Controller
         $contacto = Contacto::find($id);
         $ciudades = Ciudad::orderBy('ciudad')->get()->pluck('ciudad','id');
         $oficinas = Oficina::orderBy('direccion')->get()->pluck('direccion','id');
-        return view('contacto.form',compact('contacto','cliente_id','ciudades','oficinas'));
+        return view('contacto.form',compact('contacto','ciudades','oficinas'));
     }
 
     /**
