@@ -38,7 +38,7 @@ class ClienteController extends Controller
                 //->where('usuario_id',$usuario_id)
                 ->orderBy('nombre')->with(['facturacion','vendedor','clasificacion','contactos','oficinas.ciudad'])->paginate(20);
         }
-        
+
         if ($request->is('api/*')) {
             return response()->json(compact('clientes', 'usuario_id'));
         }
@@ -64,7 +64,7 @@ class ClienteController extends Controller
             $fechaFin = new Carbon($request->get('end'));
             $visitas = Visita::where("cliente_id", $id)->whereBetween('fecha_inicio', array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->get();
         }
-        
+
         foreach ($visitas as $visita) {
             $visita->title=$visita->vendedor->full_name.' Visita: '.$visita->tipoVisita->tipo;
             ;
@@ -166,7 +166,7 @@ class ClienteController extends Controller
                 'oficina_id'=>$oficina->id
             ]);
         }
-        
+
         if ($request->is('api/*')) {
             return response()->json(['created'=>true,'cliente'=>$cliente]);
         }
@@ -207,7 +207,7 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Cliente  $cliente
+     * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
     public function show($id)

@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('usuario', 'UsuarioController');
     Route::resource('configuracion', 'ConfiguracionController');
     Route::resource('plantilla', 'PlantillaController');
-    
+
 
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
     Route::post('contacto/store/{cliente_id}/{json?}', 'ContactoController@store')->name('contacto.store');
@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('oficina/update/{id}', 'OficinaController@update')->name('oficina.update');
     Route::delete('oficina/{id}', 'OficinaController@destroy')->name('oficina.destroy');
 
+    Route::get('cliente/{cliente}/ver','ClienteController@show')->name('cliente.show');
     Route::get('cliente/vendedor/{cliente_id}', 'ClienteController@vendedor')->name('cliente.vendedor');
     Route::get('cliente/listado/{user_id}', 'ClienteController@index')->name('cliente.listado');
     Route::get('cliente/asignar/{user_id}/{cliente_id}', 'ClienteController@asignar')->name('cliente.asignar');
@@ -50,7 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cliente/visitas/{id}', 'ClienteController@visitas')->name('cliente.visitas');
 
 
-    
+
 
     Route::post('plantilla/campo/crear/{id}', 'PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::get('plantilla/campo/edit/{id}', 'PlantillaController@editarCampo')->name('plantilla.campo.editar');
@@ -90,7 +91,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::get('visita/{id?}','Empresa\VisitaController@index')->name('visita.index');
 
         Route::get('ciudades', 'Empresa\VariosController@ciudades')->name('varios.ciudades');
-        
+
         Route::get('importaciones/', 'Empresa\ImportacionesController@index')->name('importaciones.index');
         Route::get('importaciones/upload/excel/{tipo}', 'Empresa\ImportacionesController@cargar')->name('importaciones.upload');
         Route::post('importaciones/import/excel/{tipo}', 'Empresa\ImportacionesController@import')->name('importaciones.import');
