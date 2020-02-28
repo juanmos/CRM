@@ -10,6 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Models\Objetivo;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -62,6 +63,11 @@ class User extends Authenticatable implements JWTSubject
     public function usuarios_adicionales()
     {
         return $this->belongsToMany(User::class, 'tarea_users', 'tarea_id', 'user_id')->as('adicionales');
+    }
+
+    public function objetivos()
+    {
+        return $this->hasMany(Objetivo::class, 'usuario_id');
     }
 
     public function getFullNameAttribute()

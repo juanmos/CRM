@@ -13,17 +13,21 @@ class ObjetivoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$fecha)
+    public function index(Request $request, $fecha)
     {
-        $objetivos=Objetivo::where('fecha',$fecha)->paginate(50);
-        if($request->is('api/*')) return response()->json($objetivos);
+        $objetivos=auth()->user()->objetivos()->where('fecha', $fecha)->paginate(50);
+        if ($request->is('api/*')) {
+            return response()->json($objetivos);
+        }
     }
 
     public function lista(Request $request)
     {
-        $objetivos=Objetivo::orderBy('fecha','desc')->paginate(50);
-        if($request->is('api/*')) return response()->json($objetivos);
-        return view('objetivo.index',compact('objetivos'));
+        $objetivos=auth()->user()->objetivos()->orderBy('fecha', 'desc')->paginate(50);
+        if ($request->is('api/*')) {
+            return response()->json($objetivos);
+        }
+        return view('objetivo.index', compact('objetivos'));
     }
 
     /**
@@ -47,8 +51,10 @@ class ObjetivoController extends Controller
         $data=$request->all();
         $data['usuario_id']=Auth::user()->id;
         $objetivo = Objetivo::create($data);
-        if($request->is('api/*')) return $objetivo;
-        return redirect('cliente/'.$nota->cliente_id);
+        if ($request->is('api/*')) {
+            return $objetivo;
+        }
+        return redirect()->route('objetivos.index');
     }
 
     /**
@@ -86,7 +92,9 @@ class ObjetivoController extends Controller
 
         $objetivo = Objetivo::find($id);
         $objetivo->update($data);
-        if($request->is('api/*')) return $objetivo;
+        if ($request->is('api/*')) {
+            return $objetivo;
+        }
         return redirect('cliente/'.$nota->cliente_id);
     }
 
