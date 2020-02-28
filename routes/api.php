@@ -82,5 +82,5 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('metas/{fecha}', 'ObjetivoController@index');
     Route::get('meta/list/', 'ObjetivoController@lista');
     Route::post('meta', 'ObjetivoController@store');
-    Route::put('meta/{id}', 'ObjetivoController@update');
+    Route::put('meta/{objetivo}', 'ObjetivoController@update');
 });

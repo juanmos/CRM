@@ -86,16 +86,14 @@ class ObjetivoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Objetivo $objetivo)
     {
         $data=$request->all();
-
-        $objetivo = Objetivo::find($id);
         $objetivo->update($data);
         if ($request->is('api/*')) {
             return $objetivo;
         }
-        return redirect('cliente/'.$nota->cliente_id);
+        return redirect()->route('objetivos.index');
     }
 
     /**

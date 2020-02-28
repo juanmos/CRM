@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('oficina/update/{id}', 'OficinaController@update')->name('oficina.update');
     Route::delete('oficina/{id}', 'OficinaController@destroy')->name('oficina.destroy');
 
-    Route::get('cliente/{cliente}/ver','ClienteController@show')->name('cliente.show');
+    Route::get('cliente/{cliente}/ver', 'ClienteController@show')->name('cliente.show');
     Route::get('cliente/vendedor/{cliente_id}', 'ClienteController@vendedor')->name('cliente.vendedor');
     Route::get('cliente/listado/{user_id}', 'ClienteController@index')->name('cliente.listado');
     Route::get('cliente/asignar/{user_id}/{cliente_id}', 'ClienteController@asignar')->name('cliente.asignar');
@@ -100,6 +100,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('reporte/visitas', 'Empresa\ReporteController@filtrar')->name('reporte.visitas.filtrar');
         Route::post('reporte/exportar', 'Empresa\ReporteController@exportar')->name('reporte.visitas.exportar');
 
-        Route::get('objetivos','ObjetivoController@lista')->name('objetivos.index');
+        Route::get('objetivos', 'ObjetivoController@lista')->name('objetivos.index');
+        Route::post('objetivos', 'ObjetivoController@store')->name('objetivos.store');
+        Route::put('objetivos/{objetivo}', 'ObjetivoController@update')->name('objetivos.update');
     });
 });
