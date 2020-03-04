@@ -381,16 +381,15 @@ class VisitaController extends Controller
         $visitas = Visita::where(
             'fecha_fin',
             '<=',
-            now()->subMinutes(180)->toDateTimeString()
+            '2020-02-28'
         )
         ->whereIn('estado_visita_id', [1,2,3,4,5])
         ->where('usuario_id', auth()->user()->id)
-        ->where('fecha_inicio','>','2020-02-28')
         ->orderBy('fecha_inicio')
         ->with(['vendedor','cliente','estado'])
         ->get()
         ->filter(function ($visita, $key) {
-            if ($visita->tipoVisita->plantillaVisita->detalles->count()>0) {
+            if ($visita->tipoVisita->plantillaVisita->detalles->count()==0) {
                 return $visita;
             }
         });
