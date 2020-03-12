@@ -289,33 +289,44 @@ class VisitaController extends Controller
     public function savePrevisita(Request $request, $id)
     {
         if ($request->is('api/*')) {
-            $visita = Visita::find($id)->detalles();
+            $visita = Visita::find($id);
+            if ($visita->estado_visita_id == 1) {
+                $visita->estado_visita_id=2;
+                $visita->save();
+            }
+            $detallesVisita = $visita->detalles();
             if (PlantillaDetalle::find($request->get('id'))->tipo_campo!=6) {
-                $visita->detach($request->get('id'));
-                $visita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
+                $detallesVisita->detach($request->get('id'));
+                $detallesVisita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
             } else {
                 if ($request->get('value')=='0') {
                     DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ? and valor = ? ', [$request->get('id'),$id,$request->get('valor')]);
                 } else {
-                    if ($visita->wherePivot('valor', $request->get('valor'))->get()->count()>0) {
+                    if ($detallesVisita->wherePivot('valor', $request->get('valor'))->get()->count()>0) {
                         DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id=? and valor=?', [$request->get('id'),$id,$request->get('valor')]);
                     }
-                    $visita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
+                    $detallesVisita->attach($request->get('id'), ['valor'=>$request->get('valor')]);
                 }
             }
             return response()->json(['guardado'=>true]);
         } else {
             $inputs = $request->except(['_token','pest']);
-            $visita = Visita::find($id)->detalles();
+            $visita = Visita::find($id);
+            if ($visita->estado_visita_id == 1) {
+                $visita->estado_visita_id=2;
+                $visita->save();
+            }
+            $detallesVisita = $visita->detalles();
+
             foreach ($inputs as $key => $input) {
                 $val=explode('_', $key);
                 if (PlantillaDetalle::find($val[1])->tipo_campo!=6) {
-                    $visita->detach($val[1]);
-                    $visita->attach($val[1], ['valor'=>$input]);
+                    $detallesVisita->detach($val[1]);
+                    $detallesVisita->attach($val[1], ['valor'=>$input]);
                 } else {
                     DB::delete('delete from plantilla_detalles_visitas where plantilla_detalle_id = ? and visita_id = ?', [$val[1],$id]);
                     foreach ($input as $value) {
-                        $visita->attach($val[1], ['valor'=>$value]);
+                        $detallesVisita->attach($val[1], ['valor'=>$value]);
                     }
                 }
             }
@@ -327,7 +338,13 @@ class VisitaController extends Controller
     public function saveVisita(Request $request, $id)
     {
         $inputs = $request->except(['_token','pest']);
-        $visita = Visita::find($id)->detalles();
+        $visita = Visita::find($id);
+        if ($visita->estado_visita_id < 5) {
+            $visita->estado_visita_id=5;
+            $visita->save();
+        }
+        $visita = $visita->detalles();
+
         foreach ($inputs as $key => $input) {
             $val=explode('_', $key)[1];
             if (PlantillaDetalle::find($val)->tipo_campo!=6) {
@@ -383,7 +400,7 @@ class VisitaController extends Controller
             '<=',
             now()->subMinutes(180)->toDateTimeString()
         )
-        ->whereIn('estado_visita_id', [1,2,3,4,5])
+        ->whereIn('estado_visita_id', [1,2,5])
         ->where('usuario_id', auth()->user()->id)
         ->orderBy('fecha_inicio')
         ->with(['vendedor','cliente','estado'])
