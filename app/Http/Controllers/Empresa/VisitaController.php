@@ -290,10 +290,19 @@ class VisitaController extends Controller
     {
         if ($request->is('api/*')) {
             $visita = Visita::find($id);
-            if ($visita->estado_visita_id == 1) {
-                $visita->estado_visita_id=2;
-                $visita->save();
+            $plantilla = PlantillaDetalle::findOrFail($request->get('id'))->plantilla()->first();
+            if ($plantilla->previsita) {
+                if ($visita->estado_visita_id == 1) {
+                    $visita->estado_visita_id=2;
+                    $visita->save();
+                }
+            } else {
+                if ($visita->estado_visita_id < 5) {
+                    $visita->estado_visita_id=5;
+                    $visita->save();
+                }
             }
+            
             $detallesVisita = $visita->detalles();
             if (PlantillaDetalle::find($request->get('id'))->tipo_campo!=6) {
                 $detallesVisita->detach($request->get('id'));
