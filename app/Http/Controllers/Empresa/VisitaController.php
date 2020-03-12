@@ -121,7 +121,7 @@ class VisitaController extends Controller
     {
         $fechaIni = new Carbon($request->get('start'));
         $fechaFin = new Carbon($request->get('end'));
-        
+
         $visitas = Visita::whereBetween('fecha_inicio', array($fechaIni->toDateString().' 00:00:00' ,$fechaFin->toDateString().' 23:59:59' ))->with('vendedor')->get();
         foreach ($visitas as $visita) {
             $visita->title=$visita->cliente->nombre.' Visita: '.$visita->tipoVisita->tipo;
@@ -378,7 +378,7 @@ class VisitaController extends Controller
                 User::find($id)->notify(new AcompananteVisitaNotification('agregado', $visita));
             }
         }
-        
+
         return ($request->is('api/*'))? response()->json(["guardado"=>true]): back();
     }
     public function deleteUser(Request $request, $id, $user_id)
@@ -398,7 +398,7 @@ class VisitaController extends Controller
         $visitas = Visita::where(
             'fecha_fin',
             '<=',
-            now()->subMinutes(180)->toDateTimeString()
+            '2020-02-28'
         )
         ->whereIn('estado_visita_id', [1,2,5])
         ->where('usuario_id', auth()->user()->id)
@@ -406,7 +406,7 @@ class VisitaController extends Controller
         ->with(['vendedor','cliente','estado'])
         ->get()
         ->filter(function ($visita, $key) {
-            if ($visita->tipoVisita->plantillaVisita->detalles->count()>0) {
+            if ($visita->tipoVisita->plantillaVisita->detalles->count()==0) {
                 return $visita;
             }
         });
