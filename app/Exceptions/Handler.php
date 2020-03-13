@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use App;
 
 class Handler extends ExceptionHandler
 {
@@ -35,7 +36,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        
+        if (App::environment() == 'production') {
+            if (app()->bound('sentry') && $this->shouldReport($exception)) {
+                app('sentry')->captureException($exception);
+            }
+        }
         parent::report($exception);
     }
 
@@ -52,16 +57,16 @@ class Handler extends ExceptionHandler
             $preException = $exception->getPrevious();
             if ($preException instanceof
                         \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return response()->json(['error' => 'token_expired'],400);
-            } else if ($preException instanceof
+                return response()->json(['error' => 'token_expired'], 400);
+            } elseif ($preException instanceof
                         \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return response()->json(['error' => 'TOKEN_INVALID'],400);
-            } else if ($preException instanceof
+                return response()->json(['error' => 'TOKEN_INVALID'], 400);
+            } elseif ($preException instanceof
                     \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
-                return response()->json(['error' => 'TOKEN_BLACKLISTED'],400);
+                return response()->json(['error' => 'TOKEN_BLACKLISTED'], 400);
             }
             if ($exception->getMessage() === 'Token not provided') {
-                return response()->json(['error' => 'Token not provided'],400);
+                return response()->json(['error' => 'Token not provided'], 400);
             }
         }
         return parent::render($request, $exception);
