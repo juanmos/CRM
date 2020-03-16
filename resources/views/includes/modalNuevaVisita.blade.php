@@ -187,9 +187,9 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="col-md-7 control-label ">Lugar de visita: </label>
+                                <label class="col-md-7 control-label ">Lugar de visita*: </label>
                                 <div class="col-md-12">
-                                    <input type="text" required name="lugar_visita" class="form-control" >
+                                    <input type="text" required name="lugar_visita" class="form-control" id="lugar_visita">
                                 </div>
                             </div>
                         </div>
@@ -219,14 +219,30 @@
   $(document).ready(function(){
     var usuario_id={{($usuario_id!=null)?$usuario_id:Auth::user()->id}};
     $(document).on('click','#aceptCreate',function(e){
-      if ($('#cliente_id').val() != '') {
-        var data = {cliente_id:$('#cliente_id').val() ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:$('#usuario_id').val(),tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:$('select[name=contacto_id]').val(),_token:'{{csrf_token()}}'};
+        if ($('#cliente_id').val() == '') {
+            alert('Campo requerido');
+            $("#nombreAdd").focus();
+            return false;
+        }
+          if ($('#lugar_visita').val() == '') {
+            alert('Lugar de visita es campo requerido');
+            $("#lugar_visita").focus();
+            return false;
+        }
+        var data = {
+            cliente_id:$('#cliente_id').val() ,
+            horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', 
+            fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), 
+            usuario_id:$('#usuario_id').val(),
+            tipo_visita_id:$('select[name=tipo_visita_id]').val(), 
+            tiempo_visita:$('select[name=tiempo_visita]').val(),
+            contacto_id:$('select[name=contacto_id]').val(),
+            lugar_visita:$('input[name=lugar_visita]').val(),
+            _token:'{{csrf_token()}}'
+        };
         saveVisita(data);
         
-      }else {
-        alert('Campo requerido');
-        $("#nombreAdd").focus();
-      }
+      
     });
     function saveVisita(data) { 
       $.post("{{route('visita.store')}}",data,function(json){          
@@ -234,10 +250,12 @@
         if(json.validate){
             try{
               calendar.refetchEvents();
-              $.notify('Cita creada con éxito',{className: "success",globalPosition:'top center'});                      
+              $.notify('Cita creada con éxito',{className: "success",globalPosition:'top center'});       
+              
             }catch(e){
                 $.notify('Cita creada con éxito',{className: "success",globalPosition:'top center'});   
-            }                    
+            } 
+            window.location.href = "{{url('e/visita/')}}/"+json.visita.id;                   
         }else{
           alert("La cita no pudo ser creada por conflictos de horario, por favor revise e intente nuevamente");
         }

@@ -2,14 +2,12 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="card card-signup card-plain"> 
-                {{-- <div class="modal-header"> --}}
                   <div class="card-header card-header-blue text-center">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">   
                       <i class="material-icons">clear</i>
                     </button>
                     <h4 class="card-title"> Datos de la visita</h4> 
                   </div>
-                {{-- </div> --}}
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -69,7 +67,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label class="col-md-7 control-label ">Lugar de visita: </label>
+                                        <label class="col-md-7 control-label ">Lugar de visita*: </label>
                                         <div class="col-md-12">
                                             <input type="text" required name="lugar_visita" class="form-control" >
                                         </div>
@@ -144,7 +142,17 @@
   $(document).ready(function(){
     $(document).on('click','#aceptCreate',function(e){
       if ($('#cliente_id').val() != '') {
-        var data = {cliente_id:{{$cliente->id}} ,horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), usuario_id:$('select[name=usuario_id]').val(),tipo_visita_id:$('select[name=tipo_visita_id]').val(), tiempo_visita:$('select[name=tiempo_visita]').val(),contacto_id:$('select[name=contacto_id]').val(),_token:'{{csrf_token()}}'};
+        var data = {
+            cliente_id:{{$cliente->id}} ,
+            horaEstimada:$('#horaModal').val()+':'+$('#minModal').val()+':00', 
+            fecha:$('#anioModal').val()+'/'+$('#mesModal').val()+'/'+$('#diaModal').val(), 
+            usuario_id:$('select[name=usuario_id]').val(),
+            tipo_visita_id:$('select[name=tipo_visita_id]').val(), 
+            tiempo_visita:$('select[name=tiempo_visita]').val(),
+            contacto_id:$('select[name=contacto_id]').val(),
+            lugar_visita:$('input[name=lugar_visita]').val(),
+            _token:'{{csrf_token()}}'
+        };
         saveVisita(data);
         
       }else {

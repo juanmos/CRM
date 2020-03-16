@@ -26,32 +26,6 @@
                                     @endforeach
                                 </div>
                                 <a href="" class="btn btn-secondary pull-right visitaTodos">Ver todos</a>
-                                {{-- <div class="card card-event">
-                                    <div class="card-block" style="padding:30px 5px;">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col">
-                                                <h5 class="m-0">Vendedores</h5>
-                                            </div>
-                                        </div>
-                                        <table class="table table-hover">
-                                            <tbody>
-                                                @foreach($usuarios as $user)
-                                                <tr class="unread" @if($user->id==Auth::user()->id)style="background-color: cornsilk;"@endif>
-                                                    <td class="row">
-                                                        <div class="col-md-12"><h6>{{$user->full_name}}</h6></div>
-                                                        <div class="col-md-4">
-                                                            <img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <a href="" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="label theme-bg2 text-white f-12 cambiaVendedor">Ver</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>                                              
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div> --}}
                             </div>
                             @endif
                             <!-- [ statistics year chart ] end -->
@@ -62,7 +36,6 @@
                                 <div class="card Recent-Users">
                                     <div class="card-header">
                                         <h5>Visitas - <span id="user_selected">{{Auth::user()->full_name}}</span></h5>
-                                        {{-- <a href="{{route('empresa.contacto.create',$empresa->id)}}" class="btn btn-primary float-right"><i class="fas fa-user-plus text-c-white f-10 m-r-15"></i> Nuevo usuario</a> --}}
                                     </div>
                                     <div class="card-block px-0 py-3">
                                         <div class="table-responsive">

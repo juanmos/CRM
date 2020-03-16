@@ -166,6 +166,7 @@ class VisitaController extends Controller
     {
         $data                     = $request->all();
         $data['estado_visita_id'] = 1;
+        $data['empresa_id']       = auth()->user()->empresa_id;
         if (!$request->is('api/*')) {
             $data['fecha_inicio'] = Carbon::parse($data['fecha'] . ' ' . $data['horaEstimada'])->toDateTimeString();
             $data['fecha_fin']    = Carbon::parse($data['fecha'] . ' ' . $data['horaEstimada'])->addMinutes($data['tiempo_visita'])->toDateTimeString();
@@ -215,7 +216,25 @@ class VisitaController extends Controller
         $visitasAnteriores = Visita::where('cliente_id', $visita->cliente_id)->where('fecha_inicio', '<=', Carbon::now()->toDateString())->with(['estado', 'tipoVisita'])->orderBy('fecha_inicio', 'desc')->paginate(20);
         $proximaVisita     = Visita::where('cliente_id', $visita->cliente_id)->where('fecha_inicio', '>', Carbon::now()->toDateString())->with(['estado', 'tipoVisita'])->first();
         $pest              = ($request->has('pest')) ? $request->get('pest') : 'pre';
-        return view('visita.show', compact('visita', 'estados', 'tiposVisita', 'tiempoVisita', 'visitasAnteriores', 'proximaVisita', 'pest', 'usuarios'));
+
+        $hay = false;
+
+        $filtered = $visita->detalles->filter(function ($detalle) use ($visita) {
+            if ($detalle->plantilla_id == $visita->tipoVisita->plantilla_pre_id && $detalle->tipo_campo != 5) {
+                return $visita;
+            }
+        });
+        if ($filtered->count() == 0) {
+            $hay = true;
+        }
+
+        foreach ($filtered as $detalle) {
+            if ($detalle->respuestas->valor == null) {
+                $hay = true;
+            }
+        }
+
+        return view('visita.show', compact('visita', 'estados', 'tiposVisita', 'tiempoVisita', 'visitasAnteriores', 'proximaVisita', 'pest', 'usuarios', 'hay'));
     }
 
     /**

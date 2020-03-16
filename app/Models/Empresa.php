@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Ciudad;
 use App\Models\Cliente;
 use App\Models\Configuracion;
+use App\Models\Empresa;
 use App\Models\Plantilla;
 use App\Models\User;
 use App\Models\Visita;
@@ -40,5 +41,10 @@ class Empresa extends Model
     public function plantillas()
     {
         return $this->hasMany(Plantilla::class, 'empresa_id');
+    }
+
+    public function visitas()
+    {
+        return $this->hasMany(self::class, 'empresa_id');
     }
 }

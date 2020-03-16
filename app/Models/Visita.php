@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Contacto;
 use App\Models\Cliente;
-use App\Models\TipoVisita;
+use App\Models\Contacto;
+use App\Models\Empresa;
 use App\Models\EstadoVisita;
 use App\Models\PlantillaDetalle;
 use App\Models\Tarea;
+use App\Models\TipoVisita;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Visita extends Model
 {
     use SoftDeletes;
-    protected $fillable=[
-        'cliente_id','usuario_id','contacto_id','tipo_visita_id','estado_visita_id','fecha_inicio',
-        'fecha_fin','codigo','descripcion','razon_cancelacion','pdf','lugar_visita'
+
+    protected $fillable = [
+        'cliente_id', 'usuario_id', 'contacto_id', 'tipo_visita_id', 'estado_visita_id', 'fecha_inicio',
+        'fecha_fin', 'codigo', 'descripcion', 'razon_cancelacion', 'pdf', 'lugar_visita', 'empresa_id',
     ];
 
     public function vendedor()
@@ -53,6 +55,11 @@ class Visita extends Model
     public function tareas()
     {
         return $this->hasMany(Tarea::class, 'visita_id');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 
     public function usuarios_adicionales()
