@@ -48,9 +48,9 @@
                 </li>
 
                 @endif
-                <li class="nav-item {{(Route::currentRouteName()=='objetivos.index')?'active':''}}">
+                {{-- <li class="nav-item {{(Route::currentRouteName()=='objetivos.index')?'active':''}}">
                     <a href="{{route('objetivos.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-target"></i></span><span class="pcoded-mtext">Mis metas</span></a>
-                </li>
+                </li> --}}
                 @if(Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('JefeVentas'))
                 <li class="nav-item {{(Route::currentRouteName()=='empresa.usuario.index')?'active':''}}">
                     <a href="{{route('empresa.usuario.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext">Vendedores</span></a>
