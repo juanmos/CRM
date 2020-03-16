@@ -20,12 +20,12 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     @foreach($usuarios as $user)
-                                    <a href="" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="dropdown-item f-12 cambiaVendedor">
+                                    <a href="{{route('visita.terminar',$user->id)}}" myid="{{$user->id}}" nombre="{{$user->full_name}}" class="dropdown-item f-12">
                                         <h6>{{$user->full_name}}</h6>
                                     </a>                                             
                                     @endforeach
                                 </div>
-                                <a href="" class="btn btn-secondary pull-right visitaTodos">Ver todos</a>
+                                <a href="{{route('visita.terminar','todos')}}" class="btn btn-secondary pull-right">Ver todos</a>
                                 
                             </div>
                             @endif
@@ -36,7 +36,7 @@
                             
                                 <div class="card Recent-Users">
                                     <div class="card-header">
-                                        <h5>Visitas - <span id="user_selected">{{Auth::user()->full_name}}</span></h5>
+                                        <h5>Visitas - <span id="user_selected">{{$title}}</span></h5>
                                         <div class="card-header-right">
                                             <div class="btn-group card-option">
                                                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,28 +120,17 @@
 <script>
  
   $(document).on('click','.cambiaVendedor',function(e){
-      e.preventDefault();
-      calendar.getEventSources().forEach(function(es){
-          es.remove();
-      })
-     // calendar.fullCalendar( 'removeEventSources' );
-      calendar.addEventSource( "{{url('e/visitas/by/vendedor/')}}/"+$(this).attr('myid') );
-      {{-- $("tr").css('background-color','transparent')
-      $(this).closest('tr').css('background-color','cornsilk') --}}
-      $('#dropdownMenuButton').html($(this).attr('nombre'))
-      $('#user_selected').html($(this).attr('nombre'))
-      $('#usuario_id').val($(this).attr('myid'));
+    e.preventDefault();
+    
+    $('#dropdownMenuButton').html($(this).attr('nombre'))
+    $('#user_selected').html($(this).attr('nombre'))
+    $('#usuario_id').val($(this).attr('myid'));
   })
   $(document).on('click','.visitaTodos',function(e){
     e.preventDefault();
-     calendar.getEventSources().forEach(function(es){
-          es.remove();
-      })
-     // calendar.fullCalendar( 'removeEventSources' );
-      calendar.addEventSource( "{{route('visita.todos')}}" );
-      $('#dropdownMenuButton').html('Todos los vendedores')
-      $('#user_selected').html('Todos los vendedores')
-      $('#usuario_id').val(null);
+    $('#dropdownMenuButton').html('Todos los vendedores')
+    $('#user_selected').html('Todos los vendedores')
+    $('#usuario_id').val(null);
   })
 </script>
 @endpush

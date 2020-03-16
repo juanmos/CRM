@@ -394,17 +394,25 @@ class VisitaController extends Controller
         return $visita->usuarios_adicionales->pluck('id');
     }
 
-    public function buscarNoLlenada(Request $request)
+    public function buscarNoLlenada(Request $request, $usuario_id = null)
     {
-        $visitas = Visita::
-        where(
+        $title   = 'Todos los vendedores';
+        $visitas = Visita::where('empresa_id', auth()->user()->empresa_id)
+        ->where(
             'fecha_fin',
             '>=',
             '2020-02-28'
         )
-        ->whereIn('estado_visita_id', [1, 2, 5])
-        ->where('usuario_id', auth()->user()->id)
-        ->orderBy('fecha_inicio', 'desc')
+        ->whereIn('estado_visita_id', [1, 2, 5]);
+        if ($usuario_id == null) {
+            $title   = auth()->user()->full_name;
+            $visitas = $visitas->where('usuario_id', auth()->user()->id);
+        } elseif ($usuario_id > 0) {
+            $title   = User::find($usuario_id)->full_name;
+            $visitas = $visitas->where('usuario_id', $usuario_id);
+        }
+
+        $visitas = $visitas->orderBy('fecha_inicio', 'desc')
         ->with(['vendedor', 'cliente', 'estado', 'tipoVisita', 'detalles'])
         ->get()
         ->filter(function ($visita, $key) {
@@ -433,7 +441,7 @@ class VisitaController extends Controller
                 $usuarios = User::where('user_id', Auth::user()->id)->orWhere('id', Auth::user()->id)->orderBy('nombre')->paginate(50);
             }
 
-            return view('visita.terminar', compact('visitas', 'usuarios'));
+            return view('visita.terminar', compact('visitas', 'usuarios', 'title'));
         }
     }
 }

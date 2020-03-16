@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('visitas/vendedor/{id?}', 'Empresa\VisitaController@index')->name('visita.usuario');
         Route::get('visitas/by/vendedor/{id?}', 'Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
         Route::get('visitas/todos', 'Empresa\VisitaController@visitasTodos')->name('visita.todos');
-        Route::get('visitas/terminar', 'Empresa\VisitaController@buscarNoLlenada')->name('visita.terminar');
+        Route::get('visitas/terminar/{usuario_id?}', 'Empresa\VisitaController@buscarNoLlenada')->name('visita.terminar');
         Route::get('visitas/visita/{id}/estado/{estado_id}', 'Empresa\VisitaController@cambiaEstado')->name('visita.estado');
         Route::post('visitas/visita/{id}/previsita', 'Empresa\VisitaController@savePrevisita')->name('visita.save.previsita');
         Route::post('visitas/visita/{id}/visita', 'Empresa\VisitaController@saveVisita')->name('visita.save.visita');
