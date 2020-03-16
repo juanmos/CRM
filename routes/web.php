@@ -26,7 +26,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('configuracion', 'ConfiguracionController');
     Route::resource('plantilla', 'PlantillaController');
 
-
     Route::get('contacto/create/{cliente_id}', 'ContactoController@create')->name('contacto.create');
     Route::post('contacto/store/{cliente_id}/{json?}', 'ContactoController@store')->name('contacto.store');
     Route::get('contacto/edit/{id}', 'ContactoController@edit')->name('contacto.edit');
@@ -50,9 +49,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cliente/buscar', 'ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/visitas/{id}', 'ClienteController@visitas')->name('cliente.visitas');
 
-
-
-
     Route::post('plantilla/campo/crear/{id}', 'PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::get('plantilla/campo/edit/{id}', 'PlantillaController@editarCampo')->name('plantilla.campo.editar');
     Route::post('plantilla/campo/opciones/', 'PlantillaController@opcionesCampo')->name('plantilla.campo.opciones');
@@ -65,7 +61,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'e'], function () {
         Route::get('visitas/vendedor/{id?}', 'Empresa\VisitaController@index')->name('visita.usuario');
         Route::get('visitas/by/vendedor/{id?}', 'Empresa\VisitaController@visitasByUsuario')->name('visita.vendedor');
-        Route::get('visitas/todos', 'Empresa\VisitaController@visitasTodos') ->name('visita.todos');
+        Route::get('visitas/todos', 'Empresa\VisitaController@visitasTodos')->name('visita.todos');
+        Route::get('visitas/terminar', 'Empresa\VisitaController@buscarNoLlenada')->name('visita.terminar');
         Route::get('visitas/visita/{id}/estado/{estado_id}', 'Empresa\VisitaController@cambiaEstado')->name('visita.estado');
         Route::post('visitas/visita/{id}/previsita', 'Empresa\VisitaController@savePrevisita')->name('visita.save.previsita');
         Route::post('visitas/visita/{id}/visita', 'Empresa\VisitaController@saveVisita')->name('visita.save.visita');

@@ -27,6 +27,13 @@
                     <a href="{{route('cliente.index')}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-server"></i></span><span class="pcoded-mtext">Clientes</span></a>
                 </li>
                 @endif
+                <li data-username="" class="nav-item pcoded-hasmenu {{(Route::currentRouteName()=='reporte.visitas' )?'active pcoded-trigger':''}}">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">Visitas</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class="{{(Route::currentRouteName()=='visita.index')?'active':''}}"><a href="{{route('visita.index',null)}}" class="">Proximas</a></li>
+                        <li class="{{(Route::currentRouteName()=='visita.terminar')?'active':''}}"><a href="{{route('visita.terminar')}}" class="">Por Terminar</a></li>
+                    </ul>
+                </li>
                 @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item {{(Route::currentRouteName()=='visita.index')?'active':''}}">
                     <a href="{{route('visita.index',null)}}" class="nav-link "><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">Calendario</span></a>
