@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Configuracion;
-use App\Models\Plantilla;
 use App\Models\Ciudad;
 use App\Models\Cliente;
+use App\Models\Configuracion;
+use App\Models\Plantilla;
 use App\Models\User;
+use App\Models\Visita;
+use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
 {
-    protected $fillable=[
-        'nombre','ruc','direccion','telefono','costo','ciudad_id','activo',
-        'pruebas','fecha_inicio','fecha_fin_pruebas','usuarios_permitidos'
+    protected $fillable = [
+        'nombre', 'ruc', 'direccion', 'telefono', 'costo', 'ciudad_id', 'activo',
+        'pruebas', 'fecha_inicio', 'fecha_fin_pruebas', 'usuarios_permitidos',
     ];
 
     public function ciudad()
