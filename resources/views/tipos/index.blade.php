@@ -28,6 +28,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Tipo</th>
+                                                        <th>Duración</th>
                                                         <th>Plantilla previsita</th>
                                                         <th>Plantilla visita</th>
                                                         <th>Acciones</th>
@@ -37,6 +38,7 @@
                                                     @foreach($tipos as $tipo)
                                                     <tr class="unread"></tr>
                                                         <td>{{$tipo->tipo}}</td>
+                                                        <td>{{$tipo->duracion!=null ? $tipo->duracion->duracion : '60'}} minutos</td>
                                                         <td>{{$tipo->plantillaPre->nombre}}</td>
                                                         <td>{{$tipo->plantillaVisita->nombre}}</td>
                                                         <td>
@@ -50,6 +52,7 @@
                                                             @else
                                                             <span class="label theme-danger text-white f-12">No se puede editar/borrar</span>
                                                             @endif
+                                                            <a href="#" class="btn btn-primary btn-rounded btn-sm tipoVisitaDuracion" myid="{{$tipo->id}}" duracion="{{$tipo->duracion!=null ? $tipo->duracion->duracion : '60'}}" nombre="{{$tipo->tipo}}" data-toggle="modal" data-target="#modalDuracion">Duración</a>
                                                         </td>
                                                     </tr>
                                                     
@@ -76,4 +79,61 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-md" name="modalDuracion" id="modalDuracion" tabindex="-1" role="">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="card card-signup card-plain"> 
+                {!! Form::open(["route"=>"tipo.visita.duracion","method"=>"POST"]) !!}
+                <div class="">
+                  <div class="card-header card-header-blue text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      <i class="material-icons">clear</i>
+                    </button>
+
+                    <h4 class="card-title">Duración de tipo de visitas</h4>
+                  </div>
+                </div>
+                <div class="modal-body" align="center">    
+                    <div class="row">                
+                        <div class="form-group-select col-md-12">   
+                            <div class="form-group col-md-12 ">                     
+                                <label class="col-md-4">Tipo de visita: *</label>                            
+                                {!! Form::text('nombre', "", ["class"=>"form-control","placeholder"=>"Nombre de la tarea","required"=>"required"]) !!}
+                            </div>
+                        </div>
+                        <div class="form-group-select col-md-12">
+                            <div class="form-group col-md-12 ">
+                                <label for="exampleInputEmail1">Duración del tipo de visita en minutos</label>
+                                <input type="text" value="60" name="duracion" class="form-control" aria-describedby="emailHelp" placeholder="Duracioón en minutos">
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="modal-footer">    
+                    <div class="col-md-12">                                    
+                        <button class="btn btn-danger pull-left" data-dismiss="modal">
+                            <i class="fas fa-times-circle"> </i> CERRAR
+                        </button>
+                        <button type="submit" class="btn btn-primary float-right" id="btnGuardaOpcionesCampo" >
+                            <i class="fa fa-save"> </i> GUARDAR
+                        </button>
+                        <input type="hidden" value="" name="tipo_visita_id"/>
+                    </div>    
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.tipoVisitaDuracion').on('click',function(){
+        $('input[name=tipo_visita_id]').val($(this).attr('myid'));
+        $('input[name=duracion]').val($(this).attr('duracion'));
+        $('input[name=nombre]').val($(this).attr('nombre'));
+    })
+})
+</script>
+@endpush
