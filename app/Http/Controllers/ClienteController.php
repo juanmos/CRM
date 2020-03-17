@@ -46,7 +46,26 @@ class ClienteController extends Controller
 
             return response()->json(compact('clientes', 'usuario_id'));
         }
-        return view('cliente.index', compact('usuario_id'));
+
+        if (Auth::user()->hasRole('Administrador')) {
+            $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                        ->orderBy('nombre')
+                        ->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad']);
+            if ($usuario_id != null && $usuario_id != 0) {
+                $clientes = $clientes->where('usuario_id', $usuario_id)->paginate(50);
+            } else {
+                $clientes = $clientes->paginate(50);
+            }
+        } else {
+            $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                //->where('usuario_id',$usuario_id)
+                ->orderBy('nombre')->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad'])
+                ->paginate(20);
+        }
+
+        return view('cliente.index', compact('usuario_id', 'clientes'));
     }
 
     public function clientesData(Request $request, $usuario_id = null)
