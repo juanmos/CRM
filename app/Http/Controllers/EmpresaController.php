@@ -99,7 +99,7 @@ class EmpresaController extends Controller
         $visitasTerminadas = Visita::whereHas('cliente', function ($query) use ($clientes) {
             $query->whereIn('cliente_id', $clientes->pluck('id'));
         })->where('estado_visita_id', 5)->get()->count();
-        if (Auth::user()->hasRole('Administrador')) {
+        if (Auth::user()->hasRole('Administrador') || auth()->user()->hasRole('SuperAdministrador')) {
             $usuarios = $empresa->usuarios;
         } elseif (Auth::user()->hasRole('JefeVentas')) {
             $usuarios = User::where('empresa_id', $user->empresa_id)->where('user_id', $user->id)->get();
@@ -143,8 +143,12 @@ class EmpresaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Empresa $empresa)
     {
-        //
+        if (auth()->user()->hasRole('SuperAdministrador')) {
+            $empresa->delete();
+            return redirect()->route('empresa.index');
+        }
+        abort(401);
     }
 }

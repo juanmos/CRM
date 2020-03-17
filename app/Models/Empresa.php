@@ -10,9 +10,12 @@ use App\Models\Plantilla;
 use App\Models\User;
 use App\Models\Visita;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Empresa extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'nombre', 'ruc', 'direccion', 'telefono', 'costo', 'ciudad_id', 'activo',
         'pruebas', 'fecha_inicio', 'fecha_fin_pruebas', 'usuarios_permitidos',

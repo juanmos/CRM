@@ -30,7 +30,7 @@ class HomeController extends Controller
     {
         $user = User::find(Auth::user()->id);
         if ($user->hasRole('SuperAdministrador')) {
-            return view('admin.panel');
+            return redirect()->route('empresa.index');
         } elseif ($user->hasRole('Administrador') || $user->hasRole('JefeVentas')) {
             return redirect()->route('empresa.show', $user->empresa_id);
         } elseif ($user->hasRole('Vendedor')) {

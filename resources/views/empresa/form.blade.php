@@ -68,18 +68,22 @@
                                                 <label for="exampleInputPassword1">Teléfono</label>
                                                 <input type="text" value="@if($empresa!=null){{$empresa->telefono}}@endif" name="telefono" class="form-control" id="exampleInputPassword1" placeholder="Teléfono">
                                             </div>
+                                            @if(auth()->user()->hasRole('SuperAdministrador'))
                                             <div class="form-group col-md-6">
-                                                <label for="exampleInputPassword1">Costo*</label>
+                                                <label for="exampleInputPassword1">Costo por usuario*</label>
                                                 <input type="text" value="@if($empresa!=null){{$empresa->costo}}@endif" name="costo" class="form-control" id="exampleInputPassword1" required="required" placeholder="Costo">
                                             </div>
+                                            @endif
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">Activo</label>
                                                 {!! Form::select('activo', ["0"=>"Inactivo","1"=>"Activo"], ($empresa!=null)?$empresa->activo : 1 ,["class"=>"form-control"]) !!}
                                             </div>
+                                            @if(auth()->user()->hasRole('SuperAdministrador'))
                                             <div class="form-group col-md-6">
                                                 <label for="exampleInputPassword1">En pruebas</label>
-                                                {!! Form::select('pruebas', ["0"=>"Empresa de pago","1"=>"Empresa de preubas"], ($empresa!=null)?$empresa->pruebas : 0 ,["class"=>"form-control"]) !!}
+                                                {!! Form::select('pruebas', ["0"=>"Empresa de pago","1"=>"Empresa de pruebas"], ($empresa!=null)?$empresa->pruebas : 0 ,["class"=>"form-control"]) !!}
                                             </div>
+                                            @endif
                                             <button type="submit" class="btn btn-primary"><span class="pcoded-micon"><i class="feather icon-save"></i></span><span class="pcoded-mtext">Guardar</span></button>
                                         </div>
                                     </div>

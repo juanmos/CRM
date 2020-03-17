@@ -46,11 +46,12 @@
                                                         <td>{{$empresa->ciudad->ciudad}}</td>
                                                         <td>{{$empresa->usuarios->count()}}</td>
                                                         <td>
-                                                            {{-- <a href="{{ route('afiche.pdf',$afiche->id) }}" class="label theme-bg2 text-white f-12">Descargar</a> --}}
-                                                            
                                                             <a href="{{ route('empresa.show',$empresa->id) }}" class="label theme-bg2 text-white f-12">Ver</a>
                                                             <a href="{{ route('empresa.edit',$empresa->id) }}" class="label theme-bg text-white f-12">Editar</a>
-                                                            
+                                                            {!! Form::open(['method'=>'POST', 'route'=>['empresa.destroy',$empresa->id], 'style'=>'display:inline-block']) !!}
+                                                            <button type="submit" class="label theme-danger text-white f-12">Eliminar</button>
+                                                            @method('DELETE')
+                                                            {!! Form::close() !!}
                                                             
                                                         </td>
                                                     </tr>
