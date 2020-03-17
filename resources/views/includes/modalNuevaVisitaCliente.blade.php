@@ -29,7 +29,7 @@
                                 <div class="form-group-select col-md-4">
                                     <label class="col-md-7 control-label ">Tipo: </label>
                                     <div class="col-md-12">
-                                        {!! Form::select('tipo_visita_id', $tiposVisita, 0 ,array("class"=>"form-control tipoCitaId required selectpicker full-width-fix")); !!}                                         
+                                        {!! Form::select('tipo_visita_id', $tiposVisita->pluck('tipo', 'id'), 0 ,array("class"=>"form-control tipoVisitaId required selectpicker full-width-fix")); !!}                                         
                                     </div>
                                 </div>
                                 <div class="form-group-select col-md-4">
@@ -139,6 +139,7 @@
 @push('scripts')
 
 <script type="text/javascript">
+    var tipo_visitas = JSON.parse(@json($tiposVisita->toJson()));
   $(document).ready(function(){
     $(document).on('click','#aceptCreate',function(e){
       if ($('#cliente_id').val() != '') {
@@ -175,6 +176,11 @@
         }
       },'json');
     }
+    $('.tipoVisitaId').on('change',function(){
+        var _tipo=$(this).val()
+        var _duracion=tipo_visitas.find(item => item.id == _tipo)
+        $('select[name=tiempo_visita]').val((_duracion.duracion!=null)?_duracion.duracion.duracion : 60)
+    })
     
   })
 </script>

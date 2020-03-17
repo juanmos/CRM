@@ -11,6 +11,8 @@ class TipoVisita extends Model
 {
     protected $fillable = ['tipo', 'empresa_id', 'plantilla_pre_id', 'plantilla_visita_id'];
 
+    protected $with = ['duracion'];
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');

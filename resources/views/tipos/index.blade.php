@@ -105,6 +105,7 @@
                             <div class="form-group col-md-12 ">
                                 <label for="exampleInputEmail1">Duración del tipo de visita en minutos</label>
                                 <input type="text" value="60" name="duracion" class="form-control" aria-describedby="emailHelp" placeholder="Duracioón en minutos">
+                                {!! Form::select('duracion', [10=>'10 minutos', 15=>'15 minutos', 20=>'20 minutos',30=>'30 minutos',45=>'45 minutos',60=>'60 minutos',90=>'1 hora y 30 minutos', 120=>'2 horas', 180=>'3 horas' ], $selected, [$options]) !!}
                             </div>
                         </div> 
                     </div>

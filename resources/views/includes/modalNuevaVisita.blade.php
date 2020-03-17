@@ -101,13 +101,13 @@
                                 <div class="form-group-select col-md-5">
                                     <label class="col-md-7 control-label ">Duración: </label>
                                     <div class="col-md-12">
-                                      {!! Form::select('tiempo_visita', $tiempoVisita, Auth::user()->empresa->configuracion->tiempo_visita ,["class"=>"form-control"]) !!}
+                                      {!! Form::select('tiempo_visita', $tiempoVisita, ($tiposVisita->first()->duracion!=null)?$tiposVisita->first()->duracion->duracion:Auth::user()->empresa->configuracion->tiempo_visita ,["class"=>"form-control"]) !!}
                                     </div>
                                 </div>
                                 <div class="form-group-select col-md-7">
                                     <label class="col-md-7 control-label ">Tipo: </label>
                                     <div class="col-md-12">
-                                        {!! Form::select('tipo_visita_id', $tiposVisita, 0 ,array("class"=>"form-control tipoCitaId required selectpicker full-width-fix")); !!}                                         
+                                        {!! Form::select('tipo_visita_id', $tiposVisita->pluck('tipo', 'id'), 0 ,array("class"=>"form-control tipoVisitaId required selectpicker full-width-fix")); !!}                                         
                                     </div>
                                 </div>
                                 <div class="form-group-select col-md-5">
@@ -217,6 +217,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    var tipo_visitas = JSON.parse(@json($tiposVisita->toJson()));
     var usuario_id={{($usuario_id!=null)?$usuario_id:Auth::user()->id}};
     $(document).on('click','#aceptCreate',function(e){
         if ($('#cliente_id').val() == '') {
@@ -266,6 +267,11 @@
             event.preventDefault();
         }
     });
+    $('.tipoVisitaId').on('change',function(){
+        var _tipo=$(this).val()
+        var _duracion=tipo_visitas.find(item => item.id == _tipo)
+        $('select[name=tiempo_visita]').val((_duracion.duracion!=null)?_duracion.duracion.duracion : 60)
+    })
     $(document).on('keyup', '#buscar', function(event){            
         if($(this).val().length == 0){
             $('#buscar').blur();
