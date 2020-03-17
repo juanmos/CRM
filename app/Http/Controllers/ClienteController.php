@@ -14,6 +14,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Yajra\Datatables\Datatables;
 
 class ClienteController extends Controller
 {
@@ -24,25 +25,50 @@ class ClienteController extends Controller
      */
     public function index(Request $request, $usuario_id = null)
     {
-        if (Auth::user()->hasRole('Administrador')) {
-            $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
-            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad']);
-            if ($usuario_id != null && $usuario_id != 0) {
-                $clientes = $clientes->where('usuario_id', $usuario_id)->paginate(50);
-            } else {
-                $clientes = $clientes->paginate(50);
-            }
-        } else {
-            $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
-            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
-                //->where('usuario_id',$usuario_id)
-                ->orderBy('nombre')->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad'])->paginate(20);
-        }
-
         if ($request->is('api/*')) {
+            if (Auth::user()->hasRole('Administrador')) {
+                $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+                $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                        ->orderBy('nombre')
+                        ->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad']);
+                if ($usuario_id != null && $usuario_id != 0) {
+                    $clientes = $clientes->where('usuario_id', $usuario_id)->paginate(50);
+                } else {
+                    $clientes = $clientes->paginate(50);
+                }
+            } else {
+                $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
+                $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                //->where('usuario_id',$usuario_id)
+                ->orderBy('nombre')->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad'])
+                ->paginate(20);
+            }
+
             return response()->json(compact('clientes', 'usuario_id'));
         }
-        return view('cliente.index', compact('clientes', 'usuario_id'));
+        return view('cliente.index', compact('usuario_id'));
+    }
+
+    public function clientesData(Request $request, $usuario_id = null)
+    {
+        if (Auth::user()->hasRole('Administrador')) {
+            // $usuarios = User::where('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->paginate(50);
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                ->orderBy('nombre')
+                ->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad']);
+            if ($usuario_id != null && $usuario_id != 0) {
+                $clientes = $clientes->where('usuario_id', $usuario_id)->get();
+            } else {
+                $clientes = $clientes->get();
+            }
+        } else {
+            // $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->get();
+            $clientes = Cliente::where('empresa_id', Auth::user()->empresa_id)
+                //->where('usuario_id',$usuario_id)
+                ->orderBy('nombre')->with(['facturacion', 'vendedor', 'clasificacion', 'contactos', 'oficinas.ciudad'])
+                ->get();
+        }
+        return Datatables::of($clientes)->make(true);
     }
 
     public function buscar(Request $request, $usuario_id = null)
@@ -214,7 +240,8 @@ class ClienteController extends Controller
     {
         $cliente      = Cliente::find($id);
         $tiposVisita  = TipoVisita::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('tipo')->get();
-        $tiempoVisita = ['10'=>'10 minutos', '20'=>'20 minutos', '30'=>'30 minutos', '45'=>'45 minutos', '60'=>'1 hora', '90'=>'1 hora y 30 minutos', '120'=>'2 horas', '180'=>'3 horas', '240'=>'4 horas'];
+        $tiempoVisita = [10=>'10 minutos', 15=>'15 minutos', 20=>'20 minutos', 30=>'30 minutos', 45=>'45 minutos', 60=>'60 minutos', 90=>'1 hora y 30 minutos', 120=>'2 horas', 180=>'3 horas', '240'=>'4 horas'];
+
         return view('cliente.show', compact('cliente', 'tiposVisita', 'tiempoVisita'));
     }
 

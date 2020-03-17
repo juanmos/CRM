@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cliente/desasignar/{user_id}/{cliente_id}', 'ClienteController@desasignar')->name('cliente.desasignar');
     Route::post('cliente/buscar', 'ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/visitas/{id}', 'ClienteController@visitas')->name('cliente.visitas');
+    Route::get('clientes/data/{user_id?}', 'ClienteController@clientesData')->name('clientes.data');
 
     Route::post('plantilla/campo/crear/{id}', 'PlantillaController@creaCampo')->name('plantilla.campo.create');
     Route::get('plantilla/campo/edit/{id}', 'PlantillaController@editarCampo')->name('plantilla.campo.editar');

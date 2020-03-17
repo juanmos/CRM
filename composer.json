@@ -22,7 +22,8 @@
         "sentry/sentry-laravel": "1.7.0",
         "spatie/laravel-permission": "^3.6",
         "symfony/translation": "4.3.8",
-        "tymon/jwt-auth": "1.0.0-rc.5"
+        "tymon/jwt-auth": "1.0.0-rc.5",
+        "yajra/laravel-datatables-oracle": "^9.7"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
