@@ -70,9 +70,14 @@
                                                             <p class="m-0"><i class="fas fa-phone-square-alt"></i> {{$cliente->telefono}}</p>
                                                         </td>
                                                         <td>
-                                                            <a href="{{route('cliente.show',[$cliente->id] )}}" class="label theme-bg text-white f-12">Ver</a>
-                                                            <a href="{{route('cliente.show',[$cliente->id] )}}" class="label theme-bg2 text-white f-12">Visita</a>
-                                                            <a href="{{route('cliente.desasignar',[$usuario->id,$cliente->id] )}}" class="label theme-danger text-white f-12">Quitar</a>
+                                                            <div class="btn-group mb-2 mr-2">
+                                                                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="{{route('cliente.show',[$cliente->id] )}}">Ver</a>
+                                                                    <a class="dropdown-item" href="{{route('cliente.show',[$cliente->id] )}}">Visita</a>
+                                                                    <a class="dropdown-item" href="{{route('cliente.desasignar',[$usuario->id,$cliente->id] )}}">Quitar</a>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     @empty

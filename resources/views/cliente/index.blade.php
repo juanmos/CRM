@@ -26,7 +26,7 @@
                                         @endif
                                     </div>
                                     <div class="card-block px-0 py-3">
-                                        <div class="">
+                                        {{-- <div class="">
                                             {!! Form::open() !!}
                                                 <div class="row overflow-y-auto">                            
                                                     <div class="col-md-3">
@@ -37,31 +37,29 @@
                                                     </div>
                                                 </div>
                                             {!! Form::close()!!}
-                                        </div>
+                                        </div> --}}
                                         <div class="table-responsive">
-                                        @if($clientes->count()>0)
                                             @if(Request::is('cliente/listado/*'))
                                             {!! Form::open(['route'=>["cliente.asignar.multiple",$usuario_id],'method'=>"POST"]) !!}
                                             @endif
-                                            <table class="table table-hover">
+                                            <table id="tableData" class="table table-hover" style="width:100%">
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
-                                                        <th>Direccion</th>
+                                                        <th>RUC/Cedula</th>
                                                         <th>Telefono</th>
                                                         <th>Vendedor</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="entrydata">
-                                                    @foreach($clientes as $cliente)
+                                                    {{-- @foreach($clientes as $cliente)
                                                     <tr class="unread"></tr>
                                                         <td>{{$cliente->nombre}}</td>
                                                         <td>{{$cliente->facturacion->direccion}}</td>
                                                         <td>{{$cliente->telefono}}</td>
                                                         <td>{{($cliente->usuario_id!=null)?$cliente->vendedor->nombre.' '.$cliente->vendedor->apellido:'Sin asignar'}}</td>
                                                         <td>
-                                                            {{-- <a href="{{ route('afiche.pdf',$afiche->id) }}" class="label theme-bg2 text-white f-12">Descargar</a> --}}
                                                             @if(Request::is('cliente/listado/*'))
                                                             <div class="custom-control custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" name="clientes[]" id="customCheck{{$cliente->id}}" value="{{$cliente->id}}">
@@ -75,7 +73,7 @@
                                                         </td>
                                                     </tr>
                                                     
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </tbody>
                                             </table>
                                             @if(Request::is('cliente/listado/*'))
@@ -83,11 +81,7 @@
                                             {!! Form::close() !!}
 
                                             @endif
-                                            {{ $clientes->links() }}
-                                        @else
-                                            <h4>No hay clientes registrados</h4>
-                                            <a class="btn btn-primary" href="{{route('cliente.create')}}"><span class="pcoded-micon"><i class="feather icon-plus-circle"></i></span><span class="pcoded-mtext">Crear cliente</span></a>
-                                        @endif
+                                        
                                         </div>
                                     </div>
                                 </div>
@@ -106,6 +100,51 @@
 </div>
 @endsection
 @push('scripts')
+<script src='{{asset("assets/plugins/data-tables/js/datatables.min.js")}}'></script>
+<script>
+$(function() {
+    $('#tableData').DataTable({
+        processing: true,
+        serverSide: true,
+        "pageLength": 50,
+        ajax: "{!! route('clientes.data',$usuario_id) !!}",
+        "autoWidth": false,
+        "columnDefs": [
+            { "width": "10px", "targets": 0 },
+            { "width": "40px", "targets": 1 },
+            { "width": "100px", "targets": 2 },
+            { "width": "70px", "targets": 3 },
+            { "width": "70px", "targets": 4 }
+        ],
+        columns: [
+            { data: 'nombre', name: 'nombre' , width: "30%"},
+            { data: 'facturacion.ruc', name: 'facturacion.ruc' },
+            { data: 'telefono', name: 'telefono' },
+            { data: 'vendedor', render: function(dataField){
+                if(dataField==null){
+                    return 'Sin adignar'
+                }else{
+                    return `${dataField.nombre} ${dataField.apellido}`
+                }
+            } },
+            { "data": "id", render: function (dataField) { 
+                var link = '';
+                @if(Request::is('cliente/listado/*'))
+                    link+='<div class="custom-control custom-checkbox">';
+                    link+='<input type="checkbox" class="custom-control-input" name="clientes[]" id="customCheck'+dataField+'" value="'+dataField+'">';
+                    link+='<label class="custom-control-label" for="customCheck'+dataField+'">Seleccionar</label>';
+                    link+='</div>';
+                @else
+                    link+='<a href="{{ url("cliente/")}}/'+dataField+'" class="label theme-bg2 text-white f-12">Ver</a>'
+                    link+='<a href="{{ url("cliente") }}/'+dataField+'/edit" class="label theme-bg text-white f-12">Editar</a>'
+                @endif
+                    return link;
+                } 
+            }
+        ]
+    });
+});
+</script>
 <script>
     $(document).ready(function(e){
         $('#buscar').keypress(function(event) {
@@ -147,4 +186,7 @@
         }
     })
 </script>
+@endpush
+@push('styles')
+<link rel="stylesheet" href='{{asset("assets/plugins/data-tables/css/datatables.min.css")}}'>
 @endpush
