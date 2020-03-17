@@ -42,7 +42,7 @@ class VisitaController extends Controller
         } else {
             $usuarios = User::where('id', $usuario_id)->orderBy('nombre')->paginate(50);
         }
-        $tiposVisita  = TipoVisita::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('tipo')->get()->pluck('tipo', 'id');
+        $tiposVisita  = TipoVisita::where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('tipo')->get();
         $tiempoVisita = ['10'=>'10 minutos', '20'=>'20 minutos', '30'=>'30 minutos', '45'=>'45 minutos', '60'=>'1 hora', '90'=>'1 hora y 30 minutos', '120'=>'2 horas', '180'=>'3 horas', '240'=>'4 horas'];
         return view('visita.index', compact('usuarios', 'usuario_id', 'tiposVisita', 'tiempoVisita'));
     }
@@ -422,6 +422,7 @@ class VisitaController extends Controller
             '>=',
             '2020-02-28'
         )
+        ->where('fecha_inicio', '<', now()->toDateTimeString())
         ->whereIn('estado_visita_id', [1, 2, 5]);
         if ($usuario_id == null) {
             $title   = auth()->user()->full_name;

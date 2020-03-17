@@ -27,35 +27,6 @@
                                     @endforeach
                                 </div>
                             </div>
-                            {{-- <div class="col-xl-3 col-md-3">
-                                <div class="card card-event">
-                                    <div class="card-block">
-                                        <div class="row align-items-center justify-content-center">
-                                            <div class="col">
-                                                <h5 class="m-0">Vendedores</h5>
-                                            </div>
-                                        </div>
-                                        <table class="table table-hover">
-                                            <tbody>
-                                                @foreach($usuarios as $user)
-                                                
-                                                <tr class="unread">
-                                                    <td class="row">
-                                                        <div class="col-md-4">
-                                                            <img class="rounded-circle" style="width:40px;" src="{{Storage::url($user->foto)}}" alt="activity-user">
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            {{$user->nombre}} {{$user->apellido}}<br>
-                                                            <a href="{{ route('tarea.index',[$user->id]) }}" class="label theme-bg2 text-white f-12">Ver</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>                                              
-                                                @endforeach
-                                            </tbody>
-                                      </table>
-                                    </div>
-                                </div>
-                            </div> --}}
                             @endif
                             <!-- [ statistics year chart ] end -->
                             <!--[ Recent Users ] start-->

@@ -100,5 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('objetivos', 'ObjetivoController@lista')->name('objetivos.index');
         Route::post('objetivos', 'ObjetivoController@store')->name('objetivos.store');
         Route::put('objetivos/{objetivo}', 'ObjetivoController@update')->name('objetivos.update');
+
+        Route::post('tipoVisita/duracion', 'TipoVisitaController@duracion')->name('tipo.visita.duracion');
     });
 });

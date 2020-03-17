@@ -28,9 +28,6 @@
                                                 <h5 class="m-0">{{$visita->cliente->nombre}}</h5>
                                                 <sub class="text-muted f-14">Teléfono: {{$visita->cliente->telefono}}</sub><br>
                                             </div>
-                                            {{-- <div class="col-auto">
-                                                <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
-                                            </div> --}}
                                         </div>
                                         <h6 class="text-muted mt-4 mb-0">
                                             <a href="{{route('visita.edit',$visita->id)}}" class="label theme-bg text-white f-12">Editar</a> 
@@ -41,6 +38,7 @@
                                 </div>
                                 <div class="card card-event">
                                     <div class="card-block">
+
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col">
                                                 <span class="d-block text-uppercase">Datos del contacto </span>
@@ -52,9 +50,6 @@
                                                 <sub class="text-muted f-14">No has seleccionado un contacto</sub>
                                                 @endif
                                             </div>
-                                            {{-- <div class="col-auto">
-                                                <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
-                                            </div> --}}
                                         </div>
                                         <h6 class="text-muted mt-4 mb-0">
                                             @if($visita->contacto!=null)
@@ -118,8 +113,17 @@
                                                 <i class="feather icon-map f-30 text-c-blue"></i>
                                             </div>
                                             <div class="col">                                                
-                                                <span class="d-block text-uppercase">Lugar de visita </span>
-                                                <h3 class="f-w-300">{{$visita->lugar_visita}}</h3>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span class="d-block text-uppercase">Lugar de visita </span>
+                                                        <h3 class="f-w-300">{{$visita->lugar_visita}}</h3>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span class="d-block text-uppercase">Fecha </span>
+                                                        <h3 class="f-w-300">{{date('d-m-Y H:i',strtotime($visita->fecha_inicio))}}</h3>
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>

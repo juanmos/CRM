@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Models\Empresa;
 use App\Models\Plantilla;
+use App\Models\TipoVisitaDuracion;
 use Illuminate\Database\Eloquent\Model;
 
 class TipoVisita extends Model
 {
     protected $fillable = ['tipo', 'empresa_id', 'plantilla_pre_id', 'plantilla_visita_id'];
+
+    protected $with = ['duracion'];
 
     public function empresa()
     {
@@ -23,5 +26,10 @@ class TipoVisita extends Model
     public function plantillaVisita()
     {
         return $this->belongsTo(Plantilla::class, 'plantilla_visita_id');
+    }
+
+    public function duracion()
+    {
+        return $this->hasOne(TipoVisitaDuracion::class, 'tipo_visita_id');
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\TipoVisita;
 use App\Models\Plantilla;
+use App\Models\TipoVisita;
 use Auth;
-
+use Illuminate\Http\Request;
 
 class TipoVisitaController extends Controller
 {
@@ -17,9 +16,14 @@ class TipoVisitaController extends Controller
      */
     public function index(Request $request)
     {
-        $tipos = TipoVisita::where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('tipo')->get();
-        if($request->is('api/*')) return response()->json(compact('tipos'));
-        return view('tipos.index',compact('tipos'));
+        $tipos = TipoVisita::where('empresa_id', 0)
+            ->orWhere('empresa_id', Auth::user()->empresa_id)
+            ->orderBy('tipo')
+            ->with('duracion')->get();
+        if ($request->is('api/*')) {
+            return response()->json(compact('tipos'));
+        }
+        return view('tipos.index', compact('tipos'));
     }
 
     /**
@@ -29,10 +33,10 @@ class TipoVisitaController extends Controller
      */
     public function create()
     {
-        $tipoVisita = null;
-        $plantillas = Plantilla::where('previsita',1)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        $plantillasVisitas = Plantilla::where('previsita',0)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        return view('tipos.form',compact('tipoVisita','plantillas','plantillasVisitas'));
+        $tipoVisita        = null;
+        $plantillas        = Plantilla::where('previsita', 1)->where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre', 'id');
+        $plantillasVisitas = Plantilla::where('previsita', 0)->where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre', 'id');
+        return view('tipos.form', compact('tipoVisita', 'plantillas', 'plantillasVisitas'));
     }
 
     /**
@@ -43,8 +47,8 @@ class TipoVisitaController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['empresa_id']=Auth::user()->empresa_id;
+        $data               = $request->all();
+        $data['empresa_id'] = Auth::user()->empresa_id;
         TipoVisita::create($data);
         return redirect('tipoVisita');
     }
@@ -68,10 +72,10 @@ class TipoVisitaController extends Controller
      */
     public function edit($id)
     {
-        $tipoVisita = TipoVisita::find($id);
-        $plantillas = Plantilla::where('previsita',1)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        $plantillasVisitas = Plantilla::where('previsita',0)->where('empresa_id',0)->orWhere('empresa_id',Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre','id');
-        return view('tipos.form',compact('tipoVisita','plantillas','plantillasVisitas'));
+        $tipoVisita        = TipoVisita::find($id);
+        $plantillas        = Plantilla::where('previsita', 1)->where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre', 'id');
+        $plantillasVisitas = Plantilla::where('previsita', 0)->where('empresa_id', 0)->orWhere('empresa_id', Auth::user()->empresa_id)->orderBy('nombre')->get()->pluck('nombre', 'id');
+        return view('tipos.form', compact('tipoVisita', 'plantillas', 'plantillasVisitas'));
     }
 
     /**
@@ -84,7 +88,7 @@ class TipoVisitaController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $tipo=TipoVisita::find($id);
+        $tipo = TipoVisita::find($id);
         $tipo->update($data);
         return redirect('tipoVisita');
     }
@@ -99,5 +103,16 @@ class TipoVisitaController extends Controller
     {
         TipoVisita::find($id)->delete();
         return redirect('tipoVisita');
+    }
+
+    public function duracion(Request $request)
+    {
+        $tipo = TipoVisita::find($request->get('tipo_visita_id'));
+        if ($tipo->duracion == null) {
+            $tipo->duracion()->create(['empresa_id'=>auth()->user()->empresa_id, 'duracion'=>$request->get('duracion')]);
+        } else {
+            $tipo->duracion()->update(['duracion'=>$request->get('duracion')]);
+        }
+        return back();
     }
 }
