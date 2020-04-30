@@ -13,17 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', ['as'=>'login','uses'=>'APIAuthController@login']);
+Route::post('login', ['as'=>'login', 'uses'=>'APIAuthController@login']);
 Route::post('usuario', 'APIAuthController@nuevoUsuario')->name('usuario.nuevo');
 Route::post('empresa/nueva', 'EmpresaController@store');
 
-Route::middleware('jwt.auth')->post('geoposicion', 'APIAuthController@geoposicion');//Establecer la ubicacion del usuario actual
-
+Route::middleware('jwt.auth')->post('geoposicion', 'APIAuthController@geoposicion'); //Establecer la ubicacion del usuario actual
 
 Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::get('/usuario/{version?}', 'APIAuthController@me');//Obtener los datos del usuario en sesion
-    Route::delete('usuario/{plataforma}', 'APIAuthController@logout');//Cerrar sesion del usuario actual
-    Route::post('usuario/registroPush', 'APIAuthController@registroPush');//Cerrar sesion del usuario actual
+    Route::get('/usuario/{version?}', 'APIAuthController@me'); //Obtener los datos del usuario en sesion
+    Route::delete('usuario/{plataforma}', 'APIAuthController@logout'); //Cerrar sesion del usuario actual
+    Route::post('usuario/registroPush', 'APIAuthController@registroPush'); //Cerrar sesion del usuario actual
 
     Route::get('clientes/{usuario_id?}', 'ClienteController@index');
     Route::post('clientes/buscar/{usuario_id?}', 'ClienteController@buscar');
@@ -32,6 +31,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('cliente/visitas/{id}', 'ClienteController@visitas');
     Route::get('cliente/notas/{cliente_id}', 'NotaController@index');
     Route::post('cliente/nota', 'NotaController@store');
+    Route::put('cliente/nota/{nota}', 'NotaController@update');
+
     Route::delete('cliente/nota/{id}', 'NotaController@destroy');
 
     Route::post('visitas/{id?}', 'Empresa\VisitaController@visitasByUsuario');
@@ -51,8 +52,6 @@ Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('clasificaciones', 'ClasificacionController@index');
     Route::get('vendedores', 'Empresa\UsuarioController@index');
     Route::get('oficinas/{cliente_id}', 'OficinaController@index');
-
-    
 
     Route::get('tareas/{usuario_id?}/{tipo?}', 'Empresa\TareasController@index');
     Route::post('tareas', 'Empresa\TareasController@store');

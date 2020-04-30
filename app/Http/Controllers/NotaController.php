@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\NotaCliente;
 use App\Models\Cliente;
+use App\Models\NotaCliente;
 use Auth;
+use Illuminate\Http\Request;
 
 class NotaController extends Controller
 {
@@ -38,11 +38,13 @@ class NotaController extends Controller
      */
     public function store(Request $request)
     {
-        $data=$request->all();
-        $data['usuario_id']=Auth::user()->id;
-        $nota = NotaCliente::create($data);
-        if($request->is('api/*')) return $nota;
-        return redirect('cliente/'.$nota->cliente_id);
+        $data               = $request->all();
+        $data['usuario_id'] = Auth::user()->id;
+        $nota               = NotaCliente::create($data);
+        if ($request->is('api/*')) {
+            return $nota;
+        }
+        return redirect('cliente/' . $nota->cliente_id);
     }
 
     /**
@@ -74,9 +76,11 @@ class NotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, NotaCliente $nota)
     {
-        //
+        $nota->nota = $request->get('nota');
+        $nota->save();
+        return response()->json(['actualizado'=>true]);
     }
 
     /**
@@ -85,11 +89,13 @@ class NotaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         $nota = NotaCliente::find($id);
         $nota->delete();
-        if($request->is('api/*')) return response()->json(['eliminado'=>true]);
-        return redirect('cliente/'.$nota->cliente_id);
+        if ($request->is('api/*')) {
+            return response()->json(['eliminado'=>true]);
+        }
+        return redirect('cliente/' . $nota->cliente_id);
     }
 }

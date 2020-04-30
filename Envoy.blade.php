@@ -6,7 +6,7 @@
     git pull 
     composer dump-autoload
     php artisan migrate --force
-    php artisan horizon
+    php artisan horizon:terminate
     php artisan config:clear
     php artisan route:cache
     php artisan view:cache
